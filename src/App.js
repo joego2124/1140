@@ -22,7 +22,7 @@ function App() {
 		ref.on('value', snapshot => {
 			const state = `${snapshot.val()}`;
 			console.log(`LED STATE INIT: ${state}`);
-			setLedState(state == "ON" ? true : false);
+			setLedState(state === "ON" ? true : false);
 		});
 	}
 
