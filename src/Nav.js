@@ -30,7 +30,7 @@ function NavComponent() {
 						<IoTrainOutline size="1.75em" />
 					</NavIcon>
 					<NavText>
-						Train Control
+						Train Controller
 					</NavText>
 				</NavItem>
 			</SideNav.Nav>
