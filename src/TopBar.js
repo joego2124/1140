@@ -1,12 +1,15 @@
 import portrait from "./portrait.png"
-import { React, useState } from 'react'
+import { React, useContext } from 'react'
 import { Image, Navbar, Dropdown, Form, Button, Nav, ButtonGroup } from 'react-bootstrap'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
+import { SpeedContext } from './SpeedProvider';
 
 function TopBar() {
 
-	const [speed, changeSpeed] = useState(1);
-	const [paused, changePaused] = useState(false);
+	const [speedState, setSpeedState] = useContext(SpeedContext);
+
+	// const [speed, changeSpeed] = useState(1);
+	// const [paused, changePaused] = useState(false);
 
 	return (
 		<Navbar style={styles.bar} expand="lg">
@@ -27,13 +30,23 @@ function TopBar() {
 					<Navbar.Text style={styles.timeDisplay}>12:00:00</Navbar.Text>
 
 					{/* Play/Pause Button */}
-					<Button style={styles.pausePlay} onClick={() => changePaused(!paused)}>
-						{ paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
+					<Button style={styles.pausePlay} onClick={() => {
+						 setSpeedState({
+							 ...speedState, 
+							 paused: !speedState.paused
+							})
+					}}>
+						{ speedState.paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
 					</Button>
 
 					{/* Speed Dropdown */}
-					<Dropdown as={ButtonGroup} onSelect={ selected => changeSpeed(selected)} alignRight>
-						<Button style={styles.speedButton}>{ `x${speed}` }</Button>
+					<Dropdown as={ButtonGroup} onSelect={ selected => {
+						setSpeedState({
+							...speedState, 
+							speed: Number(selected)
+						 })
+					}} alignRight>
+						<Button style={styles.speedButton}>{ `x${speedState.speed}` }</Button>
 
 						<Dropdown.Toggle split style={styles.speedDropdown} id="dropdown-split-basic" />
 
@@ -52,9 +65,8 @@ function TopBar() {
 							<Image src={portrait} style={{maxWidth: "100%",}} roundedCircle/>
 						</Dropdown.Toggle>
 						<Dropdown.Menu>
-							<Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-							<Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-							<Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+							<Dropdown.Item href="#/settings">Settings</Dropdown.Item>
+							<Dropdown.Item href="#/logout">Log out</Dropdown.Item>
 						</Dropdown.Menu>
 					</Dropdown>
 

@@ -1,12 +1,13 @@
 import logo from './pittlogo.png';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Button } from 'react-bootstrap';
-
 import config from './config';
-
 import Firebase from "firebase";
+import { SpeedContext } from './SpeedProvider';
 
 function CTC() {
+
+	const [speedState] = useContext(SpeedContext);
 
 	const [ledState, setLedState] = useState(false);
 
@@ -37,6 +38,8 @@ function CTC() {
 				<p>
 					CTC Dashboard
 				</p>
+				<p>{`Paused: ${speedState.paused}`}</p>
+				<p>{`Speed: x${speedState.speed}`}</p>
 				<div>
 				<Button 
 					variant={ ledState ? "secondary" : "primary" } 
