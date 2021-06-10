@@ -3,13 +3,26 @@ import { React, useContext } from 'react'
 import { Image, Navbar, Dropdown, Form, Button, Nav, ButtonGroup } from 'react-bootstrap'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import { SpeedContext } from './SpeedProvider';
+import Firebase from "firebase";
+import config from './config';
 
 function TopBar() {
 
 	const [speedState, setSpeedState] = useContext(SpeedContext);
 
-	// const [speed, changeSpeed] = useState(1);
-	// const [paused, changePaused] = useState(false);
+	if (!Firebase.apps.length) {
+		Firebase.initializeApp(config);
+	}else {
+		Firebase.app(); // if already initialized, use that one
+	}
+
+	function setSpeed(newSpeed) {
+		Firebase.database().ref('/speedSettings/speed').set(newSpeed);
+	}
+
+	function setPaused(newPaused) {
+		Firebase.database().ref('/speedSettings/paused').set(newPaused);
+	}
 
 	return (
 		<Navbar style={styles.bar} expand="lg">
@@ -31,20 +44,23 @@ function TopBar() {
 
 					{/* Play/Pause Button */}
 					<Button style={styles.pausePlay} onClick={() => {
-						 setSpeedState({
-							 ...speedState, 
-							 paused: !speedState.paused
-							})
+						var newPaused = !speedState.paused;
+						setPaused(newPaused);
+						setSpeedState({
+							...speedState, 
+							paused: newPaused,
+						});
 					}}>
 						{ speedState.paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
 					</Button>
 
 					{/* Speed Dropdown */}
 					<Dropdown as={ButtonGroup} onSelect={ selected => {
+						setSpeed(Number(selected));
 						setSpeedState({
 							...speedState, 
 							speed: Number(selected)
-						 })
+						 });
 					}} alignRight>
 						<Button style={styles.speedButton}>{ `x${speedState.speed}` }</Button>
 
