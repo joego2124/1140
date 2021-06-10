@@ -35,11 +35,11 @@ function CTC() {
 		<div>
 			<header className="App-header">
 				{
-					!speedState.paused ? <img src={logo} style={{
+					!speedState.paused ? <img alt="logo" src={logo} style={{
 						height: "40vmin",
 						pointerEvents: "none",
 						animation: `App-logo-spin ${1 / speedState.speed * 5}s infinite linear`,
-					}}/> : <img src={logo} style={{
+					}}/> : <img alt="logo" src={logo} style={{
 						height: "40vmin",
 						pointerEvents: "none",
 					}}/>
