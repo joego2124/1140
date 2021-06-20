@@ -33,6 +33,14 @@ function NavComponent() {
 						Train Controller
 					</NavText>
 				</NavItem>
+				<NavItem eventKey="Ben">
+					<NavIcon>
+						<IoTrainOutline size="1.75em" />
+					</NavIcon>
+					<NavText>
+						Ben's Test Page
+					</NavText>
+				</NavItem>
 			</SideNav.Nav>
 		</SideNav>
 	);
