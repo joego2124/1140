@@ -1,40 +1,52 @@
-import React, { useState, Button } from 'react'
+import React, { useState } from 'react'
 import SlidingPane from "react-sliding-pane";
+import { Button } from 'react-bootstrap';
+import { AiOutlinePlus } from "react-icons/ai";
+import { BsCircleFill } from "react-icons/bs";
+
 import "react-sliding-pane/dist/react-sliding-pane.css";
+import "./leftPanel.css";
 
 const TrainsPanel = () => {
 
-	const [state, setState] = useState(true);
+	const [open, setOpen] = useState(true);
 
 	return (
-		<div style={{
-			position: "absolute",
-			width: "100px",
-			height: "100px",
-
-		}}>
-			<button onClick={() => {
-				setState(true);
-				console.log("clicked");
-			}}> Show Panel </button>
+		<div>
+			<Button onClick={()=>setOpen(true)} className="showTrainButton">Show Trains</Button>
 			<SlidingPane
-        closeIcon={<div>Some div containing custom close icon.</div>}
-        isOpen={state}
-        title="Hey, it is optional pane title.  I can be React component too."
-        from="bottom"
-        width="200px"
-        onRequestClose={() => setState(false)}
-      >
-        <div>And I am pane content on left.</div>
-      </SlidingPane>
+				isOpen={open}
+				title="Active Trains"
+				from="left"
+				width="225px"
+				onRequestClose={() => setOpen(false)}
+			>
+				<div className="trainPanelHolder">
+					<Button variant="light" className="trainButton">
+						<div className="buttonDiv">
+							<BsCircleFill size="1.5em" color="#C44242"/>
+							<div className="buttonText">RD-01</div>
+						</div>
+					</Button>
+					<Button variant="light" className="trainButton">
+						<div className="buttonDiv">
+							<BsCircleFill size="1.5em" color="#C44242"/>
+							<div className="buttonText">RD-01</div>
+						</div>
+					</Button>
+					<Button variant="light" className="trainButton">
+						<div className="buttonDiv">
+							<BsCircleFill size="1.5em" color="#C44242"/>
+							<div className="buttonText">RD-01</div>
+						</div>
+					</Button>
+					<Button variant="light" className="addTrainButton">
+						<AiOutlinePlus size="2em" color="grey"/>
+					</Button>
+				</div>
+			</SlidingPane>
 		</div>
 	)
-}
-
-const styles = {
-	bar: {
-
-	}
 }
 
 export default TrainsPanel
