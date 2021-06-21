@@ -13,7 +13,7 @@ function NavComponent() {
 			onSelect={(selected) => {
 				history.push(`/${selected}`);
 			}}
-			style={{ background: "#1C4E80" }}
+			style={{ background: "#1C4E80", boxShadow: "0px 0px 25px rgba(0,0,0,.5)", }}
 		>
 			<SideNav.Toggle />
 			<SideNav.Nav defaultSelected="CTC">
