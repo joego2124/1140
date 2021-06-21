@@ -97,9 +97,7 @@ const styles = {
 	bar: { 
 		background: "#1C4E80", 
 		height: "64px", 
-		// marginLeft: "64px",
-		// zIndex: "1107",
-		// boxShadow: "0px 0px 30px black",
+		boxShadow: "0px 0px 25px rgba(0,0,0,.5)",
 	},
 	brandTitle: { 
 		color: "#FFFFFF",
