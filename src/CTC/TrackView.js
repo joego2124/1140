@@ -5,7 +5,7 @@ const TrackView = () => {
 
 	const maxLength = 4000;
 
-	document.body.style.overflow='hidden'
+	document.body.style.overflow='hidden';
 
 	return (
 		<div style={styles.track}>

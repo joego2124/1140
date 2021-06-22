@@ -5,7 +5,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { BsCircleFill } from "react-icons/bs";
 
 import "react-sliding-pane/dist/react-sliding-pane.css";
-import "./leftPanel.css";
+import "./styles.css";
 
 const TrainsPanel = () => {
 
@@ -16,7 +16,6 @@ const TrainsPanel = () => {
 			<Button onClick={()=>setOpen(true)} className="showTrainButton">Show Trains</Button>
 			<SlidingPane
 				isOpen={open}
-				title="Active Trains"
 				from="left"
 				width="225px"
 				onRequestClose={() => setOpen(false)}
