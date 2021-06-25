@@ -3,6 +3,7 @@ import { React, useContext } from 'react'
 import { Image, Navbar, Dropdown, Form, Button, Nav, ButtonGroup } from 'react-bootstrap'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import { SpeedContext } from './SpeedProvider';
+// import firebaseApp from './base';
 import Firebase from "firebase";
 import config from './config';
 
@@ -81,8 +82,8 @@ function TopBar() {
 							<Image src={portrait} style={{maxWidth: "100%",}} roundedCircle/>
 						</Dropdown.Toggle>
 						<Dropdown.Menu>
-							<Dropdown.Item href="#/settings">Settings</Dropdown.Item>
-							<Dropdown.Item href="#/logout">Log out</Dropdown.Item>
+							<Dropdown.Item >Settings</Dropdown.Item>
+							<Dropdown.Item onClick={()=>Firebase.auth().signOut()}>Log out</Dropdown.Item>
 						</Dropdown.Menu>
 					</Dropdown>
 
@@ -96,9 +97,8 @@ const styles = {
 	bar: { 
 		background: "#1C4E80", 
 		height: "64px", 
-		// marginLeft: "64px",
-		// zIndex: "1107",
-		// boxShadow: "0px 0px 30px black",
+		boxShadow: "0px 0px 25px rgba(0,0,0,.5)",
+		zIndex: "1000"
 	},
 	brandTitle: { 
 		color: "#FFFFFF",

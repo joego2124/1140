@@ -26,6 +26,8 @@ FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
 
+FirebaseJson json;
+
 const int LED_PIN = 13;
 
 bool ledStatus = false;
@@ -40,6 +42,14 @@ void streamCallback(FirebaseStream data)
   Serial.println(data.streamPath());
   Serial.println(data.dataPath());
   Serial.println(data.dataType());
+
+//  FirebaseJsonData  jsonData = data.jsonData();
+//
+//  if (data.dataType() == "json") {
+//    Serial.println(json.get(jsonData , "LED_STATUS", true));
+//    Serial.println(json.get(jsonData , "speedSettings/paused", true));
+//    Serial.println(json.get(jsonData , "speedSettings/speed", true));
+//  }
 
   if (data.dataType() == "string") {
     if (data.stringData() == "ON") {                              
