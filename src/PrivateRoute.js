@@ -7,7 +7,7 @@ import CTC from './CTC/CTC';
 import Login from './login';
 import TopBar from './TopBar';
 import TrainController from './TrainController';
-import TrainModel from './TrainModel';
+import TrainModel from './TrainModel/TrainModel';
 import { SpeedProvider } from './SpeedProvider';
 
 import "firebase/auth";
