@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.13.0",
+    "@react-firebase/auth": "^0.2.10",
     "@react-firebase/database": "^0.3.11",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.7",
@@ -17,6 +18,8 @@
     "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-sliding-pane": "git+https://github.com/joego2124/sliding-pane.git",
+    "react-zoom-pan-pinch": "^2.0.2",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
