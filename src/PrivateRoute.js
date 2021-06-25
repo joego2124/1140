@@ -7,6 +7,7 @@ import CTC from './CTC';
 import Login from './login';
 import TopBar from './TopBar';
 import TrainController from './TrainController';
+import TrainModel from './TrainModel';
 import { SpeedProvider } from './SpeedProvider';
 
 import "firebase/auth";
@@ -27,6 +28,7 @@ const PrivateRoute = () => {
 											<Redirect exact from="/" to="/CTC"/>
 											<Route path="/CTC" exact component={CTC}/>
 											<Route path="/TrainController" exact component={TrainController}/>
+											<Route path="/TrainModel" exact component={TrainModel}/>
 										</Switch>
 									</div>
 								</Router>
