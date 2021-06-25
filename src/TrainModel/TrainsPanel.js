@@ -17,26 +17,26 @@ const TrainsPanel = () => {
 			<SlidingPane
 				isOpen={open}
 				from="left"
-				width="225px"
+				width="300px"
 				onRequestClose={() => setOpen(false)}
 			>
 				<div className="trainPanelHolder">
 					<Button variant="light" className="trainButton">
 						<div className="buttonDiv">
-							<BsCircleFill size="1.5em" color="#C44242"/>
+							<BsCircleFill size="1.5em" color="green"/>
 							<div className="buttonText">RD-01</div>
 						</div>
 					</Button>
 					<Button variant="light" className="trainButton">
 						<div className="buttonDiv">
 							<BsCircleFill size="1.5em" color="#C44242"/>
-							<div className="buttonText">RD-01</div>
+							<div className="buttonText">RD-02</div>
 						</div>
 					</Button>
 					<Button variant="light" className="trainButton">
 						<div className="buttonDiv">
 							<BsCircleFill size="1.5em" color="#C44242"/>
-							<div className="buttonText">RD-01</div>
+							<div className="buttonText">RD-03</div>
 						</div>
 					</Button>
 					<Button variant="light" className="addTrainButton">
