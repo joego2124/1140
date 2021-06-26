@@ -17,6 +17,7 @@ import { SpeedProvider } from './SpeedProvider';
 
 import 'firebase/auth';
 import { FirebaseAuthConsumer } from '@react-firebase/auth';
+import TrackController from './TrackController/TrackController';
 
 const PrivateRoute = () => {
   return (
@@ -32,6 +33,7 @@ const PrivateRoute = () => {
                   <Switch>
                     <Redirect exact from='/' to='/CTC' />
                     <Route path='/CTC' exact component={CTC} />
+                    <Route path='/TrackController' exact component={TrackController}/>
                     <Route
                       path='/TrainController'
                       exact

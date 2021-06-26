@@ -26,6 +26,14 @@ function NavComponent() {
 							CTC Dashboard
 						</NavText>
 				</NavItem>
+				<NavItem eventKey="TrackController">
+					<NavIcon>
+						<IoTrainOutline size="1.75em" />
+					</NavIcon>
+					<NavText>
+						Track Controller
+					</NavText>
+				</NavItem>
 				<NavItem eventKey="TrainController">
 					<NavIcon>
 						<AiOutlineControl size="1.75em" />
