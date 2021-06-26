@@ -18,15 +18,11 @@ const MainPanel = () => {
 			>
 				<div className="controlPanelHolder">
 					<div className = "controlPanelSection">
-						test
+						Properties
 					</div>
 
 					<div className = "controlPanelSection">
-						test
-					</div>
-
-					<div className = "controlPanelSection">
-						test
+						Current States
 					</div>
 				</div>
 			</SlidingPane>
