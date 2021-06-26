@@ -24,19 +24,19 @@ FirebaseAuth auth;
 FirebaseConfig config;
 
 /* 6. GLOBAL VARIABLES  */
-
 const int LED_PIN = 13;
-bool ledStatus = false;
-bool prevLedStatus = false;
 int firebaseNumber;
 int prevNumber;
+unsigned long count = 0;
+bool startTimer = 0;
+unsigned long keepAliveTime;
+
 
 
 void setup()
 {
   pinMode(LED_PIN, OUTPUT);
   Serial.begin(115200);
-
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to Wi-Fi");
   while (WiFi.status() != WL_CONNECTED)
@@ -48,7 +48,6 @@ void setup()
   Serial.print("Connected with IP: ");
   Serial.println(WiFi.localIP());
   Serial.println();
-
   Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
 
   /* Assign the api key (required) */
@@ -81,7 +80,12 @@ void setup()
 
 void loop()
 {
-  bool result;
+  if(startTimer == 0)
+  {
+      keepAliveTime = millis();
+      startTimer = 1;
+  }
+  
   
   if(!Firebase.RTDB.readStream(&fbdoDownload))
   {
@@ -97,44 +101,35 @@ void loop()
     if(fbdoDownload.dataType() == "int")
     {
         firebaseNumber = fbdoDownload.intData();
+        Serial.println(firebaseNumber);
     }
   }
+  
   
 
   
   if (prevNumber != firebaseNumber)
   {
     prevNumber = firebaseNumber;
-    Serial.println(firebaseNumber);
-
-    
     int outputInt = prevNumber * 2;
-    long int start = millis();
-    result = Firebase.RTDB.setInt(&fbdoUpload, "/deanTest/output", outputInt);
+    
+    unsigned long start = millis();
+    Firebase.RTDB.setInt(&fbdoUpload, "/deanTest/output", outputInt);
     Serial.print("Milliseconds: ");
     Serial.println(millis() - start);
     Serial.println(outputInt);    
   }
+
   
 
-
-  /*
-  //stress test
-  if (prevNumber != firebaseNumber)
+  if((millis() - keepAliveTime) == 39999 ||  (millis() - keepAliveTime) == 40000 || (millis() - keepAliveTime) == 40001)
   {
-    prevNumber = firebaseNumber;
-
-    
-    int outputInt = prevNumber + 1;
-    long int start = millis();
-    result = Firebase.RTDB.setInt(&fbdoUpload, "/deanTest/number", outputInt);
-    Serial.print("Milliseconds: ");
-    Serial.println(millis() - start);
-    
+      
+      Firebase.RTDB.setInt(&fbdoUpload, "/deanTest/keepAlive", 1);
+      Serial.println("keep Alive!!!!");    
+      keepAliveTime = millis();
+      startTimer = 0;
   }
-  */
-
-  
 }
 
 
