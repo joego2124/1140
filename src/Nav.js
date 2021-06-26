@@ -3,6 +3,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { AiOutlineControl } from 'react-icons/ai';
 import { IoTrainOutline } from 'react-icons/io5';
+import { BiSitemap } from 'react-icons/bi';
 
 function NavComponent() {
 
@@ -19,7 +20,7 @@ function NavComponent() {
 			<SideNav.Nav defaultSelected="CTC">
 				<NavItem eventKey="CTC">
 						<NavIcon>
-							<AiOutlineControl size="1.75em" />
+							<BiSitemap size="1.75em" />
 						</NavIcon>
 						<NavText>
 							CTC Dashboard
@@ -27,18 +28,18 @@ function NavComponent() {
 				</NavItem>
 				<NavItem eventKey="TrainController">
 					<NavIcon>
-						<IoTrainOutline size="1.75em" />
+						<AiOutlineControl size="1.75em" />
 					</NavIcon>
 					<NavText>
 						Train Controller
 					</NavText>
 				</NavItem>
-				<NavItem eventKey="Ben">
+				<NavItem eventKey="TrainModel">
 					<NavIcon>
 						<IoTrainOutline size="1.75em" />
 					</NavIcon>
 					<NavText>
-						Ben's Test Page
+						Train Model
 					</NavText>
 				</NavItem>
 			</SideNav.Nav>
