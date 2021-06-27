@@ -35,7 +35,7 @@ function NavComponent() {
 						Track Controller
 					</NavText>
 				</NavItem>
-				<NavItem eventKey="TrainController">
+				<NavItem eventKey="TrackModel">
 					<NavIcon>
 						<GiRailway size="1.75em" />
 					</NavIcon>
