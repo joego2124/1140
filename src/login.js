@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import firebaseApp from './base';
 import { Form, Button, Card } from 'react-bootstrap'
 import './index.css'
+import logo from './trainsLogo.svg'
 
 function Login() {
 
@@ -18,7 +19,8 @@ function Login() {
 	);
 
 	return (
-		<div stlye={styles.centeredDiv}>
+		<div style={styles.centeredDiv}>
+			<img src={logo} style={styles.loginLogo} />
 			<Card style={styles.loginCard}>
 				<Card.Body>
 					<Form onSubmit={handleLogin}>
@@ -53,15 +55,21 @@ const styles = {
 		marginRight: "auto", 
 		borderRadius: "25px", 
 		padding: "15px", 
-		boxShadow: "0px 10px 25px #9E9E9E",
+		boxShadow: "0px 15px 35px rgba(0,0,0,.25)",
 	},
 	centeredDiv: {
-		margin: "0",
-		position: "absolute",
-		top: "50%",
-		msTransform: "translateY(-50%)",
-		transform: "translateY(-50%)",
-	}
+		height: "100vh",
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		background: "rgb(0,48,143)",
+		background: "linear-gradient(45deg, rgba(0,48,143,1) 0%, rgba(137,207,240,1) 100%)",
+		flexDirection: "column",
+	},
+	loginLogo: {
+		width: "32rem",
+		margin: "50px",
+	},
 }
 
 export default Login
