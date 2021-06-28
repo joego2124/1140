@@ -1,31 +1,22 @@
 import React, { useState } from 'react';
 import SlidingPane from "react-sliding-pane";
 import { Button } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const MainPanel = () => {
 
 	const [open, setOpen] = useState(true);
 
 	return (
-		<div>
-			<Button onClick={()=>setOpen(true)} className="showControlPanelButton">Show Controls</Button>
-			<SlidingPane
-				isOpen={open}
-				from="bottom"
-				width="100%"
-				overlayClassName="bottomPanel"
-				onRequestClose={() => setOpen(false)}
-			>
-				<div className="controlPanelHolder">
-					<div className = "controlPanelSection">
-						Properties
-					</div>
-
-					<div className = "controlPanelSection">
-						Current States
-					</div>
-				</div>
-			</SlidingPane>
+		<div style={{
+			textAlign: "center",
+			background: "grey",
+			width: "50%",
+		}}>
+			<h1>PROPERTIES</h1>
+			<p>testtext</p>
 		</div>
 	)
 }

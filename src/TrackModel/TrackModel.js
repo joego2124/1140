@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 
 import config from '../config';
 import Firebase from "firebase";
-// import { SpeedContext } from '../SpeedProvider';
-// import TrackView from './TrackView';
-// import TrainsPanel from './TrainsPanel';
 import MainPanel from './MainPanel';
 
 function TrackModel() {
+
+	document.body.style.overflow='hidden';
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -16,10 +15,17 @@ function TrackModel() {
 	}
 
 	return (
-		<div>
-			<header className="App-header">
-				<MainPanel />
-			</header>
+		<div style={{
+			display: "flex",
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "flex-end",
+			bottom: 0,
+			width: "100%",
+			position: "absolute",
+		}}>
+			<MainPanel />
+			<MainPanel />
 		</div>
 	)
 }
