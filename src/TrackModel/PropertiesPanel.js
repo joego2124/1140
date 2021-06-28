@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-const MainPanel = () => {
+const PropertiesPanel = () => {
 
 	const [open, setOpen] = useState(true);
 
@@ -21,4 +21,4 @@ const MainPanel = () => {
 	)
 }
 
-export default MainPanel
+export default PropertiesPanel

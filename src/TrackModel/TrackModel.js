@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 
 import config from '../config';
 import Firebase from "firebase";
-import MainPanel from './MainPanel';
+import PropertiesPanel from './PropertiesPanel';
+import StatesPanel from './StatesPanel';
 
 function TrackModel() {
 
@@ -24,8 +25,8 @@ function TrackModel() {
 			width: "100%",
 			position: "absolute",
 		}}>
-			<MainPanel />
-			<MainPanel />
+			<PropertiesPanel />
+			<StatesPanel />
 		</div>
 	)
 }
