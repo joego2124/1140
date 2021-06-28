@@ -33,7 +33,6 @@ const Ben = () => {
     return (
         <div>
             {alpha}
-
             <Form onSubmit={handleUpdate}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>alpha</Form.Label>

@@ -3,6 +3,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { AiOutlineControl } from 'react-icons/ai';
 import { IoTrainOutline } from 'react-icons/io5';
+import { BiSitemap } from 'react-icons/bi';
 
 function NavComponent() {
 
@@ -13,13 +14,13 @@ function NavComponent() {
 			onSelect={(selected) => {
 				history.push(`/${selected}`);
 			}}
-			style={{ background: "#1C4E80" }}
+			style={{ background: "#1C4E80", boxShadow: "0px 0px 25px rgba(0,0,0,.5)", }}
 		>
 			<SideNav.Toggle />
 			<SideNav.Nav defaultSelected="CTC">
 				<NavItem eventKey="CTC">
 						<NavIcon>
-							<AiOutlineControl size="1.75em" />
+							<BiSitemap size="1.75em" />
 						</NavIcon>
 						<NavText>
 							CTC Dashboard
@@ -27,7 +28,7 @@ function NavComponent() {
 				</NavItem>
 				<NavItem eventKey="TrainController">
 					<NavIcon>
-						<IoTrainOutline size="1.75em" />
+						<AiOutlineControl size="1.75em" />
 					</NavIcon>
 					<NavText>
 						Train Controller
@@ -39,6 +40,7 @@ function NavComponent() {
 					</NavIcon>
 					<NavText>
 						Ben's Test Page
+						Train Model
 					</NavText>
 				</NavItem>
 			</SideNav.Nav>
