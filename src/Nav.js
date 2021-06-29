@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { AiOutlineControl } from 'react-icons/ai';
 import { IoTrainOutline } from 'react-icons/io5';
 import { BiSitemap } from 'react-icons/bi';
+import { GiRailway } from "react-icons/gi";
 
 function NavComponent() {
 
@@ -26,12 +27,20 @@ function NavComponent() {
 							CTC Dashboard
 						</NavText>
 				</NavItem>
-				<NavItem eventKey="TrainController">
+				<NavItem eventKey="TrackController">
 					<NavIcon>
-						<AiOutlineControl size="1.75em" />
+						<IoTrainOutline size="1.75em" />
 					</NavIcon>
 					<NavText>
-						Train Controller
+						Track Controller
+					</NavText>
+				</NavItem>
+				<NavItem eventKey="TrackModel">
+					<NavIcon>
+						<GiRailway size="1.75em" />
+					</NavIcon>
+					<NavText>
+						Track Model
 					</NavText>
 				</NavItem>
 				<NavItem eventKey="TrainModel">
@@ -40,6 +49,14 @@ function NavComponent() {
 					</NavIcon>
 					<NavText>
 						Train Model
+					</NavText>
+				</NavItem>
+				<NavItem eventKey="TrainController">
+					<NavIcon>
+						<AiOutlineControl size="1.75em" />
+					</NavIcon>
+					<NavText>
+						Train Controller
 					</NavText>
 				</NavItem>
 			</SideNav.Nav>
