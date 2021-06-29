@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SlidingPane from "react-sliding-pane";
 import { Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import config from '../config';
+import Firebase from "firebase";
 
 const PropertiesPanel = () => {
 
@@ -19,7 +21,7 @@ const PropertiesPanel = () => {
 		let ref = Firebase.database().ref('/LED_STATUS');
 		ref.on('value', snapshot => {
 			const state = `${snapshot.val()}`;
-			setLedState(state === "ON" ? true : false);
+			// setLedState(state === "ON" ? true : false);
 		});
 	}
 
