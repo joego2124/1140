@@ -1,4 +1,4 @@
-export default trackLayout = {
+const trackLayout = {
 	"blocks": [
 		{
 			"blockId": 0,
@@ -23,3 +23,5 @@ export default trackLayout = {
 		}
 	]
 }
+
+export default trackLayout;
