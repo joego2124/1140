@@ -15,16 +15,26 @@ function TrainModel() {
 		<div>
 		<header className="App-header">
 			<TrainsPanel />
-			<Container>
-				<Col>
+			{/* <Container styles={{
+				display: "flex",
+				flexDirection: "row",
+				justifyContent: "space-between",
+				width: "100%",
+			}}>
+				<PhysicsStatus/>
+				<PhysicsStatus/>
+				<PhysicsStatus/>
+			<Container/> */}
+			<Container style={{height:"100%"}}>
+				<Col style={{width: '60vh'}}>
 					<Row>
-						<PhysicsStatus/>
+						<TrackStatus/>
 					</Row>
 					<Row>
 						<PhysicsStatus/>
 					</Row>
 				</Col>
-				<Col>
+				<Col style={{height:"100vh",width: '90vh'}}>
 					<TrainStatus/>
 				</Col>
 			</Container>
