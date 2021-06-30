@@ -6,7 +6,7 @@ function VarDisplay({varName, message}) {
 	
 	const [vari, setVari] = useState('default');
 
-	useEffect(() => {DatabaseGet(setVari, varName);}, []);
+	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName), 1000);}, []);
 
 	return (
 		<div>

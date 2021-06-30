@@ -7,7 +7,7 @@ function ButtonIndicator({varName, message}) {
 	
 	const [vari, setVari] = useState(false);
 
-	useEffect(() => {DatabaseGet(setVari, varName);}, []);
+	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName), 1000);}, []);
 
 	return (
 		<div>
