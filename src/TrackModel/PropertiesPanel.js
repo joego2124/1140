@@ -67,6 +67,8 @@ const PropertiesPanel = () => {
 			<div style={{
 				textAlign: "left",
 				paddingLeft: 100,
+				paddingRight: 50,
+				paddingBottom: 10
 			}}>
 				<p>Block Size: </p>
 				<p>Directions of Travel: {dirOfTravel}</p>
