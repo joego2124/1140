@@ -31,7 +31,6 @@ function TrainStatus() {
 	// 	Firebase.database().ref('/NEXT_STATION').set(newState);
 	// }
 
-	useEffect(() => {InitializeJsonTree();}, []);
 
 	return (
 		<div style={{borderStyle: 'solid', height:"90%", width: '105%'}}>
