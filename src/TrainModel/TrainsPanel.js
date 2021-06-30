@@ -13,7 +13,7 @@ const TrainsPanel = () => {
 
 	return (
 		<div>
-			<Button onClick={()=>setOpen(true)} className="showTrainButton">Show Trains</Button>
+			<Button onClick={()=>{setOpen(true);}} className="showTrainButton">Show Trains</Button>
 			<SlidingPane
 				isOpen={open}
 				from="left"
