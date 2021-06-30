@@ -12,6 +12,7 @@ const PropertiesPanel = () => {
 	const [open, setOpen] = useState(true);
 
 	const [dirOfTravel, setDirOfTravel] = useState();
+	const [elev, setElevation] = useState();
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -24,11 +25,18 @@ const PropertiesPanel = () => {
 		ref.on('value', snapshot => {
 			setDirOfTravel(snapshot.val());
 		});
+		ref = Firebase.database().ref('/WSM/Elevation');
+		ref.on('value', snapshot => {
+			setElevation(snapshot.val());
+		});
 	}
 
 	function setData(newState, commandType) {
         if(commandType == "dir"){
             Firebase.database().ref('/WSM/DirectionsOfTravel').set(newState);
+        }
+		else if(commandType == "elev"){
+            Firebase.database().ref('/WSM/Elevation').set(newState);
         }
 	}
 
@@ -39,7 +47,17 @@ const PropertiesPanel = () => {
             setDOT(dirOfTravel.value);
         }, []
     );
+	const elevation = useCallback(
+        async event => {
+            event.preventDefault();
+            const {elev} = event.target.elements;
+            setElev(elev.value);
+        }, []
+    );
 
+	/////////////////////////////////////////////////////////////////
+	// Getter Functions
+	/////////////////////////////////////////////////////////////////
 	// DOT = Direction of Travel
 	function getDOT(){
         let ref = Firebase.database().ref('/WSM/DirectionsOfTravel');
@@ -47,14 +65,28 @@ const PropertiesPanel = () => {
             setDirOfTravel(snapshot.val());
         });
     }
+	function getElev(){
+        let ref = Firebase.database().ref('/WSM/Elevation');
+        ref.on('value', snapshot => {
+            setElevation(snapshot.val());
+        });
+    }
 
+	/////////////////////////////////////////////////////////////////
+	// Setter Functions
+	/////////////////////////////////////////////////////////////////
 	// DOT = Direction of Travel
 	function setDOT(newDOT){
         Firebase.database().ref('/WSM/DirectionsOfTravel').set(parseInt(newDOT))
     }
 
+	function setElev(newElev){
+        Firebase.database().ref('/WSM/Elevation').set(parseInt(newElev))
+    }
+
 	useEffect(getData, []);
 	useEffect(() => getDOT());
+	useEffect(() => getElev());
 
 	return (
 		// Properties title
@@ -72,7 +104,7 @@ const PropertiesPanel = () => {
 			}}>
 				<p>Block Size: </p>
 				<p>Directions of Travel: {dirOfTravel}</p>
-				<p>Elevation: </p>
+				<p>Elevation: {elev}</p>
 				<p>Desired Track Temp: </p>
 				<p>Grade: </p>
 				<p>Railway Crossing: </p>
