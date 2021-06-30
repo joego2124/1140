@@ -13,7 +13,7 @@ const StatesPanel = () => {
 		<div style={{
 			textAlign: "center",
 			background: "grey",
-			width: "50%",
+			width: "70%",
 		}}>
 			<h1>STATES</h1>
 			<p>testtext</p>

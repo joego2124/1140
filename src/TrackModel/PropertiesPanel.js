@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import SlidingPane from "react-sliding-pane";
 import { Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
@@ -11,41 +11,73 @@ const PropertiesPanel = () => {
 
 	const [open, setOpen] = useState(true);
 
+	const [dirOfTravel, setDirOfTravel] = useState();
+
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
 	}else {
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	function getLedData() {
-		let ref = Firebase.database().ref('/LED_STATUS');
+	function getData() {
+		let ref = Firebase.database().ref('/WSM/DirectionsOfTravel');
 		ref.on('value', snapshot => {
-			const state = `${snapshot.val()}`;
-			// setLedState(state === "ON" ? true : false);
+			setDirOfTravel(snapshot.val());
 		});
 	}
 
-	function setLedData(newState) {
-		Firebase.database().ref('/LED_STATUS').set(newState ? "ON" : "OFF");
+	function setData(newState, commandType) {
+        if(commandType == "dir"){
+            Firebase.database().ref('/WSM/DirectionsOfTravel').set(newState);
+        }
 	}
 
-	useEffect(() => getLedData(), []);
+	const directionOfTravel = useCallback(
+        async event => {
+            event.preventDefault();
+            const {dirOfTravel} = event.target.elements;
+            setDOT(dirOfTravel.value);
+        }, []
+    );
+
+	// DOT = Direction of Travel
+	function getDOT(){
+        let ref = Firebase.database().ref('/WSM/DirectionsOfTravel');
+        ref.on('value', snapshot => {
+            setDirOfTravel(snapshot.val());
+        });
+    }
+
+	// DOT = Direction of Travel
+	function setDOT(newDOT){
+        Firebase.database().ref('/WSM/DirectionsOfTravel').set(parseInt(newDOT))
+    }
+
+	useEffect(getData, []);
+	useEffect(() => getDOT());
 
 	return (
+		// Properties title
 		<div style={{
 			textAlign: "center",
 			background: "grey",
-			width: "50%",
+			width: "30%",
 		}}>
 			<h1>PROPERTIES</h1>
-			<p>Block Size: </p>
-			<p>Direction of Travel: </p>
-			<p>Elevation: </p>
-			<p>testtext</p>
-			<p>testtext</p>
-			<p>testtext</p>
-			<p>testtext</p>
+			<div style={{
+				textAlign: "left",
+				paddingLeft: 100,
+			}}>
+				<p>Block Size: </p>
+				<p>Directions of Travel: {dirOfTravel}</p>
+				<p>Elevation: </p>
+				<p>Desired Track Temp: </p>
+				<p>Grade: </p>
+				<p>Railway Crossing: </p>
+				<p>Speed Limit: </p>
+			</div>
 		</div>
+
 	)
 }
 
