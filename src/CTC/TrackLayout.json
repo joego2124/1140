@@ -1,0 +1,44 @@
+{
+	"blocks": [
+		{
+			"blockId": 0,
+			"connectors": [null, null, 1, 9]
+		},
+		{
+			"blockId": 1,
+			"connectors": [0, null, 2, null]
+		},
+		{
+			"blockId": 2,
+			"connectors": [1, null, 3, null]
+		},
+		{
+			"blockId": 3,
+			"connectors": [2, null, null, 4]
+		},
+		{
+			"blockId": 4,
+			"connectors": [null, 3, 5, null]
+		},
+		{
+			"blockId": 5,
+			"connectors": [6, 4, null, null]
+		},
+		{
+			"blockId": 6,
+			"connectors": [7, null, 5, null]
+		},
+		{
+			"blockId": 7,
+			"connectors": [8, null, 6, null]
+		},
+		{
+			"blockId": 8,
+			"connectors": [null, 9, 7, null]
+		},
+		{
+			"blockId": 9,
+			"connectors": [null, 0, null, 8]
+		}
+	]
+}
