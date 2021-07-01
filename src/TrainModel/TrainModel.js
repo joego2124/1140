@@ -1,31 +1,39 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Button, Container, Col, Row  } from 'react-bootstrap';
-// import config from '../config';
-// import Firebase from "firebase";
-// import { SpeedContext } from '../SpeedProvider';
 import TrainsPanel from './TrainsPanel';
 import TrackStatus from './TrackStatus';
 import TrainStatus from './TrainStatus';
 import PhysicsStatus from './PhysicsStatus';
-// import { Container, Col } from 'postcss-safe-parser/node_modules/postcss';
 
 function TrainModel() {
+
+	const [parentName, setParentName] = useState('TRN1');
 
 	return (
 		<div>
 		<header className="App-header">
-			<TrainsPanel />
-			<Container>
-				<Col>
+			<TrainsPanel setParentName={setParentName}/>
+			{/* <Container styles={{
+				display: "flex",
+				flexDirection: "row",
+				justifyContent: "space-between",
+				width: "100%",
+			}}>
+				<PhysicsStatus/>
+				<PhysicsStatus/>
+				<PhysicsStatus/>
+			<Container/> */}
+			<Container style={{height:"100%"}}>
+				<Col style={{width: '60vh'}}>
 					<Row>
-						<PhysicsStatus/>
+						<TrackStatus parentName={parentName}/>
 					</Row>
 					<Row>
-						<PhysicsStatus/>
+						<PhysicsStatus parentName={parentName}/>
 					</Row>
 				</Col>
-				<Col>
-					<TrainStatus/>
+				<Col style={{height:"100vh",width: '90vh'}}>
+					<TrainStatus parentName={parentName}/>
 				</Col>
 			</Container>
 		</header>
