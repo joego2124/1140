@@ -23,10 +23,10 @@ const BottomPanel = () => {
   Firebase.app();
 
   //when updates happen this is called and then it calls appropriate functions to update the page element
-  const handleUpdate = useCallback(async (event) => {
-    event.preventDefault();
+  const handleUpdate = () => {
+    console.log(switchCommand == 0 ? 1 : 0);
     setSwitchCommandData(switchCommand == 0 ? 1 : 0);
-  }, []);
+  };
 
   function getSwitchCommandData() {
     let ref = Firebase.database().ref('/WSC/SwitchCommand');
@@ -62,7 +62,7 @@ const BottomPanel = () => {
     ));
     return (
       <div className='dataSection'>
-        <select>{listItems}</select>
+        <select className='blockSelect'>{listItems}</select>
         <div className='dataContainer'>
           <div className='dataLeft'>
             <div className='dataName'>
@@ -121,17 +121,23 @@ const BottomPanel = () => {
         <div className='bottomPanelHolder'>
           <div className='uploadPLCSection'>
             Upload PLC
-            <div>
-              PLC Upload Status:
-              {plcUploaded ? 'Uploaded' : 'Not Uploaded'}
+            <div className='dataName'>
+              Upload Status:
+              <div className='dataValue'>
+                {plcUploaded ? ' Uploaded' : ' Not Uploaded'}
+              </div>
             </div>
-            <PLCFileUpload />
+            <PLCFileUpload setter={setPlcUploaded} />
           </div>
           <div className='moveSwitchSection'>
-            Move Switch: current state: {switchCommand}
+            Move Switch
+            <div className='dataName'>
+              Current State:
+              <div className='dataValue'>{switchCommand}</div>
+            </div>
             <Button
               variant='light'
-              className='waysideButton'
+              className='moveSwitchButton'
               onClick={handleUpdate}
             >
               <div className='buttonDiv'>
