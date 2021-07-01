@@ -44,13 +44,17 @@ const BottomPanel = () => {
   function getWaysideListData() {
     let ref = Firebase.database().ref('/WSC/WS-1');
     ref.on('value', (snapshot) => {
-      setBlockList(['Block 1', 'Block 2', 'Block 3']);
-      setCrossingLights(snapshot.val().CrossingLights);
-      setLength(snapshot.val().Length);
-      setLevelCrossing(snapshot.val().LevelCrossing);
-      setOccupancy(snapshot.val().Occupancy);
-      setSpeedLimit(snapshot.val().SpeedLimit);
-      setStatus(snapshot.val().Status);
+      console.log(snapshot.val());
+      var newArray = [];
+      snapshot.val().forEach((key, value) => newArray.push(value));
+      setBlockList(newArray);
+      console.log(newArray);
+      // setCrossingLights(snapshot.val().CrossingLights);
+      // setLength(snapshot.val().Length);
+      // setLevelCrossing(snapshot.val().LevelCrossing);
+      // setOccupancy(snapshot.val().Occupancy);
+      // setSpeedLimit(snapshot.val().SpeedLimit);
+      // setStatus(snapshot.val().Status);
     });
   }
 
