@@ -51,8 +51,8 @@
 	flex-direction: row;
 	align-items: stretch;
 	justify-content: space-evenly;
-	height: 100%;
 	padding: 24px 24px;
+	/* background: grey; */
 }
 
 .controlPanelSection {
@@ -61,5 +61,25 @@
 	margin: 15px;
 	margin-top: 10px;
 	flex-grow: 1;
-	height: 100%;
+}
+
+.controlPanelValueContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	margin: 15px;
+}
+
+.controlPanelValueLabel {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	border: 2px solid grey;
+	border-radius: 100px;
+	box-shadow: 0px 3px 10px rgba(0, 0, 0, .25);
+	width: 150px;
+	padding: 3px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
