@@ -33,7 +33,10 @@ function StatesPanel(parentName){
 	useEffect(() => {setTimeout(() => DatabaseGet(setFailTrackCirc, 'FailureTrackCircuit', parentName),500);}, [parentName]);
 	useEffect(() => {setTimeout(() => DatabaseGet(setFailBeacon, 'BeaconFailure', parentName),500);}, [parentName]);
 
-	useEffect(() => {DatabaseSet((actualTemp < desiredTemp) ? 'true' : 'false', "TrackHeater", parentName)}, [actualTemp, desiredTemp]);
+	// Checking if track heater needs to be turned on
+	useEffect(() => {DatabaseSet((actualTemp < desiredTemp) ? true : false, "TrackHeater", parentName)}, [actualTemp, desiredTemp, parentName]);
+	// Disable track components if a failure is detected
+	// useEffect(() => {DatabaseSet(failBrokenRail ? false : true, "TrackOccupancy", parentName);}, [failBrokenRail]);
 
 	return (
 		<div style={{
@@ -52,11 +55,11 @@ function StatesPanel(parentName){
 					<Row>
 						<Col xs={4}>
 							<h4>
-								<WSMInverseIndicator parentName={parentName} varName='TrackOccupancy' message='AVAILABILITY'/>
+								<WSMIndicator parentName={parentName} varName='TrackOccupancy' message='AVAILABILITY'/>
 							</h4>
 							<p></p>
 							<p></p>
-							<p><WSMIndicator parentName={parentName} varName='TrackOccupancy' message='Track occupied?'/></p>
+							<p><WSMInverseIndicator parentName={parentName} varName='TrackOccupancy' message='Track occupied?'/></p>
 							<p><WSMInverseIndicator parentName={parentName} varName='MaintenanceStatus' message='Track under maintenance?'/></p>
 							<p><WSMInverseIndicator parentName={parentName} varName='MaxCapacity' message='Maximum capacity?'/></p>
 						</Col>
@@ -69,7 +72,7 @@ function StatesPanel(parentName){
 							<WSMDisplay parentName={parentName} varName='SwitchState' message='Switch State'/>
 							<p></p>
 							<WSMInverseIndicator parentName={parentName} varName='RailwayCrossingState' message='Railway Crossing'/>
-							<WSMDisplay parentName={parentName} varName='TrackHeater' message='Track Heater'/>
+							<WSMInverseIndicator parentName={parentName} varName='TrackHeater' message='Track Heater'/>
 							<WSMDisplay parentName={parentName} varName='Temperature' message='Current Temperature [°F]'/>
 						</Col>
 						<Col>
