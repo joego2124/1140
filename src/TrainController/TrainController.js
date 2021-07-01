@@ -6,6 +6,9 @@ import BrakingOptions from './BrakingOptions';
 import DoorOptions from './DoorOptions';
 import TrainStatus from './TrainStatus';
 import TrainsPanel from '../CTC/TrainsPanel.js';
+import Container from 'react-bootstrap/Container'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 
 function TrainContoller() {
 
@@ -31,11 +34,15 @@ function TrainContoller() {
 
 	return (
 		<div>
+			<Container>
+				<Col xs={4}>
+					<DoorOptions />
+				</Col>
+				<Col xs={4}>
+					<BrakingOptions />
+				</Col>
+			</Container>
 			<header className="App-header">
-				<div>
-                    <DoorOptions />
-                    <BrakingOptions />
-                </div>
 				<TrainStatus />
                 <TrainsPanel />
 			</header>

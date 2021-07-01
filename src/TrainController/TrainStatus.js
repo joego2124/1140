@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback} from 'react'
 import { Form, Button } from 'react-bootstrap'
 import Firebase from 'firebase'
+import Container from 'react-bootstrap/Container'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 
 const TrainStatus = () => {
 
@@ -140,70 +143,75 @@ const TrainStatus = () => {
 
     return (
         <div>
-            <div>
-                Current Speed: {currentSpeed}
-            </div>
-            <div>
-                Commanded Speed: {commandedSpeed}
-            </div>
-            <div>
-                Speed Limit: {speedLimit}
-            </div>
-            <div>
-                Power: {power}
-            </div>
-            <div>
-                Authority: {authority}
-            </div>
-            <div>
-                Grade: {grade}
-            </div>
-            <div>
-                Internal Temperature: {intTemp}
-            </div>
-            <div>
-                External Temperature: {extTemp}
-            </div>
-            <Button 
-                variant={intLights ? "primary" : "outline-primary"}
-                onClick={() => setData(!intLights, "int")}
-            >
-                Internal Lights
-            </Button>
-            <Button 
-                variant={extLights ? "primary" : "outline-primary"}
-                onClick={() => setData(!extLights, "ext")}
-            >
-                External Lights
-            </Button>
-            <Button 
-                variant={station ? "primary" : "outline-primary"}
-                onClick={() => setData(!station, "sta")}
-            >
-                Announce Next Station
-            </Button>
-            <div>
-                <Form onSubmit={setpoint}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Update Setpoint Speed</Form.Label>
-                        <Form.Control name="setpointSpeed" placeholder={setpointSpeed} />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
+            <h1>TRAIN STATUS</h1>
+            <Container>
+                <Col xs={4}>
+                    <p>Current Speed: {currentSpeed}</p>
+                    <p>Commanded Speed: {commandedSpeed}</p>
+                </Col>
+                <Col xs={4}>
+                    <p>Speed Limit: {speedLimit}</p>
+                    <p>Power: {power}</p>
+                </Col>
+                <Col xs={4}>
+                    <p>Authority: {authority}</p>
+                    <p>Grade: {grade}</p>
+                </Col>
+                <Col xs={4}>
+                    <p>Internal Temp: {intTemp}</p>
+                    <p>External Temp: {extTemp}</p>
+                </Col>
+            </Container>
+            <Container>
+                <Col xs={4}>
+                    <Button 
+                        variant={intLights ? "primary" : "outline-primary"}
+                        onClick={() => setData(!intLights, "int")}
+                    >
+                        Internal Lights
                     </Button>
-                </Form>
-            </div>
-            <div>
-                <Form onSubmit={temperature}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Update Temperature</Form.Label>
-                        <Form.Control name="temperatureControl" placeholder={temperatureControl} />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
+                </Col>
+                <Col xs={4}>
+                    <Button
+                        variant={extLights ? "primary" : "outline-primary"}
+                        onClick={() => setData(!extLights, "ext")}
+                    >
+                        External Lights
                     </Button>
-                </Form>
-            </div>
+                </Col>
+                <Col xs={4}>
+                    <Button 
+                        variant={station ? "primary" : "outline-primary"}
+                        onClick={() => setData(!station, "sta")}
+                    >
+                        Announce Next Station
+                    </Button>
+                </Col>
+            </Container>
+            <Container>
+                <Col xs={4}>
+                    <Form onSubmit={setpoint}>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Update Setpoint Speed</Form.Label>
+                            <Form.Control name="setpointSpeed" placeholder={setpointSpeed} />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Submit
+                        </Button>
+                    </Form>
+                </Col>
+                <Col xs={4}>
+                    <Form onSubmit={temperature}>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Update Temperature</Form.Label>
+                            <Form.Control name="temperatureControl" placeholder={temperatureControl} />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Submit
+                        </Button>
+                    </Form>
+                </Col>
+            </Container>
         </div>
     )
 }
