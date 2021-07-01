@@ -7,7 +7,7 @@ function WSMIndicator({varName, message, parentName}) {
 	const [vari, setVari] = useState(false);
 
 	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [parentName]);
-
+	useEffect(() => console.log(vari), [vari])
 	return (
 		<div>
 			<BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>{' '}
