@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import SlidingPane from "react-sliding-pane";
 import { Button, Dropdown } from 'react-bootstrap';
+import ValueIO from "./ValueIO";
 
-const MainPanel = () => {
+import "./styles.css"
+
+const MainPanel = ({setModalShow}) => {
 
 	const [open, setOpen] = useState(true);
-
+	const [maintenanceMode, setMaintenanceMode] = useState(false);
+	const [manualMode, setManualMode] = useState(false);
+	
 	return (
 		<div>
 			<Button onClick={()=>setOpen(true)} className="showControlPanelButton">Show Controls</Button>
@@ -18,78 +23,142 @@ const MainPanel = () => {
 			>
 				<div className="controlPanelHolder">
 
-					<div className = "controlPanelSection">
-
+					<div className = "controlPanelSection" style={{maxWidth: '225px', minWidth: '225px'}}>
+						<div className="modeSection">
+							<Button 
+								className="button"
+								variant={`${!maintenanceMode ? 'outline-': ''}dark`}
+								onClick={() => setMaintenanceMode(!maintenanceMode)}
+							>Maintenance Mode</Button>
+							<Button 
+								className="button"
+								variant={`${!manualMode ? 'outline-': ''}dark`}
+								onClick={() => setManualMode(!manualMode)}
+							>Manual Mode</Button>
+							<Button 
+								className="button"
+								variant="primary"
+								onClick={() => setModalShow(true)}
+							>Show Schedule</Button>
+						</div>
 					</div>
 
 					<div className = "controlPanelSection">
 						<div className="controlPanelSubSection">
-							<div className="controlPanelValueContainer">
-								Rt. Destination
-								<Dropdown>
-									<Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
-										Station Name
-									</Dropdown.Toggle>
-
-									<Dropdown.Menu>
-										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-										<Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-										<Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-									</Dropdown.Menu>
-								</Dropdown>
-							</div>
-
-							<div className="controlPanelValueContainer">
-								Authority
-								<div className="controlPanelValueUnitLabel">
-									<div>50</div>
-									<div>blocks</div>
-								</div>
-							</div>
-
-							<div className="controlPanelValueContainer">
-								Departure
-								<div className="controlPanelValueUnitLabel">
-									13:00:00
-								</div>
-							</div>
+							<ValueIO 
+								valueType="input"
+								valueLabel="Route Destination"
+								valueData={{
+									value: "Option 1",
+									dropdownList: [
+										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
+									],
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Authority"
+								valueData={{
+									value: 50,
+									units: "blocks",
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Departure Time"
+								valueData={{
+									value: "13:00:00",
+								}}
+							/>
 						</div>
+
 						<div className="controlPanelDivider"></div>
+
 						<div className="controlPanelSubSection">
-							<div className="controlPanelValueContainer">
-								Rt. Destination
-								<Dropdown>
-									<Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
-										Station Name
-									</Dropdown.Toggle>
-
-									<Dropdown.Menu>
-										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-										<Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-										<Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-									</Dropdown.Menu>
-								</Dropdown>
-							</div>
-
-							<div className="controlPanelValueContainer">
-								Authority
-								<div className="controlPanelValueUnitLabel">
-									<div>50</div>
-									<div>blocks</div>
-								</div>
-							</div>
-
-							<div className="controlPanelValueContainer">
-								Departure
-								<div className="controlPanelValueUnitLabel">
-									13:00:00
-								</div>
-							</div>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Next Stop"
+								valueData={{
+									value: "Stop Name",
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Suggested Speed"
+								valueData={{
+									value: 25,
+									units: "mi/hr"
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Train ID"
+								valueData={{
+									value: "Train ID",
+								}}
+							/>
 						</div>
-
 					</div>
 					<div className = "controlPanelSection">
-						
+						<div className="controlPanelSubSection">
+							<ValueIO 
+								valueType="input"
+								valueLabel="Signal State"
+								valueData={{
+									value: "Option 1",
+									dropdownList: [
+										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
+									],
+								}}
+							/>
+							<ValueIO 
+								valueType="input"
+								valueLabel="Switch State"
+								valueData={{
+									value: "Option 1",
+									dropdownList: [
+										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
+									],
+								}}
+							/>
+							<ValueIO 
+								valueType="input"
+								valueLabel="Maintenance Status"
+								valueData={{
+									value: "Option 1",
+									dropdownList: [
+										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
+									],
+								}}
+							/>
+						</div>
+						<div className="controlPanelSubSection">
+							<ValueIO 
+								valueType="input"
+								valueLabel="Railway State"
+								valueData={{
+									value: "Option 1",
+									dropdownList: [
+										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
+									],
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Track Occupancy"
+								valueData={{
+									value: "TRUE",
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Tickets"
+								valueData={{
+									value: 105,
+									units: "units/hr"
+								}}
+							/>
+						</div>
 					</div>
 				</div>
 			</SlidingPane>
