@@ -15,15 +15,15 @@ const TrainsPanel = (props) => {
 
 	return (
 		<div>
-			<Button onClick={()=>{setOpen(true);}} className="showTrainButton">Show Trains</Button>
-			<SlidingPane
+			{/* <Button onClick={()=>{setOpen(true);}} className="showTrainButton">Show Trains</Button> */}
+			{/* <SlidingPane
 				isOpen={open}
 				from="left"
 				width="300px"
 				onRequestClose={() => setOpen(false)}
-			>
-				<div className="trainPanelHolder">
-					<Button variant="light" className="trainButton" onClick={()=>{setTrain('TRN1');}}>
+			> */}
+				<div className="trainPanelHolderFixed">
+					<Button variant="light" className="trainButton" onClick={()=>{props.setParentName('TRN1');}}>
 						<div className="buttonDiv">
 							<BsCircleFill size="1.5em" color="green"/>
 							<div className="buttonText">TRN1</div>
@@ -41,11 +41,11 @@ const TrainsPanel = (props) => {
 							<div className="buttonText">TRN3</div>
 						</div>
 					</Button>
-					<Button variant="light" className="addTrainButton">
+					{/* <Button variant="light" className="addTrainButton">
 						<AiOutlinePlus size="2em" color="grey"/>
-					</Button>
+					</Button> */}
 				</div>
-			</SlidingPane>
+			{/* </SlidingPane> */}
 		</div>
 	)
 }

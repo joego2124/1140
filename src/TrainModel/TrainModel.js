@@ -12,7 +12,6 @@ function TrainModel() {
 	return (
 		<div>
 		<header className="App-header">
-			<TrainsPanel setParentName={setParentName}/>
 			{/* <Container styles={{
 				display: "flex",
 				flexDirection: "row",
@@ -24,6 +23,9 @@ function TrainModel() {
 				<PhysicsStatus/>
 			<Container/> */}
 			<Container style={{height:"100%"}}>
+				<Col>
+					<TrainsPanel setParentName={setParentName}/>
+				</Col>
 				<Col style={{width: '60vh'}}>
 					<Row>
 						<TrackStatus parentName={parentName}/>

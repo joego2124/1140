@@ -68,6 +68,7 @@ function DatabaseSet(value, varName, parentName){
 function DatabaseGet(setter, varName, parentName){
     if(parentName != undefined){
         var parentNameCleaned = Object.values(parentName)[0];
+        // console.log('test',parentName, parentNameCleaned);
         var parent = findById(jsonTree, `${parentNameCleaned}`.toLowerCase(), '');
         if(!parent){
             console.warn(`PARENT ${parentNameCleaned} NOT FOUND IN RTDB TREE`);

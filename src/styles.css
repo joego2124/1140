@@ -46,6 +46,14 @@
 	padding: 24px 32px;
 }
 
+.trainPanelHolderFixed {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 24px 32px;
+}
+
 .controlPanelHolder {
 	display: flex;
 	flex-direction: row;

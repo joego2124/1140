@@ -12,13 +12,13 @@ function TrackStatus(parentName) {
 				<Col>
 					<VarDisplay parentName={parentName} varName='Elevation' message='Elecation [ft]'/>
 					<VarDisplay parentName={parentName} varName='Grade' message='Grade [°]'/>
-					<VarDisplay parentName={parentName} varName='Authority' message='Authority [m]'/>
+					<VarDisplay parentName={parentName} varName='Authority' message='Authority [mi]'/>
 					<VarIndicator parentName={parentName} varName='LightState' message='Light Sensor'/>
 				</Col>
 				<Col>
 					<VarDisplay parentName={parentName} varName='SignalState' message='Signal Status'/> 
-					<VarDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit [m/h]'/>
-					<VarDisplay parentName={parentName} varName='CommandedSpeed' message='Commanded Speed [m/h]'/>
+					<VarDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit [mi/h]'/>
+					<VarDisplay parentName={parentName} varName='CommandedSpeed' message='Commanded Speed [mi/h]'/>
 					<VarIndicator parentName={parentName} varName='BeaconFailure' message='Beacon Failure'/>
 				</Col>
 			</Container>
