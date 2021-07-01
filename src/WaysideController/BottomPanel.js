@@ -24,8 +24,8 @@ const BottomPanel = () => {
 
   //when updates happen this is called and then it calls appropriate functions to update the page element
   const handleUpdate = () => {
-		console.log(switchCommand.value == 0 ? 1 : 0);
-    setSwitchCommandData(switchCommand.value == 0 ? 1 : 0);
+		console.log(switchCommand == 0 ? 1 : 0);
+    setSwitchCommandData(switchCommand == 0 ? 1 : 0);
   }
 
   function getSwitchCommandData() {
