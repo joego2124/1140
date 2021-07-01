@@ -10,13 +10,9 @@ function VarIndicator({varName, message, parentName}) {
 	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [parentName]);
 
 	return (
-		<div>
-			<Container>
-				<Row>
-					<h3>{message}</h3>
-                    <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>
-				</Row>
-			</Container>
+		<div className="componentDiv">
+			<div className="indicatorText">{message}</div>
+			<BsCircleFill className="indicator" size="1.0em" color={vari ? 'green' : "#C44242"}/>
 		</div>
 	)
 }

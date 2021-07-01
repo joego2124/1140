@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, Container, Row  } from 'react-bootstrap';
 import {DatabaseGet, DatabaseSet} from '../Database';
 import { BsCircleFill } from "react-icons/bs";
+import "./componentStyles.css";
 
 function ButtonIndicator({varName, message, parentName}) {
 	
@@ -10,13 +11,12 @@ function ButtonIndicator({varName, message, parentName}) {
 	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [parentName]);
 
 	return (
-		<div>
-			<Container>
-				<Row>
-					<Button onClick={()=>{DatabaseSet(vari == true ? false : true, varName, parentName)}}>{message}</Button>
-                    <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>
-				</Row>
-			</Container>
+		<div className="componentDiv">
+			<Button variant="light" className="componentButton" 
+					onClick={()=>{DatabaseSet(vari == true ? false : true, varName, parentName)}}>
+				<div className="componentButtonText">{message}</div>
+			</Button>
+			<BsCircleFill className="indicator" size="1.5em" color={vari ? 'green' : "#C44242"}/>
 		</div>
 	)
 }
