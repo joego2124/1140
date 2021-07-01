@@ -3,11 +3,11 @@ import { Button, Container, Row  } from 'react-bootstrap';
 import {DatabaseGet} from '../Database';
 import { BsCircleFill } from "react-icons/bs";
 
-function VarIndicator({varName, message}) {
+function VarIndicator({varName, message, parentName}) {
 	
 	const [vari, setVari] = useState(false);
 
-	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName), 1000);}, []);
+	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [parentName]);
 
 	return (
 		<div>
