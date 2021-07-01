@@ -44,11 +44,14 @@ const BottomPanel = () => {
   function getWaysideListData() {
     let ref = Firebase.database().ref('/WSC/WS-1');
     ref.on('value', (snapshot) => {
-      console.log(snapshot.val());
-      var newArray = [];
-      snapshot.val().forEach((key, value) => newArray.push(value));
-      setBlockList(newArray);
-      console.log(newArray);
+      setBlockList(Object.entries(snapshot.val()).map((element, index) => { 
+				return {...element[1], blockId: element[0]};
+			}));
+      // var newArray = [];
+			// val.keys(key => console.log(key));
+      // snapshot.val().forEach((key, value) => newArray.push(value));
+      // console.log(newArray);
+			
       // setCrossingLights(snapshot.val().CrossingLights);
       // setLength(snapshot.val().Length);
       // setLevelCrossing(snapshot.val().LevelCrossing);
@@ -60,46 +63,16 @@ const BottomPanel = () => {
 
   useEffect(() => getWaysideListData(), []);
 
-  function WaysideBlocks() {
-    const listItems = blockList.map((blockIndex) => (
-      <option value={blockIndex}>{blockIndex}</option>
-    ));
-    return (
-      <div className='dataSection'>
-        <select className='blockSelect'>{listItems}</select>
-        <div className='dataContainer'>
-          <div className='dataLeft'>
-            <div className='dataName'>
-              Status:
-              <div className='dataValue'>{status}</div>
-            </div>
-            <div className='dataName'>
-              Occupancy:
-              <div className='dataValue'>{occupancy}</div>
-            </div>
-            <div className='dataName'>
-              Level Crossing:
-              <div className='dataValue'>{levelCrossing}</div>
-            </div>
-          </div>
-          <div className='dataRight'>
-            <div className='dataName'>
-              Crossing Lights:
-              <div className='dataValue'>{crossingLights}</div>
-            </div>
-            <div className='dataName'>
-              Speed Limit:
-              <div className='dataValue'>{speedLimit}</div>
-            </div>
-            <div className='dataName'>
-              Length:
-              <div className='dataValue'>{length}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+	// const listItems = blockList.map((blockIndex) => <option value={blockIndex}>{blockIndex}</option>);
+	// console.log(blockList.map((blockIndex) => <option value={blockIndex}>{blockIndex}</option>));
+	const listItems = [<option value={0}>0</option>, <option value={1}>1</option>];
+	console.log(listItems);
+	// const listItems = [];
+  // function WaysideBlocks() {
+  //   return (
+     
+  //   );
+  // }
 
   return (
     <div>
@@ -149,7 +122,41 @@ const BottomPanel = () => {
               </div>
             </Button>
           </div>
-          <WaysideBlocks />
+				
+					<div className='dataSection'>
+						<select className='blockSelect'>{listItems}</select>
+						<div className='dataContainer'>
+							<div className='dataLeft'>
+								<div className='dataName'>
+									Status:
+									<div className='dataValue'>{status}</div>
+								</div>
+								<div className='dataName'>
+									Occupancy:
+									<div className='dataValue'>{occupancy}</div>
+								</div>
+								<div className='dataName'>
+									Level Crossing:
+									<div className='dataValue'>{levelCrossing}</div>
+								</div>
+							</div>
+							<div className='dataRight'>
+								<div className='dataName'>
+									Crossing Lights:
+									<div className='dataValue'>{crossingLights}</div>
+								</div>
+								<div className='dataName'>
+									Speed Limit:
+									<div className='dataValue'>{speedLimit}</div>
+								</div>
+								<div className='dataName'>
+									Length:
+									<div className='dataValue'>{length}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
         </div>
       </SlidingPane>
     </div>
