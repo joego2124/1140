@@ -24,8 +24,10 @@ const TrackView = (props) => {
             <Button variant="dark" size="lg" className="blockButton" onClick={()=>{setBlock('Block1');}}>
                 1
             </Button>{' '}
-            <Button variant="dark" size="lg">2</Button>{' '}
-            <Button variant="dark" size="lg">3</Button>
+            <Button variant="dark" size="lg" className="blockButton" onClick={()=>{setBlock('Block2');}}>
+                2
+            </Button>{' '}
+            <Button variant="dark" size="lg" className="blockButton" onClick={()=>{setBlock('Block3');}}>3</Button>
 		</div>
 	)
 }
