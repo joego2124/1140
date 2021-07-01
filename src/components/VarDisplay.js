@@ -10,11 +10,7 @@ function VarDisplay({varName, message, parentName}) {
 
 	return (
 		<div>
-            <Container>
-                <Row>
-                    <h3>{message}: {vari}</h3>
-                </Row>
-            </Container>
+            <p>{message}: {vari}</p>
 		</div>
 	)
 }
