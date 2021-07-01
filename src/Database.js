@@ -22,20 +22,22 @@ function InitializeJsonTree(){
 function findPath(varName){
     //TODO: add caching
     //TODO make general function blacklist train list
-    return findById(jsonTree, varName, '');
+    return findById(jsonTree, varName, '')?.newPath;
 }
 
 function findById(o, id, path) {
+    // console.log(id, o);
     var result, p; 
     for (p in o) {
         if( o.hasOwnProperty(p) ) {
 
-            var newP = path + '/' + p;
+            var newPath = path + '/' + p;
+            // console.log(path, p, newPath)
             if(p.toLowerCase() === id) {
-                return newP;
+                return {newPath, o};
             } 
             if (typeof(o[p]) === 'object') {
-                var result = findById(o[p], id, newP);
+                var result = findById(o[p], id, newPath);
                 if(result) return result;
             }
         }
@@ -43,8 +45,18 @@ function findById(o, id, path) {
     return result;
 }
 
-function DatabaseSet(value, varName){
-    var path = findPath(varName.toLowerCase());
+function DatabaseSet(value, varName, parentName){
+    if(parentName != undefined){
+        var parentNameCleaned = Object.values(parentName)[0];
+        var parent = findById(jsonTree, `${parentNameCleaned}`.toLowerCase(), '');
+        if(!parent){
+            console.warn(`PARENT ${parentNameCleaned} NOT FOUND IN RTDB TREE`);
+        } else {
+        var path = findById(Object.values(parent.o)[0], varName.toLowerCase(), parent.newPath)?.newPath;
+        }
+    } else {
+        var path = findPath(varName.toLowerCase());
+    }
     
     if (!path) {
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
@@ -53,8 +65,18 @@ function DatabaseSet(value, varName){
     }
 }
 
-function DatabaseGet(setter, varName){
-    var path = findPath(varName.toLowerCase());
+function DatabaseGet(setter, varName, parentName){
+    if(parentName != undefined){
+        var parentNameCleaned = Object.values(parentName)[0];
+        var parent = findById(jsonTree, `${parentNameCleaned}`.toLowerCase(), '');
+        if(!parent){
+            console.warn(`PARENT ${parentNameCleaned} NOT FOUND IN RTDB TREE`);
+        } else {
+            var path = findById(Object.values(parent.o)[0], varName.toLowerCase(), parent.newPath)?.newPath;
+        }
+    } else {
+        var path = findPath(varName.toLowerCase());
+    }
 
     if (!path) {
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);

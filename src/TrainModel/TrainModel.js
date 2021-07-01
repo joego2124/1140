@@ -7,10 +7,12 @@ import PhysicsStatus from './PhysicsStatus';
 
 function TrainModel() {
 
+	const [parentName, setParentName] = useState('TRN1');
+
 	return (
 		<div>
 		<header className="App-header">
-			<TrainsPanel />
+			<TrainsPanel setParentName={setParentName}/>
 			{/* <Container styles={{
 				display: "flex",
 				flexDirection: "row",
@@ -24,14 +26,14 @@ function TrainModel() {
 			<Container style={{height:"100%"}}>
 				<Col style={{width: '60vh'}}>
 					<Row>
-						<TrackStatus/>
+						<TrackStatus parentName={parentName}/>
 					</Row>
 					<Row>
-						<PhysicsStatus/>
+						<PhysicsStatus parentName={parentName}/>
 					</Row>
 				</Col>
 				<Col style={{height:"100vh",width: '90vh'}}>
-					<TrainStatus/>
+					<TrainStatus parentName={parentName}/>
 				</Col>
 			</Container>
 		</header>
