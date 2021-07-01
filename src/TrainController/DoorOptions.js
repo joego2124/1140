@@ -36,7 +36,9 @@ const DoorOptions = () => {
 
     return (
         <div>
-            <h1>DOOR OPTIONS</h1>
+            <h1 style={{
+                padding: '25px'
+            }}>DOOR OPTIONS</h1>
             <Container>
                 <Col xs={4}>
                     <Button 
