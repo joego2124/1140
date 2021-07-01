@@ -23,13 +23,13 @@ function StatesPanel(parentName){
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	// const [actualTemp, setTemp] = useState(0);
-	// const [desiredTemp, setDesTemp] = useState(0);
+	const [actualTemp, setTemp] = useState(0);
+	const [desiredTemp, setDesTemp] = useState(0);
 
-	// DatabaseGet(setTemp, 'Temperature', parentName);
-	// DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName);
+	useEffect(() => {setTimeout(() => DatabaseGet(setTemp, 'Temperature', parentName), 500);}, [parentName]);
+	useEffect(() => {setTimeout(() => DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName),500);}, [parentName]);
 
-	// useEffect(() => {DatabaseSet(actualTemp < desiredTemp ? 'true' : 'false', "TrackHeater", parentName)}, [actualTemp]);
+	useEffect(() => {DatabaseSet((actualTemp < desiredTemp) ? 'true' : 'false', "TrackHeater", parentName)}, [actualTemp, desiredTemp]);
 
 	return (
 		<div style={{
@@ -55,13 +55,6 @@ function StatesPanel(parentName){
 							<p><WSMIndicator parentName={parentName} varName='TrackOccupancy' message='Track occupied?'/></p>
 							<p><WSMInverseIndicator parentName={parentName} varName='MaintenanceStatus' message='Track under maintenance?'/></p>
 							<p><WSMInverseIndicator parentName={parentName} varName='MaxCapacity' message='Maximum capacity?'/></p>
-							<p>(BOOL)
-								<DropdownButton id="dropdown-basic-button" title="Failure Modes">
-								<Dropdown.Item href="#/action-1">Broken rail</Dropdown.Item>
-								<Dropdown.Item href="#/action-2">Track circuit</Dropdown.Item>
-								<Dropdown.Item href="#/action-3">Transponder/beacon</Dropdown.Item>
-								</DropdownButton>
-							</p>
 						</Col>
 						<Col>
 							<h4>TRACK ELEMENTS</h4>
@@ -72,8 +65,8 @@ function StatesPanel(parentName){
 							<WSMDisplay parentName={parentName} varName='SwitchState' message='Switch State'/>
 							<p></p>
 							<WSMInverseIndicator parentName={parentName} varName='RailwayCrossingState' message='Railway Crossing'/>
-							<p>Track Heater</p>
-							<p>(add indent) Current temp: </p>
+							<WSMIndicator parentName={parentName} varName='TrackHeater' message='Track Heater'/>
+							<WSMDisplay parentName={parentName} varName='Temperature' message='Current Temperature [°F]'/>
 						</Col>
 						<Col>
 							<h4>PASSENGERS</h4>
@@ -81,6 +74,22 @@ function StatesPanel(parentName){
 							<p></p>
 							<p>Boarding: </p>
 							<p>Departing: </p>
+							<h4>FAILURE MODES</h4>
+							<p>
+								<Button>
+									<WSMInverseIndicator parentName={parentName} varName='FailureBrokenRail' message='Broken Rail'/>
+								</Button>
+							</p>
+							<p>
+								<Button>
+									<WSMInverseIndicator parentName={parentName} varName='FailureTrackCircuit' message='Track Circuit'/>
+								</Button>
+							</p>
+							<p>
+								<Button>
+									<WSMInverseIndicator parentName={parentName} varName='BeaconFailure' message='Beacon Failure'/>
+								</Button>
+							</p>
 						</Col>
 					</Row>
 				</Container>
