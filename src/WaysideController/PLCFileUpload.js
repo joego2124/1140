@@ -2,8 +2,14 @@ import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from 'react-bootstrap';
 
-const PLCFileUpload = () => {
-  const onDrop = useCallback((acceptedFiles) => {}, []);
+import './styles.css';
+
+const PLCFileUpload = ({ setter }) => {
+  const onDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length > 0) {
+      setter(true);
+    }
+  }, []);
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
