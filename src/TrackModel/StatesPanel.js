@@ -23,9 +23,15 @@ function StatesPanel(parentName){
 
 	const [actualTemp, setTemp] = useState(0);
 	const [desiredTemp, setDesTemp] = useState(0);
+	const [failBrokenRail, setFailBrokenRail] = useState(0);
+	const [failTrackCirc, setFailTrackCirc] = useState(0);
+	const [failBeacon, setFailBeacon] = useState(0);
 
 	useEffect(() => {setTimeout(() => DatabaseGet(setTemp, 'Temperature', parentName), 500);}, [parentName]);
 	useEffect(() => {setTimeout(() => DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName),500);}, [parentName]);
+	useEffect(() => {setTimeout(() => DatabaseGet(setFailBrokenRail, 'FailureBrokenRail', parentName),500);}, [parentName]);
+	useEffect(() => {setTimeout(() => DatabaseGet(setFailTrackCirc, 'FailureTrackCircuit', parentName),500);}, [parentName]);
+	useEffect(() => {setTimeout(() => DatabaseGet(setFailBeacon, 'BeaconFailure', parentName),500);}, [parentName]);
 
 	useEffect(() => {DatabaseSet((actualTemp < desiredTemp) ? 'true' : 'false', "TrackHeater", parentName)}, [actualTemp, desiredTemp]);
 
@@ -63,7 +69,7 @@ function StatesPanel(parentName){
 							<WSMDisplay parentName={parentName} varName='SwitchState' message='Switch State'/>
 							<p></p>
 							<WSMInverseIndicator parentName={parentName} varName='RailwayCrossingState' message='Railway Crossing'/>
-							<WSMIndicator parentName={parentName} varName='TrackHeater' message='Track Heater'/>
+							<WSMDisplay parentName={parentName} varName='TrackHeater' message='Track Heater'/>
 							<WSMDisplay parentName={parentName} varName='Temperature' message='Current Temperature [°F]'/>
 						</Col>
 						<Col>
@@ -74,17 +80,17 @@ function StatesPanel(parentName){
 							<p>Departing: </p>
 							<h4>FAILURE MODES</h4>
 							<p>
-								<Button>
+								<Button variant="outline-dark" onClick={()=>{DatabaseSet(!failBrokenRail, 'FailureBrokenRail', parentName);}}>
 									<WSMInverseIndicator parentName={parentName} varName='FailureBrokenRail' message='Broken Rail'/>
 								</Button>
 							</p>
 							<p>
-								<Button>
+								<Button variant="outline-dark" onClick={()=>{DatabaseSet(!failTrackCirc, 'FailureTrackCircuit', parentName);}}>
 									<WSMInverseIndicator parentName={parentName} varName='FailureTrackCircuit' message='Track Circuit'/>
 								</Button>
 							</p>
 							<p>
-								<Button>
+								<Button variant="outline-dark" onClick={()=>{DatabaseSet(!failBeacon, 'BeaconFailure', parentName);}}>
 									<WSMInverseIndicator parentName={parentName} varName='BeaconFailure' message='Beacon Failure'/>
 								</Button>
 							</p>
