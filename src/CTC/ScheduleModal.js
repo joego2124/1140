@@ -41,6 +41,7 @@ const ScheduleModal = (props) => {
 				</Table>
       </Modal.Body>
       <Modal.Footer>
+				<Button variant="dark">Upload Schedule</Button>
         <Button onClick={props.onHide}>Close</Button>
       </Modal.Footer>
     </Modal>
