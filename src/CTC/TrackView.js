@@ -35,18 +35,17 @@ const TrackView = () => {
 				//get nextBlock from nextBlockId
 				const nextBlock = trackLayout.blocks.find(block => block.blockId === nextBlockId); 
 	
-				 //recursively follow connected block that isn't an visited block
-				if (!visitedBlockIds.find(id => id === nextBlock.blockId)) {
+				//recursively follow connected block that isn't an visited block
+				if (visitedBlockIds.find(visitedId => visitedId === nextBlockId) === undefined) {
 					var dx = 0, dy = 0;
 					switch(i) {
-						case 0: dx = -50; break;
-						case 1: dy = -50; break;
-						case 2: dx = 50; break;
-						case 3: dy = 50; break;
+						case 0: dx = -100; break;
+						case 1: dy = -100; break;
+						case 2: dx = 100; break;
+						case 3: dy = 100; break;
 						default: break;
 					}
 					const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
-					console.log(currBlock.blockId, nextBlock.blockId);
 					traceTrack(nextBlock, nextPos);
 				}
 			}
@@ -56,6 +55,7 @@ const TrackView = () => {
 		//create new svg and push to trackBlockSVGs
 		console.log(blockTypeName, currPos, currBlock.blockId);
 		const newSVG = <img 
+			key={currBlock.blockId}
 			src={svgs[`${blockTypeName}.svg`].default} 
 			style={{
 				position: "absolute", 

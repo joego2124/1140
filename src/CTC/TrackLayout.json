@@ -18,7 +18,7 @@
 		},
 		{
 			"blockId": 4,
-			"connectors": [null, 3, 5, null]
+			"connectors": [null, 3, null, 5]
 		},
 		{
 			"blockId": 5,
