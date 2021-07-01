@@ -3,7 +3,7 @@ import { Button, Container, Row  } from 'react-bootstrap';
 import {DatabaseGet} from '../Database';
 import { BsCircleFill } from "react-icons/bs";
 
-function WSMIndicator({varName, message, parentName}) {
+function WSMInverseIndicator({varName, message, parentName}) {
 	
 	const [vari, setVari] = useState(false);
 
@@ -11,10 +11,10 @@ function WSMIndicator({varName, message, parentName}) {
 	
 	return (
 		<div>
-			<BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>{' '}
+			<BsCircleFill size="1.0em" color={!vari ? "#C44242" : 'green'}/>{' '}
 			{message}
 		</div>
 	)
 }
 
-export default WSMIndicator
+export default WSMInverseIndicator

@@ -34,7 +34,7 @@ function TrackModel() {
 				position: "absolute",
 			}}>
 				<PropertiesPanel parentName={parentName}/>
-				<StatesPanel />
+				<StatesPanel parentName={parentName}/>
 			</div>
 		</>
 	)
