@@ -23,12 +23,10 @@ const BottomPanel = () => {
   Firebase.app();
 
   //when updates happen this is called and then it calls appropriate functions to update the page element
-  const handleUpdate = useCallback(async (event) => {
-    event.preventDefault();
-    const { switchCommand } = event.target.elements;
-    console.log(switchCommand.value);
+  const handleUpdate = () => {
+		console.log(switchCommand.value == 0 ? 1 : 0);
     setSwitchCommandData(switchCommand.value == 0 ? 1 : 0);
-  }, []);
+  }
 
   function getSwitchCommandData() {
     let ref = Firebase.database().ref('/WSC/SwitchCommand');
@@ -41,7 +39,7 @@ const BottomPanel = () => {
     Firebase.database().ref('/WSC/SwitchCommand').set(newState);
   }
 
-  useEffect(() => getSwitchCommandData());
+  useEffect(() => getSwitchCommandData(), []);
 
   function getWaysideListData() {
     let ref = Firebase.database().ref('/WSC/WS-1');
@@ -134,7 +132,7 @@ const BottomPanel = () => {
             <Button
               variant='light'
               className='waysideButton'
-              click={handleUpdate}
+              onClick={handleUpdate}
             >
               <div className='buttonDiv'>
                 <div className='buttonText'>Click to Move Switch</div>
