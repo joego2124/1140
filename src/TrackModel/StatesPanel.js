@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import SlidingPane from "react-sliding-pane";
 import { Button } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
@@ -11,7 +10,6 @@ import Firebase from "firebase";
 import WSMDisplay from './WSMVarDisplay';
 import WSMIndicator from './WSMVarIndicator';
 import WSMInverseIndicator from './WSMInverseVarIndicator';
-import ButtonIndicator from '../components/ButtonIndicator';
 import { DatabaseSet } from '../Database';
 import { DatabaseGet } from '../Database';
 
