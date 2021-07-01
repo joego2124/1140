@@ -31,13 +31,13 @@ function PropertiesPanel(parentName) {
 				paddingRight: 50,
 				paddingBottom: 10
 			}}>
-				<WSMDisplay parentName={parentName} varName='BlockSize' message='Block Size'/>
+				<WSMDisplay parentName={parentName} varName='BlockSize' message='Block Size [m]'/>
 				<WSMDisplay parentName={parentName} varName='DirectionsOfTravel' message='Directions of Travel'/>
-				<WSMDisplay parentName={parentName} varName='Elevation' message='Elevation'/>
-				<WSMDisplay parentName={parentName} varName='DesiredTrackTemperature' message='Desired Track Temperature'/>
-				<WSMDisplay parentName={parentName} varName='Grade' message='Grade'/>
+				<WSMDisplay parentName={parentName} varName='Elevation' message='Elevation [ft]'/>
+				<WSMDisplay parentName={parentName} varName='DesiredTrackTemperature' message='Desired Track Temperature [°F]'/>
+				<WSMDisplay parentName={parentName} varName='Grade' message='Grade [°]'/>
 				<WSMDisplay parentName={parentName} varName='RailwayCrossing' message='Railway Crossing'/>
-				<WSMDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit'/>
+				<WSMDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit [m/h]'/>
 			</div>
 		</div>
 
