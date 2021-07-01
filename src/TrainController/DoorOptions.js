@@ -33,18 +33,14 @@ const DoorOptions = () => {
 
     return (
         <div>
-            <Button 
-                variant={eDoor ? "primary" : "outline-primary"}
-                onClick={() => setData(!eDoor, "e")}
-            >
-                Emergency Door
-            </Button>
-            <Button 
-                variant={sDoor ? "primary" : "outline-primary"}
-                onClick={() => setData(!sDoor, "s")}
-            >
-                Service Door
-            </Button>
+            <Container>
+                <Col>
+                    <ButtonIndicator parentName={eDoor} varName='eDoor' message='Emergency Door'/>
+                </Col>
+                <Col>
+                    <ButtonIndicator parentName={sDoor} varName='sDoor' message='Service Door'/>
+                </Col>
+            </Container>
         </div>
     )
 }
