@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap'
 import Firebase from "firebase";
 import config from '../config';
 import WaysidePanel from './WaysidePanel';
+import BottomPanel from './BottomPanel';
 
 const WaysideController = () => {
 
@@ -16,6 +17,7 @@ const WaysideController = () => {
 		<div>
 			<header className="App-header">
 				<WaysidePanel />
+                <BottomPanel />
 			</header>
 		</div>
 	)

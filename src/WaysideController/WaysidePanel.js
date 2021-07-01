@@ -6,7 +6,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { BsCircleFill } from "react-icons/bs";
 
 import "react-sliding-pane/dist/react-sliding-pane.css";
-import "../styles.css";
+import "./styles.css";
 
 const WaysidePanel = () => {
 
@@ -28,7 +28,7 @@ const WaysidePanel = () => {
     function getWaysideListData() {
         let ref = Firebase.database().ref('/trackController/Waysidelist');
         ref.on('value', snapshot => {
-            setWaysideList(['Wayside-1', 'Wayside-2', 'Wayside-3']);
+            setWaysideList(['WS-1', 'WS-2', 'WS-3']);
             // setWaysideList(snapshot.val());
         });
     }

@@ -1,15 +1,8 @@
-.trainButton, .waysideButton {
+.waysideButton {
 	width: 100%;
 	border-radius: 15px !important; 
 	box-shadow: 0px 3px 10px rgba(0,0,0,.25);
 	margin-bottom: 25px;
-}
-
-.showTrainButton{
-	position: absolute;
-	top: 100px;
-	left: 100px;
-	z-index: 1;
 }
 
 .showWaysideControllersButton {
@@ -23,11 +16,15 @@
 	align-items: center;
 }
 
-.showControlPanelButton {
-	position: absolute;
+.showBottomPanelButton {
+	/* position: absolute;
 	bottom: 25px;
 	left: 50%;
-	z-index: 1;	
+	z-index: 1; */
+    display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 
 .buttonDiv {
@@ -43,13 +40,7 @@
 	font-size: 1.5em;
 }
 
-.addTrainButton {
-	border-radius: 100px !important;
-	box-shadow: 0px 3px 10px rgba(0,0,0,.25);
-	width: 50%;
-}
-
-.trainPanelHolder, .waysidePanelHolder {
+.waysidePanelHolder {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -57,7 +48,7 @@
 	padding: 24px 32px;
 }
 
-.controlPanelHolder {
+.bottomPanelHolder {
 	display: flex;
 	flex-direction: row;
 	align-items: stretch;
@@ -66,7 +57,7 @@
 	padding: 24px 24px;
 }
 
-.controlPanelSection {
+.bottomPanelSection {
 	border-radius: 25px;
 	border: 2px solid #EFEFEF;
 	margin: 15px;
