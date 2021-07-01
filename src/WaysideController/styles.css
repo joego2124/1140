@@ -48,6 +48,10 @@
 	padding: 24px 32px;
 }
 
+.bottomPanel {
+    /* margin-left: 14em; */
+}
+
 .bottomPanelHolder {
 	display: flex;
 	flex-direction: row;
