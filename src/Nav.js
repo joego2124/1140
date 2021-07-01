@@ -5,6 +5,7 @@ import { AiOutlineControl } from 'react-icons/ai';
 import { IoTrainOutline } from 'react-icons/io5';
 import { BiSitemap } from 'react-icons/bi';
 import { GiRailway } from "react-icons/gi";
+import { GiRadarDish } from "react-icons/gi";
 
 function NavComponent() {
 
@@ -27,12 +28,12 @@ function NavComponent() {
 							CTC Dashboard
 						</NavText>
 				</NavItem>
-				<NavItem eventKey="TrackController">
+				<NavItem eventKey="WaysideController">
 					<NavIcon>
-						<IoTrainOutline size="1.75em" />
+						<GiRadarDish size="1.75em" />
 					</NavIcon>
 					<NavText>
-						Track Controller
+						Wayside Controller
 					</NavText>
 				</NavItem>
 				<NavItem eventKey="TrackModel">

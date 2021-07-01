@@ -20,11 +20,9 @@ const MainPanel = () => {
 					<div className = "controlPanelSection">
 						test
 					</div>
-
 					<div className = "controlPanelSection">
 						test
 					</div>
-
 					<div className = "controlPanelSection">
 						test
 					</div>

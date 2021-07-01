@@ -14,11 +14,11 @@ import TopBar from './TopBar';
 import TrainController from './TrainController';
 import TrainModel from './TrainModel/TrainModel';
 import TrackModel from './TrackModel/TrackModel';
+import WaysideController from './WaysideController/WaysideController';
 import { SpeedProvider } from './SpeedProvider';
 
 import 'firebase/auth';
 import { FirebaseAuthConsumer } from '@react-firebase/auth';
-import TrackController from './TrackController/TrackController';
 
 const PrivateRoute = () => {
 	return (
@@ -34,6 +34,7 @@ const PrivateRoute = () => {
 										<Switch>
 											<Redirect exact from="/" to="/CTC"/>
 											<Route path="/CTC" exact component={CTC}/>
+                      						<Route path="/WaysideController" exact component={WaysideController}/>
 											<Route path="/TrackModel" exact component={TrackModel}/>
 											<Route path="/TrainModel" exact component={TrainModel}/>
 											<Route path="/TrainController" exact component={TrainController}/>
