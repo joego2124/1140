@@ -4,10 +4,12 @@ import { Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import DatabaseGet from '../Database'
 import config from '../config';
 import Firebase from "firebase";
+import WSMDisplay from './WSMVarDisplay';
 
-const PropertiesPanel = () => {
+function PropertiesPanel(parentName) {
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -99,13 +101,13 @@ const PropertiesPanel = () => {
 				paddingRight: 50,
 				paddingBottom: 10
 			}}>
-				<p>Block Size: </p>
-				<p>Directions of Travel: {dirOfTravel}</p>
-				<p>Elevation: {elev}</p>
-				<p>Desired Track Temp: </p>
-				<p>Grade: </p>
-				<p>Railway Crossing: </p>
-				<p>Speed Limit: </p>
+				<WSMDisplay parentName={parentName} varName='BlockSize' message='Block Size'/>
+				<WSMDisplay parentName={parentName} varName='DirectionsOfTravel' message='Directions of Travel'/>
+				<WSMDisplay parentName={parentName} varName='Elevation' message='Elevation'/>
+				<WSMDisplay parentName={parentName} varName='DesiredTrackTemperature' message='Desired Track Temperature'/>
+				<WSMDisplay parentName={parentName} varName='Grade' message='Grade'/>
+				<WSMDisplay parentName={parentName} varName='RailwayCrossing' message='Railway Crossing'/>
+				<WSMDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit'/>
 			</div>
 		</div>
 

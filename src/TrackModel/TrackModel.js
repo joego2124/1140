@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import config from '../config';
 import Firebase from "firebase";
 import PropertiesPanel from './PropertiesPanel';
 import StatesPanel from './StatesPanel';
+import TrackView from './TrackView';
 
 function TrackModel() {
 
@@ -15,19 +16,27 @@ function TrackModel() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
+	const [parentName, setParentName] = useState('Block1');
+
 	return (
-		<div style={{
-			display: "flex",
-			flexDirection: "row",
-			justifyContent: "center",
-			alignItems: "flex-end",
-			bottom: 0,
-			width: "100%",
-			position: "absolute",
-		}}>
-			<PropertiesPanel />
-			<StatesPanel />
-		</div>
+		<>
+			<div>
+				<p></p>
+				<TrackView setParentName={setParentName}/>
+			</div>
+			<div style={{
+				display: "flex",
+				flexDirection: "row",
+				justifyContent: "center",
+				alignItems: "flex-end",
+				bottom: 0,
+				width: "100%",
+				position: "absolute",
+			}}>
+				<PropertiesPanel parentName={parentName}/>
+				<StatesPanel />
+			</div>
+		</>
 	)
 }
 
