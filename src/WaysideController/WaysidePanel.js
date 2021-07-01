@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 import SlidingPane from "react-sliding-pane";
 import Firebase from "firebase";
 import { Button } from 'react-bootstrap';
-import { AiOutlinePlus } from "react-icons/ai";
 import { BsCircleFill } from "react-icons/bs";
 
 import "react-sliding-pane/dist/react-sliding-pane.css";
@@ -37,26 +36,19 @@ const WaysidePanel = () => {
 	// 	Firebase.database().ref('/trackController/Waysidelist').set(newState);
 	// }
 
-    useEffect(() => getWaysideListData());
-    
-    function ListItem(props) {
-    // Correct! There is no need to specify the key here:
-    return (
-            <Button variant="light" className="waysideButton">
-                <div className="buttonDiv">
-                    <BsCircleFill size="1.5em" color="#C44242"/>
-                    <div className="buttonText">{props.value}</div>
-                </div>
-            </Button>
-            );
-    }
+    useEffect(() => getWaysideListData(), []);
 
     function ShowWaysideList() {
         const listItems = waysideList.map((waysideIndex) => 
-            <ListItem key={waysideIndex.toString()} value={waysideIndex} />
+            <Button variant="light" className="waysideButton">
+                <div className="buttonDiv">
+                    <BsCircleFill size="1.5em" color="#C44242"/>
+                    <div className="buttonText">{waysideIndex}</div>
+                </div>
+            </Button>
         );
         return (
-            <div>
+            <div className="waysidePanelHolder">
                 {listItems}
             </div>
         )
@@ -73,9 +65,7 @@ const WaysidePanel = () => {
                 style={{paddingTop: '10rem'}}
 				onRequestClose={() => setOpen(false)}
 			>
-				<div className="waysidePanelHolder" >
-                    <ShowWaysideList />
-				</div>
+                <ShowWaysideList />
 			</SlidingPane>
 		</div>
 	)
