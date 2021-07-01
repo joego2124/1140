@@ -72,6 +72,7 @@ function StatesPanel(parentName){
 							<WSMDisplay parentName={parentName} varName='SwitchState' message='Switch State'/>
 							<p></p>
 							<WSMInverseIndicator parentName={parentName} varName='RailwayCrossingState' message='Railway Crossing'/>
+							<p></p>
 							<WSMInverseIndicator parentName={parentName} varName='TrackHeater' message='Track Heater'/>
 							<WSMDisplay parentName={parentName} varName='Temperature' message='Current Temperature [°F]'/>
 						</Col>
@@ -79,7 +80,7 @@ function StatesPanel(parentName){
 							<h4>PASSENGERS</h4>
 							<p></p>
 							<p></p>
-							<p>Boarding: </p>
+							<WSMDisplay parentName={parentName} varName='PassBoarding' message='Boarding'/>
 							<p>Departing: </p>
 							<h4>FAILURE MODES</h4>
 							<p>

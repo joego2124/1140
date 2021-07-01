@@ -5,6 +5,8 @@ import Firebase from "firebase";
 import PropertiesPanel from './PropertiesPanel';
 import StatesPanel from './StatesPanel';
 import TrackView from './TrackView';
+import UploadLayoutButton from './UploadLayoutButton';
+import { left } from '@popperjs/core';
 
 function TrackModel() {
 
@@ -20,9 +22,31 @@ function TrackModel() {
 
 	return (
 		<>
+			<div style={{
+				paddingTop: 20,
+				textAlign: "left",
+				paddingLeft: 100
+			}}>
+				<UploadLayoutButton />
+			</div>
+			<div style={{
+				paddingTop: 50,
+				textAlign: "right",
+				paddingRight: 340
+			}}>
+				<h2>Test of Interactive Track Layout</h2>
+			</div>
+			<div style={{paddingTop: 140,
+							textAlign: "right",
+							paddingRight: 500 }}>
+					<TrackView setParentName={setParentName}/>
+			</div>
 			<div>
-				<p></p>
-				<TrackView setParentName={setParentName}/>
+				<h2 style={{paddingTop: 220,
+							textAlign: "left",
+							paddingLeft: 80 }}>
+					Currently Selected: {parentName}
+				</h2>
 			</div>
 			<div style={{
 				display: "flex",
