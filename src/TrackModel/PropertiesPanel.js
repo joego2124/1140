@@ -21,7 +21,7 @@ function PropertiesPanel(parentName) {
 		// Properties title
 		<div style={{
 			textAlign: "center",
-			background: "grey",
+			background: "#c4c4c4",
 			width: "30%",
 		}}>
 			<h1>PROPERTIES</h1>
@@ -38,6 +38,7 @@ function PropertiesPanel(parentName) {
 				<WSMDisplay parentName={parentName} varName='Grade' message='Grade [°]'/>
 				<WSMDisplay parentName={parentName} varName='RailwayCrossing' message='Railway Crossing'/>
 				<WSMDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit [m/h]'/>
+				<p style={{textColor: "grey"}}>__</p>
 			</div>
 		</div>
 
