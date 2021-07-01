@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback} from 'react'
 import { Form, Button } from 'react-bootstrap'
 import Firebase from 'firebase'
+import Container from 'react-bootstrap/Container'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 
 const BrakeOptions = () => {
 
@@ -8,6 +11,7 @@ const BrakeOptions = () => {
     const [sBrake, setSBrake] = useState(false);
 
     Firebase.app();
+
 
     function getData() {
 		let ref = Firebase.database().ref('/TC/DriverEBrakeCommand');
@@ -33,18 +37,25 @@ const BrakeOptions = () => {
 
     return (
         <div>
-            <Button 
-                variant={eBrake ? "primary" : "outline-primary"}
-                onClick={() => setData(!eBrake, "e")}
-            >
-                Emergency Brake
-            </Button>
-            <Button 
-                variant={sBrake ? "primary" : "outline-primary"}
-                onClick={() => setData(!sBrake, "s")}
-            >
-                Service Brake
-            </Button>
+            <h1>DOOR OPTIONS</h1>
+            <Container>
+                <Col xs={4}>
+                    <Button 
+                        variant={eBrake ? "primary" : "outline-primary"}
+                        onClick={() => setData(!eBrake, "e")}
+                    >
+                        Emergency Brake
+                    </Button>
+                </Col>
+                <Col xs={4}>
+                    <Button 
+                        variant={sBrake ? "primary" : "outline-primary"}
+                        onClick={() => setData(!sBrake, "s")}
+                    >
+                        Service Brake
+                    </Button>
+                </Col>
+            </Container>
         </div>
     )
 }
