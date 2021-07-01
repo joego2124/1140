@@ -7,6 +7,7 @@ import CTC from './CTC/CTC';
 import Login from './login';
 import TopBar from './TopBar';
 import TrainController from './TrainController/TrainController';
+import TCHW from './TrainController/TCHW';
 import Ben from './Ben';
 import TrainModel from './TrainModel/TrainModel';
 import { SpeedProvider } from './SpeedProvider';
@@ -29,6 +30,7 @@ const PrivateRoute = () => {
 											<Redirect exact from="/" to="/CTC"/>
 											<Route path="/CTC" exact component={CTC}/>
 											<Route path="/TrainController" exact component={TrainController}/>
+											<Route path="/TCHW" exact component={TCHW}/>
 											<Route path="/Ben" exact component={Ben}/>
 											<Route path="/TrainModel" exact component={TrainModel}/>
 										</Switch>

@@ -1,16 +1,11 @@
 import React, { useEffect } from 'react';
 import config from '../config';
 import Firebase from "firebase";
-import { SpeedContext } from '../SpeedProvider';
-import BrakingOptions from './BrakingOptions';
-import DoorOptions from './DoorOptions';
-import TrainStatus from './TrainStatus';
+import Gains from './Gains';
+import TrainStatusRO from './TrainStatusRO';
 import TrainsPanel from '../CTC/TrainsPanel.js';
-import Container from 'react-bootstrap/Container'
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
 
-function TrainContoller() {
+function TCHW() {
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -48,23 +43,15 @@ function TrainContoller() {
 						border: '1px solid #ddd',
 						flexGrow: '1'
 					}}>
-						<DoorOptions/>
+						<Gains/>
 						<div />
 					</div>
-					<div style={{
-						paddingBottom: '200px',
-						paddingTop: '50px',
-						border: '1px solid #ddd',
-						flexGrow: '1'
-					}}>
-						<BrakingOptions />
-					</div>
 				</div>
-				<TrainStatus />
+				<TrainStatusRO />
 			</div>
 			<TrainsPanel />
 		</div>
 	)
 }
 
-export default TrainContoller
+export default TCHW

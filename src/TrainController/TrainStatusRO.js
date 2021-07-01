@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
-const TrainStatus = () => {
+const TrainStatusRO = () => {
 
     document.body.style.overflow='hidden';
     
@@ -99,47 +99,7 @@ const TrainStatus = () => {
         }
 	}
 
-    const setpoint = useCallback(
-        async event => {
-            event.preventDefault();
-            const {setpointSpeed} = event.target.elements;
-            setSPS(setpointSpeed.value);
-        }, []
-    );
-
-    const temperature = useCallback(
-        async event => {
-            event.preventDefault();
-            const {temperatureControl} = event.target.elements;
-            setTemp(temperatureControl.value);
-        }, []
-    );
-
-    function getSPS(){
-        let ref = Firebase.database().ref('/TC/SetpointSpeedCommand');
-        ref.on('value', snapshot => {
-            setSetpointSpeed(snapshot.val());
-        });
-    }
-
-    function setSPS(newSPS){
-        Firebase.database().ref('/TC/SetpointSpeedCommand').set(parseInt(newSPS))
-    }
-
-    function getTemp(){
-        let ref = Firebase.database().ref('/TC/TemperatureCommand');
-        ref.on('value', snapshot => {
-            setTemperatureControl(snapshot.val());
-        });
-    }
-
-    function setTemp(newTemp){
-        Firebase.database().ref('/TC/TemperatureCommand').set(parseInt(newTemp))
-    }
-
     useEffect(getData, []);
-    useEffect(() => getSPS());
-    useEffect(() => getTemp());
 
     return (
         <div>
@@ -164,58 +124,8 @@ const TrainStatus = () => {
                     <p>External Temp: {extTemp} °F</p>
                 </Col>
             </Container>
-            <Container>
-                <Col xs={4}>
-                    <Button 
-                        variant={intLights ? "primary" : "outline-primary"}
-                        onClick={() => setData(!intLights, "int")}
-                    >
-                        Internal Lights
-                    </Button>
-                </Col>
-                <Col xs={4}>
-                    <Button
-                        variant={extLights ? "primary" : "outline-primary"}
-                        onClick={() => setData(!extLights, "ext")}
-                    >
-                        External Lights
-                    </Button>
-                </Col>
-                <Col xs={4}>
-                    <Button 
-                        variant={station ? "primary" : "outline-primary"}
-                        onClick={() => setData(!station, "sta")}
-                    >
-                        Announce Next Station
-                    </Button>
-                </Col>
-            </Container>
-            <Container>
-                <Col xs={4}>
-                    <Form onSubmit={setpoint}>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Update Setpoint Speed</Form.Label>
-                            <Form.Control name="setpointSpeed" placeholder={setpointSpeed} />
-                        </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Submit
-                        </Button>
-                    </Form>
-                </Col>
-                <Col xs={4}>
-                    <Form onSubmit={temperature}>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Update Temperature</Form.Label>
-                            <Form.Control name="temperatureControl" placeholder={temperatureControl} />
-                        </Form.Group>
-                        <Button variant="primary" type="submit">
-                            Submit
-                        </Button>
-                    </Form>
-                </Col>
-            </Container>
         </div>
     )
 }
 
-export default TrainStatus
+export default TrainStatusRO

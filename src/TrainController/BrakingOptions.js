@@ -37,7 +37,9 @@ const BrakeOptions = () => {
 
     return (
         <div>
-            <h1>DOOR OPTIONS</h1>
+            <h1 style={{
+                padding: '25px',
+            }}>BRAKE OPTIONS</h1>
             <Container>
                 <Col xs={4}>
                     <Button 
