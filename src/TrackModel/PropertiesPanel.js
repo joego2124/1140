@@ -9,16 +9,14 @@ import Firebase from "firebase";
 
 const PropertiesPanel = () => {
 
-	const [open, setOpen] = useState(true);
-
-	const [dirOfTravel, setDirOfTravel] = useState();
-	const [elev, setElevation] = useState();
-
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
 	}else {
 		Firebase.app(); // if already initialized, use that one
 	}
+
+	const [dirOfTravel, setDirOfTravel] = useState(true);
+	const [elev, setElevation] = useState(true);
 
 	function getData() {
 		let ref = Firebase.database().ref('/WSM/DirectionsOfTravel');
@@ -79,7 +77,6 @@ const PropertiesPanel = () => {
 	function setDOT(newDOT){
         Firebase.database().ref('/WSM/DirectionsOfTravel').set(parseInt(newDOT))
     }
-
 	function setElev(newElev){
         Firebase.database().ref('/WSM/Elevation').set(parseInt(newElev))
     }
