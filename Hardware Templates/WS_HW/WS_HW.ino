@@ -54,6 +54,10 @@ struct Button
 Button signalCommand = {13,0};
 Button switchSignal = {12,0};
 Button levelCrossCommand = {27,0};
+
+Button signalLED = {26, 0};
+Button switchLED = {25, 0};
+Button levelLED = {21, 0};
 // ------------------ END STRUCTS ---------------
 
 
@@ -138,6 +142,10 @@ void setup()
 //  attachInterrupt(digitalPinToInterrupt(switchSignal.PIN), switchInterrupt, FALLING); 
   pinMode(levelCrossCommand.PIN, INPUT_PULLUP);
 
+  pinMode(signalLED.PIN, OUTPUT);
+  pinMode(switchLED.PIN, OUTPUT);
+  pinMode(levelLED.PIN, OUTPUT);
+
 timer = millis();
 }
 // --------------------- END SETUP ----------------
@@ -185,13 +193,14 @@ void loop()
     // INTERRUPT READ/WRITE HANDLING
     if(digitalRead(signalCommand.PIN) == LOW)
     {
-      Firebase.getBool(fbdoDownload, "/WSC/SignalCommand");
+      Firebase.getBool(fbdoDownload, "/WSC/WS-1/Block1/CrossingLights");
       signalState = fbdoDownload.boolData();
 
       long int start = millis();
       Serial.println("Signal Command: " + signalState);
   
-      Firebase.setBool(fbdoDownload, "/WSC/SignalCommand", !signalState);
+      Firebase.setBool(fbdoDownload, "/WSC/WS-1/Block1/CrossingLights", !signalState);
+      digitalWrite(signalLED.PIN, (!signalState) ? HIGH : LOW);
   
       Serial.print("Milliseconds: ");
       Serial.println(millis() - start);
@@ -206,19 +215,21 @@ void loop()
       Serial.println(switchState);
   
       Firebase.setBool(fbdoUpload, "/WSC/SwitchCommand", !switchState);
+      digitalWrite(switchLED.PIN, (!switchState) ? HIGH : LOW);
   
       Serial.print("Milliseconds: ");
       Serial.println(millis() - start);
     }
     if(digitalRead(levelCrossCommand.PIN) == LOW)
     {
-      Firebase.getBool(fbdoDownload, "/WSC/RailwayCrossingCommand");
+      Firebase.getBool(fbdoDownload, "/WSC/WS-1/Block1/LevelCrossing");
       levelCrossingState = fbdoDownload.boolData();
       
       long int start = millis();
       Serial.println(levelCrossingState);
   
-      Firebase.setBool(fbdoUpload, "/WSC/RailwayCrossingCommand", !levelCrossingState);
+      Firebase.setBool(fbdoUpload, "/WSC/WS-1/Block1/LevelCrossing", !levelCrossingState);
+      digitalWrite(levelLED.PIN, (!levelCrossingState) ? HIGH : LOW);
   
       Serial.print("Milliseconds: ");
       Serial.println(millis() - start);
