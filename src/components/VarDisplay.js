@@ -10,11 +10,15 @@ function VarDisplay({varName, message, parentName}) {
 
 	return (
 		<div>
+<<<<<<< HEAD
             <Container>
                 <Row>
                     <h3>{message}: {vari}</h3>
                 </Row>
             </Container>
+=======
+            <p>{message}: {vari}</p>
+>>>>>>> benBranch
 		</div>
 	)
 }
