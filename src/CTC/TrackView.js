@@ -21,8 +21,8 @@ const TrackView = () => {
 	var trackBlockSVGs = [];
 	var visitedBlockIds = [];
 
+	//recursive function to generate a list of tracks for rendering
 	const traceTrack = (currBlock, currPos) => {
-
 		//add current block to list of visited blocks
 		visitedBlockIds.push(currBlock.blockId);
 
@@ -37,7 +37,7 @@ const TrackView = () => {
 	
 				//recursively follow connected block that isn't an visited block
 				if (visitedBlockIds.find(visitedId => visitedId === nextBlockId) === undefined) {
-					var dx = 0, dy = 0;
+					var dx = 0, dy = 0; //appy offsets to nextBlock position
 					switch(i) {
 						case 0: dx = -100; break;
 						case 1: dy = -100; break;
@@ -52,23 +52,32 @@ const TrackView = () => {
 			blockTypeName += (nextBlockId === null ? "0" : "1"); //inc blockTypeName
 		});
 
+		//apply offsets for svgs
+		var dx = 0, dy = 0; 
+		switch(blockTypeName) {
+			case "0011": dx = 45; dy = 45; break;
+			case "1001": dy = 45; break;
+			case "0110": dx = 45; break;
+		}
+
+		var size = (blockTypeName == "0101" || blockTypeName == "1010") ? 100 : 55;
+
 		//create new svg and push to trackBlockSVGs
-		console.log(blockTypeName, currPos, currBlock.blockId);
 		const newSVG = <img 
 			key={currBlock.blockId}
 			src={svgs[`${blockTypeName}.svg`].default} 
 			style={{
 				position: "absolute", 
-				left: currPos.x,
-				top: currPos.y, 
-				// height: "100px",
-				// width: "100px",
+				left: currPos.x + dx,
+				top: currPos.y + dy, 
+				height: size,
+				width: size,
 			}}
 		/>;
 		trackBlockSVGs.push(newSVG);
 	}
 
-	traceTrack(trackLayout.blocks[0], {x: 0, y: 0});
+	traceTrack(trackLayout.blocks[0], {x: maxLength / 4, y: maxLength / 4 - 400});
 
 	return (
 		<div style={styles.track}>
