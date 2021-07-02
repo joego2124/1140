@@ -4,6 +4,7 @@ import Firebase from 'firebase';
 import config from '../config';
 import WaysidePanel from './WaysidePanel';
 import BottomPanel from './BottomPanel';
+import TempWaysideView from './TempWaysideView';
 
 const WaysideController = () => {
   document.body.style.overflow = 'hidden';
@@ -17,6 +18,7 @@ const WaysideController = () => {
   return (
     <div>
       <header className='App-header'>
+        <TempWaysideView />
         <WaysidePanel />
         <BottomPanel />
       </header>

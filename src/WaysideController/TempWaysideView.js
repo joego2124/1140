@@ -2,30 +2,33 @@ import React, { useState, useEffect, useCallback } from 'react';
 import SlidingPane from 'react-sliding-pane';
 import Firebase from 'firebase';
 import { Button } from 'react-bootstrap';
+import rightAngle from './rightAngle.png';
 
 import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './styles.css';
 
-import PLCFileUpload from './PLCFileUpload';
-
-const TempWaysideView = () => {
-  //   const [blockList, setBlockList] = useState([]);
-  //   const [crossingLights, setCrossingLights] = useState('string');
-  //   const [length, setLength] = useState('string');
-  //   const [levelCrossing, setLevelCrossing] = useState('string');
-  //   const [occupancy, setOccupancy] = useState('string');
-  //   const [speedLimit, setSpeedLimit] = useState('string');
-  //   const [status, setStatus] = useState('string');
-  //   const [plcUploaded, setPlcUploaded] = useState(false);
-  const [switchCommand, setSwitchCommand] = useState(0);
+const TempWaysideView = ({ changeSignal }) => {
+  const [switchCommand, setSwitchCommand] = useState(true);
+  const [signalCommand, setSignalCommand] = useState(true);
 
   Firebase.app();
 
   //when updates happen this is called and then it calls appropriate functions to update the page element
-  //   const handleUpdate = () => {
-  //     console.log(switchCommand == 0 ? 1 : 0);
-  //     setSwitchCommandData(switchCommand == 0 ? 1 : 0);
-  //   };
+  const handleUpdate = () => {
+    console.log(signalCommand === false ? true : false);
+    setSignalCommandData(signalCommand === false ? true : false);
+  };
+
+  function setSignalCommandData(newState) {
+    Firebase.database().ref('/WSC/SignalCommand').set(newState);
+  }
+
+  function getSignalCommandData() {
+    let ref = Firebase.database().ref('/WSC/SignalCommand');
+    ref.on('value', (snapshot) => {
+      setSignalCommand(snapshot.val());
+    });
+  }
 
   function getSwitchCommandData() {
     let ref = Firebase.database().ref('/WSC/SwitchCommand');
@@ -34,32 +37,16 @@ const TempWaysideView = () => {
     });
   }
 
-  function setSwitchCommandData(newState) {
-    Firebase.database().ref('/WSC/SwitchCommand').set(newState);
-  }
-
   useEffect(() => getSwitchCommandData(), []);
 
-  function getWaysideListData() {
-    let ref = Firebase.database().ref('/WSC/WS-1');
-    ref.on('value', (snapshot) => {
-      setBlockList(['Block 1', 'Block 2', 'Block 3']);
-      setCrossingLights(snapshot.val().CrossingLights);
-      setLength(snapshot.val().Length);
-      setLevelCrossing(snapshot.val().LevelCrossing);
-      setOccupancy(snapshot.val().Occupancy);
-      setSpeedLimit(snapshot.val().SpeedLimit);
-      setStatus(snapshot.val().Status);
-    });
-  }
-
-  useEffect(() => getWaysideListData(), []);
+  useEffect(() => getSignalCommandData(), []);
 
   return (
     <div>
       <Button
-        variant='light'
-        className='moveSwitchButton'
+        variant='dark'
+        className='blockButton1'
+        style={{ backgroundColor: 'Green' }}
         onClick={handleUpdate}
       >
         <div className='buttonDiv'>
@@ -67,21 +54,43 @@ const TempWaysideView = () => {
         </div>
       </Button>
       <Button
-        variant='light'
-        className='moveSwitchButton'
+        variant='dark'
+        className='blockButton2'
+        style={{ backgroundColor: 'Green' }}
         onClick={handleUpdate}
       >
         <div className='buttonDiv'>
           <div className='buttonText'>Block 2</div>
         </div>
       </Button>
+      {switchCommand === true ? (
+        <div className='switch1Style'>
+          <img src={rightAngle} height={100} width={100} />
+        </div>
+      ) : (
+        <div className='switch2Style'>
+          <img src={rightAngle} height={100} width={100} />
+        </div>
+      )}
+
       <Button
-        variant='light'
-        className='moveSwitchButton'
+        variant='dark'
+        className='blockButton3'
+        style={{ backgroundColor: 'Green' }}
         onClick={handleUpdate}
       >
         <div className='buttonDiv'>
           <div className='buttonText'>Block 3</div>
+        </div>
+      </Button>
+      <Button
+        variant='dark'
+        className='blockButton4'
+        style={{ backgroundColor: signalCommand == true ? 'Green' : 'Red' }}
+        onClick={handleUpdate}
+      >
+        <div className='buttonDiv'>
+          <div className='buttonText'>Block 4</div>
         </div>
       </Button>
     </div>

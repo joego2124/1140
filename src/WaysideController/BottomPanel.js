@@ -18,14 +18,15 @@ const BottomPanel = () => {
   const [speedLimit, setSpeedLimit] = useState('string');
   const [status, setStatus] = useState('string');
   const [plcUploaded, setPlcUploaded] = useState(false);
-  const [switchCommand, setSwitchCommand] = useState(0);
+  const [switchCommand, setSwitchCommand] = useState(false);
+  const [selectedBlock, setSelectedBlock] = useState('Block 1');
 
   Firebase.app();
 
   //when updates happen this is called and then it calls appropriate functions to update the page element
   const handleUpdate = () => {
-    console.log(switchCommand == 0 ? 1 : 0);
-    setSwitchCommandData(switchCommand == 0 ? 1 : 0);
+    console.log(switchCommand == false ? true : false);
+    setSwitchCommandData(switchCommand == false ? true : false);
   };
 
   function getSwitchCommandData() {
@@ -42,37 +43,87 @@ const BottomPanel = () => {
   useEffect(() => getSwitchCommandData(), []);
 
   function getWaysideListData() {
-    let ref = Firebase.database().ref('/WSC/WS-1');
+    console.log(selectedBlock);
+    let ref = Firebase.database().ref('/WSC/WS-1/Block1');
+    if (selectedBlock == 'Block 1') {
+      ref = Firebase.database().ref('/WSC/WS-1/Block1');
+    } else if (selectedBlock == 'Block 2') {
+      ref = Firebase.database().ref('/WSC/WS-1/Block2');
+    } else if (selectedBlock == 'Block 3') {
+      ref = Firebase.database().ref('/WSC/WS-1/Block3');
+    }
     ref.on('value', (snapshot) => {
-      setBlockList(Object.entries(snapshot.val()).map((element, index) => { 
-				return {...element[1], blockId: element[0]};
-			}));
-      // var newArray = [];
-			// val.keys(key => console.log(key));
-      // snapshot.val().forEach((key, value) => newArray.push(value));
-      // console.log(newArray);
-			
-      // setCrossingLights(snapshot.val().CrossingLights);
-      // setLength(snapshot.val().Length);
-      // setLevelCrossing(snapshot.val().LevelCrossing);
-      // setOccupancy(snapshot.val().Occupancy);
-      // setSpeedLimit(snapshot.val().SpeedLimit);
-      // setStatus(snapshot.val().Status);
+      setBlockList(['Block 1', 'Block 2', 'Block 3']);
+      setCrossingLights(snapshot.val().CrossingLights);
+      setLength(snapshot.val().Length);
+      setLevelCrossing(snapshot.val().LevelCrossing);
+      setOccupancy(snapshot.val().Occupancy);
+      setSpeedLimit(snapshot.val().SpeedLimit);
+      setStatus(snapshot.val().Status);
     });
   }
 
   useEffect(() => getWaysideListData(), []);
 
-	// const listItems = blockList.map((blockIndex) => <option value={blockIndex}>{blockIndex}</option>);
-	// console.log(blockList.map((blockIndex) => <option value={blockIndex}>{blockIndex}</option>));
-	const listItems = [<option value={0}>0</option>, <option value={1}>1</option>];
-	console.log(listItems);
-	// const listItems = [];
-  // function WaysideBlocks() {
-  //   return (
-     
-  //   );
-  // }
+  function handleBlocks($event) {
+    setSelectedBlock($event.target.value);
+    getWaysideListData();
+  }
+
+  function WaysideBlocks() {
+    const listItems = blockList.map((blockIndex) => (
+      <option value={blockIndex}>{blockIndex}</option>
+    ));
+    return (
+      <div className='dataSection'>
+        <select
+          onChange={handleBlocks}
+          value={selectedBlock}
+          className='blockSelect'
+        >
+          {listItems}
+        </select>
+        <div className='dataContainer'>
+          <div className='dataLeft'>
+            <div className='dataName'>
+              Status:
+              <div className='dataValue'>{status}</div>
+            </div>
+            <div className='dataName'>
+              Occupancy:
+              <div className='dataValue'>{occupancy}</div>
+            </div>
+            <div className='dataName'>
+              Level Crossing:
+              {levelCrossing == true ? (
+                <div className='dataValue'>Lowered</div>
+              ) : (
+                <div className='dataValue'>Raised</div>
+              )}
+            </div>
+          </div>
+          <div className='dataRight'>
+            <div className='dataName'>
+              Crossing Lights:
+              {crossingLights == true ? (
+                <div className='dataValue'>On</div>
+              ) : (
+                <div className='dataValue'>Off</div>
+              )}
+            </div>
+            <div className='dataName'>
+              Speed Limit:
+              <div className='dataValue'>{speedLimit} mph</div>
+            </div>
+            <div className='dataName'>
+              Length:
+              <div className='dataValue'>{length} feet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -110,7 +161,7 @@ const BottomPanel = () => {
             Move Switch
             <div className='dataName'>
               Current State:
-              <div className='dataValue'>{switchCommand}</div>
+              <div className='dataValue'>{switchCommand.toString()}</div>
             </div>
             <Button
               variant='light'
@@ -122,41 +173,7 @@ const BottomPanel = () => {
               </div>
             </Button>
           </div>
-				
-					<div className='dataSection'>
-						<select className='blockSelect'>{listItems}</select>
-						<div className='dataContainer'>
-							<div className='dataLeft'>
-								<div className='dataName'>
-									Status:
-									<div className='dataValue'>{status}</div>
-								</div>
-								<div className='dataName'>
-									Occupancy:
-									<div className='dataValue'>{occupancy}</div>
-								</div>
-								<div className='dataName'>
-									Level Crossing:
-									<div className='dataValue'>{levelCrossing}</div>
-								</div>
-							</div>
-							<div className='dataRight'>
-								<div className='dataName'>
-									Crossing Lights:
-									<div className='dataValue'>{crossingLights}</div>
-								</div>
-								<div className='dataName'>
-									Speed Limit:
-									<div className='dataValue'>{speedLimit}</div>
-								</div>
-								<div className='dataName'>
-									Length:
-									<div className='dataValue'>{length}</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
+          <WaysideBlocks />
         </div>
       </SlidingPane>
     </div>
