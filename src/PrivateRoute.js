@@ -11,7 +11,8 @@ import Nav from './Nav';
 import CTC from './CTC/CTC';
 import Login from './login';
 import TopBar from './TopBar';
-import TrainController from './TrainController';
+import TrainController from './TrainController/TrainController';
+import TCHW from "./TrainController/TCHW";
 import TrainModel from './TrainModel/TrainModel';
 import TrackModel from './TrackModel/TrackModel';
 import WaysideController from './WaysideController/WaysideController';
@@ -38,6 +39,7 @@ const PrivateRoute = () => {
 											<Route path="/TrackModel" exact component={TrackModel}/>
 											<Route path="/TrainModel" exact component={TrainModel}/>
 											<Route path="/TrainController" exact component={TrainController}/>
+											<Route path="/TCHW" exact component={TCHW} />
 										</Switch>
 									</div>
 								</Router>
