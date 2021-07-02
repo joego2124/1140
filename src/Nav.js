@@ -44,11 +44,24 @@ function NavComponent() {
 						Track Model
 					</NavText>
 				</NavItem>
+<<<<<<< HEAD
 				<NavItem eventKey="TrainModel">
+=======
+				<NavItem eventKey="TCHW">
+						<NavIcon>
+							<BiSitemap size="1.75em" />
+						</NavIcon>
+						<NavText>
+							Train Controller Hardware
+						</NavText>
+				</NavItem>
+				<NavItem eventKey="Ben">
+>>>>>>> benBranch
 					<NavIcon>
 						<IoTrainOutline size="1.75em" />
 					</NavIcon>
 					<NavText>
+<<<<<<< HEAD
 						Train Model
 					</NavText>
 				</NavItem>
@@ -58,6 +71,10 @@ function NavComponent() {
 					</NavIcon>
 					<NavText>
 						Train Controller
+=======
+						Ben's Test Page
+						Train Model
+>>>>>>> benBranch
 					</NavText>
 				</NavItem>
 			</SideNav.Nav>
