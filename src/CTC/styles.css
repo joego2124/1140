@@ -5,7 +5,13 @@
 	margin-bottom: 25px;
 }
 
-.showTrainButton{
+.trainButton {
+	width: 100%;
+	border-radius: 15px !important; 
+	box-shadow: 0px 3px 10px rgba(0,0,0,.25);
+}
+
+.showTrainButton {
 	position: absolute;
 	top: 100px;
 	left: 100px;
@@ -56,11 +62,30 @@
 }
 
 .controlPanelSection {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 	border-radius: 25px;
 	border: 2px solid #EFEFEF;
 	margin: 15px;
 	margin-top: 10px;
 	flex-grow: 1;
+}
+
+.controlPanelSectionHeaderLabel {
+	position: absolute;
+	width: 100%;
+	background: grey;
+}
+
+.controlPanelSubSection {
+	flex-grow: 1;
+}
+
+.controlPanelDivider {
+	border-left: 1px solid #EFEFEF;
+	border-right: 1px solid #EFEFEF;
+	height: 80%
 }
 
 .controlPanelValueContainer {
@@ -71,7 +96,7 @@
 	margin: 15px;
 }
 
-.controlPanelValueLabel {
+.controlPanelValueUnitLabel {
 	display: flex;
 	justify-content: space-between;
 	flex-direction: row;
