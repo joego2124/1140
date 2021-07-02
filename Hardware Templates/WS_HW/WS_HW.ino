@@ -1,6 +1,8 @@
 #include <WiFi.h>
-#include <Firebase_ESP_Client.h>
+//#include <Firebase_ESP_Client.h>
+#include <FirebaseESP32.h>
 #include "addons/TokenHelper.h"
+
 #include "addons/RTDBHelper.h"
 
 /* 1. Define the WiFi credentials */
@@ -27,7 +29,7 @@ FirebaseConfig config;
 // FIREBASE VARIABLES
 bool switchState;
 bool signalState;
-bool * hello;
+bool levelCrossingState;
 
 // GLOBAL VARIABLES
 unsigned long count = 0;
@@ -51,6 +53,7 @@ struct Button
 
 Button signalCommand = {13,0};
 Button switchSignal = {12,0};
+Button levelCrossCommand = {27,0};
 // ------------------ END STRUCTS ---------------
 
 
@@ -117,22 +120,23 @@ void setup()
 
 
   // START STREAMS
-  if (!Firebase.RTDB.beginStream(&fbdoDownload, "/WSC"))
-  {
-    //Could not begin stream connection, then print out the error detail
-    Serial.println(fbdoDownload.errorReason());
-  }
-  if (!Firebase.RTDB.beginStream(&fbdoUpload, "/WSC"))
-  {
-    //Could not begin stream connection, then print out the error detail
-    Serial.println(fbdoUpload.errorReason());
-  } 
+//  if (!Firebase.RTDB.beginStream(&fbdoDownload, "/WSC"))
+//  {
+//    //Could not begin stream connection, then print out the error detail
+//    Serial.println(fbdoDownload.errorReason());
+//  }
+//  if (!Firebase.RTDB.beginStream(&fbdoUpload, "/WSC"))
+//  {
+//    //Could not begin stream connection, then print out the error detail
+//    Serial.println(fbdoUpload.errorReason());
+//  } 
 
   // ATTACH INTERRUPTS
   pinMode(signalCommand.PIN, INPUT_PULLUP);
 //  attachInterrupt(digitalPinToInterrupt(signalCommand.PIN), signalInterrupt, FALLING);
   pinMode(switchSignal.PIN, INPUT_PULLUP);
 //  attachInterrupt(digitalPinToInterrupt(switchSignal.PIN), switchInterrupt, FALLING); 
+  pinMode(levelCrossCommand.PIN, INPUT_PULLUP);
 
 timer = millis();
 }
@@ -144,18 +148,18 @@ timer = millis();
 void loop()
 {
   // READ FIREBASE STREAM
-  if(!Firebase.RTDB.readStream(&fbdoDownload))
-  {
-    Serial.println(fbdoDownload.errorReason());
-  }
-
-
-  // TIMEOUT HANDLING
-  if(fbdoDownload.streamTimeout())
-  {
-    Serial.println("Stream timeout, resume streaming...");
-    Serial.println();
-  }
+//  if(!Firebase.RTDB.readStream(&fbdoDownload))
+//  {
+//    Serial.println(fbdoDownload.errorReason());
+//  }
+//
+//
+//  // TIMEOUT HANDLING
+//  if(fbdoDownload.streamTimeout())
+//  {
+//    Serial.println("Stream timeout, resume streaming...");
+//    Serial.println();
+//  }
 
 
   // DOWNLOAD NECESSARY VARIABLES
@@ -181,58 +185,44 @@ void loop()
     // INTERRUPT READ/WRITE HANDLING
     if(digitalRead(signalCommand.PIN) == LOW)
     {
-          if(fbdoDownload.streamAvailable())
-            {
-              if(fbdoDownload.dataType() == "boolean")
-              {
-                const String path = "/SignalCommand";
-                  Firebase.RTDB.getBool(fbdoDownload, path, &signalState);
-                  Serial.println(signalState);
-              }
-            }
+      Firebase.getBool(fbdoDownload, "/WSC/SignalCommand");
+      signalState = fbdoDownload.boolData();
+
       long int start = millis();
-      Serial.println("Signal State: " + signalState);
+      Serial.println("Signal Command: " + signalState);
   
-      Firebase.RTDB.setBool(&fbdoUpload, "/WSC/SignalCommand", !signalState);
+      Firebase.setBool(fbdoDownload, "/WSC/SignalCommand", !signalState);
   
       Serial.print("Milliseconds: ");
       Serial.println(millis() - start);
-      signalCommand.pressed = false;
       delay(100);
-      
     }
     if(digitalRead(switchSignal.PIN) == LOW)
     {
-      if(fbdoDownload.streamAvailable())
-        {
-          if(fbdoDownload.dataType() == "boolean")
-          {
-              switchState = fbdoDownload.boolData();
-              Serial.println(switchState);
-          }
-        }
+      Firebase.getBool(fbdoDownload, "/WSC/SwitchCommand");
+      switchState = fbdoDownload.boolData();
       
       long int start = millis();
       Serial.println(switchState);
   
-      Firebase.RTDB.setBool(&fbdoUpload, "/WSC/SwitchState", !switchState);
+      Firebase.setBool(fbdoUpload, "/WSC/SwitchCommand", !switchState);
   
       Serial.print("Milliseconds: ");
       Serial.println(millis() - start);
-      switchSignal.pressed = false;
-      
-      
     }
-  }
+    if(digitalRead(levelCrossCommand.PIN) == LOW)
+    {
+      Firebase.getBool(fbdoDownload, "/WSC/RailwayCrossingCommand");
+      levelCrossingState = fbdoDownload.boolData();
+      
+      long int start = millis();
+      Serial.println(levelCrossingState);
   
-
-  // KEEP ALIVE HANDLING
-  if((millis() - keepAliveTime) == 39999 ||  (millis() - keepAliveTime) == 40000 || (millis() - keepAliveTime) == 40001)
-  {
-      Firebase.RTDB.setInt(&fbdoUpload, "/deanTest/keepAlive", 1);
-      Serial.println("keep Alive!!!!");    
-      keepAliveTime = millis();
-      startTimer = 0;
+      Firebase.setBool(fbdoUpload, "/WSC/RailwayCrossingCommand", !levelCrossingState);
+  
+      Serial.print("Milliseconds: ");
+      Serial.println(millis() - start);
+    }
   }
 }
 
