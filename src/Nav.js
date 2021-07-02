@@ -52,6 +52,12 @@ function NavComponent() {
           </NavIcon>
           <NavText>Train Controller</NavText>
         </NavItem>
+        <NavItem eventKey='TCHW'>
+          <NavIcon>
+            <AiOutlineControl size='1.75em' />
+          </NavIcon>
+          <NavText>TCHW</NavText>
+        </NavItem>
       </SideNav.Nav>
     </SideNav>
   );
