@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
+<<<<<<< HEAD
 import { Button, Container, Row  } from 'react-bootstrap';
+=======
+>>>>>>> benBranch
 import {DatabaseGet} from '../Database';
 import { BsCircleFill } from "react-icons/bs";
 
@@ -11,12 +14,17 @@ function VarIndicator({varName, message, parentName}) {
 
 	return (
 		<div>
+<<<<<<< HEAD
 			<Container>
 				<Row>
 					<h3>{message}</h3>
                     <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>
 				</Row>
 			</Container>
+=======
+            <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>{' '}
+            {message}
+>>>>>>> benBranch
 		</div>
 	)
 }
