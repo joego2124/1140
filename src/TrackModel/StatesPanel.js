@@ -23,12 +23,14 @@ function StatesPanel(parentName){
 
 	const [actualTemp, setTemp] = useState(0);
 	const [desiredTemp, setDesTemp] = useState(0);
+	const [trackOccup, setTrackOccup] = useState(0);
 	const [failBrokenRail, setFailBrokenRail] = useState(0);
 	const [failTrackCirc, setFailTrackCirc] = useState(0);
 	const [failBeacon, setFailBeacon] = useState(0);
 
 	useEffect(() => {setTimeout(() => DatabaseGet(setTemp, 'Temperature', parentName), 500);}, [parentName]);
 	useEffect(() => {setTimeout(() => DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName),500);}, [parentName]);
+	useEffect(() => {setTimeout(() => DatabaseGet(setTrackOccup, 'TrackOccupancy', parentName), 500);}, [parentName]);
 	useEffect(() => {setTimeout(() => DatabaseGet(setFailBrokenRail, 'FailureBrokenRail', parentName),500);}, [parentName]);
 	useEffect(() => {setTimeout(() => DatabaseGet(setFailTrackCirc, 'FailureTrackCircuit', parentName),500);}, [parentName]);
 	useEffect(() => {setTimeout(() => DatabaseGet(setFailBeacon, 'BeaconFailure', parentName),500);}, [parentName]);
