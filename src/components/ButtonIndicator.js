@@ -11,12 +11,17 @@ function ButtonIndicator({varName, message, parentName}) {
 
 	return (
 		<div>
+<<<<<<< HEAD
 			<Container>
 				<Row>
 					<Button onClick={()=>{DatabaseSet(vari == true ? false : true, varName, parentName)}}>{message}</Button>
                     <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>
 				</Row>
 			</Container>
+=======
+			<Button onClick={()=>{DatabaseSet(vari == true ? false : true, varName, parentName)}}>{message}</Button>
+            <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>
+>>>>>>> benBranch
 		</div>
 	)
 }
