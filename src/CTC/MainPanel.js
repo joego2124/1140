@@ -5,12 +5,17 @@ import ValueIO from "./ValueIO";
 
 import "./styles.css"
 
-const MainPanel = ({setModalShow}) => {
+const MainPanel = ({
+	setModalShow,
+	selectedTrain,
+}) => {
 
 	const [open, setOpen] = useState(true);
 	const [maintenanceMode, setMaintenanceMode] = useState(false);
 	const [manualMode, setManualMode] = useState(false);
 	
+	console.log(selectedTrain);
+
 	return (
 		<div>
 			<Button onClick={()=>setOpen(true)} className="showControlPanelButton">Show Controls</Button>
@@ -49,7 +54,7 @@ const MainPanel = ({setModalShow}) => {
 								valueType="input"
 								valueLabel="Route Destination"
 								valueData={{
-									value: "Option 1",
+									value: selectedTrain.CurrentStation,
 									dropdownList: [
 										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
 									],
@@ -59,7 +64,7 @@ const MainPanel = ({setModalShow}) => {
 								valueType="output"
 								valueLabel="Authority"
 								valueData={{
-									value: 50,
+									value: selectedTrain.Authority,
 									units: "blocks",
 								}}
 							/>
@@ -67,7 +72,7 @@ const MainPanel = ({setModalShow}) => {
 								valueType="output"
 								valueLabel="Departure Time"
 								valueData={{
-									value: "13:00:00",
+									value: "12:00:00",
 								}}
 							/>
 						</div>
@@ -79,14 +84,14 @@ const MainPanel = ({setModalShow}) => {
 								valueType="output"
 								valueLabel="Next Stop"
 								valueData={{
-									value: "Stop Name",
+									value: selectedTrain.NextStation,
 								}}
 							/>
 							<ValueIO 
 								valueType="output"
-								valueLabel="Suggested Speed"
+								valueLabel="Commanded Speed"
 								valueData={{
-									value: 25,
+									value: selectedTrain.CommandedSpeed,
 									units: "mi/hr"
 								}}
 							/>
@@ -94,7 +99,7 @@ const MainPanel = ({setModalShow}) => {
 								valueType="output"
 								valueLabel="Train ID"
 								valueData={{
-									value: "Train ID",
+									value: selectedTrain.TrainId,
 								}}
 							/>
 						</div>
@@ -105,7 +110,7 @@ const MainPanel = ({setModalShow}) => {
 								valueType="input"
 								valueLabel="Signal State"
 								valueData={{
-									value: "Option 1",
+									value: selectedTrain.SignalState,
 									dropdownList: [
 										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
 									],
@@ -132,6 +137,9 @@ const MainPanel = ({setModalShow}) => {
 								}}
 							/>
 						</div>
+
+						<div className="controlPanelDivider"></div>
+						
 						<div className="controlPanelSubSection">
 							<ValueIO 
 								valueType="input"

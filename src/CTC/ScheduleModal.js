@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Table } from 'react-bootstrap';
 
 const ScheduleModal = (props) => {
+	const [trainLabelList, setTrainLabelList] = useState({});
+
+	useEffect(() => {
+		var labelList = [];
+		for (const [trainName, trainObj] of Object.entries(props.trainsList)) {
+			labelList.push(
+				<tr>
+					<td>{trainName}</td>
+					<td>Track ID</td>
+					<td>Destination Station</td>
+					<td>{trainObj.CurrentStation}</td>
+					<td>{trainObj.NextStation}</td>
+					<td>12:00:00</td>
+					<td>12:00:00</td>
+					<td>
+						<Button variant="outline-dark">Toggle Stops</Button>
+					</td>
+				</tr>
+			);
+		}
+		setTrainLabelList(labelList);
+	}, [props.trainsList]);
+
 	return (
 		<Modal
       {...props}
-      size="lg"
+      size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
@@ -18,25 +41,18 @@ const ScheduleModal = (props) => {
 				<Table striped bordered hover>
 					<thead>
 						<tr>
-							<th>#</th>
-							<th>First Name</th>
-							<th>Last Name</th>
-							<th>Username</th>
+							<th>ID</th>
+							<th>Current Track</th>
+							<th>Destination</th>
+							<th>Current Station</th>
+							<th>Next Station</th>
+							<th>Dispatched Time</th>
+							<th>ETA</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>1</td>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td>@mdo</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>Jacob</td>
-							<td>Thornton</td>
-							<td>@fat</td>
-						</tr>
+						{trainLabelList}
 					</tbody>
 				</Table>
       </Modal.Body>
@@ -49,3 +65,4 @@ const ScheduleModal = (props) => {
 }
 
 export default ScheduleModal
+

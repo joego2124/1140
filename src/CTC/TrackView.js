@@ -12,7 +12,7 @@ const svgs = importAll(require.context ('./assets/blocks', true, /\.svg/));
 var trackLayout = require("./TrackLayout.json");
 
 const maxLength = 4000;
-const gridSize = 100;
+const gridSize = 120;
 
 const TrackView = () => {
 
@@ -39,10 +39,10 @@ const TrackView = () => {
 				if (visitedBlockIds.find(visitedId => visitedId === nextBlockId) === undefined) {
 					var dx = 0, dy = 0; //appy offsets to nextBlock position
 					switch(i) {
-						case 0: dx = -100; break;
-						case 1: dy = -100; break;
-						case 2: dx = 100; break;
-						case 3: dy = 100; break;
+						case 0: dx = -gridSize; break;
+						case 1: dy = -gridSize; break;
+						case 2: dx = gridSize; break;
+						case 3: dy = gridSize; break;
 						default: break;
 					}
 					const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
@@ -68,16 +68,17 @@ const TrackView = () => {
 			src={svgs[`${blockTypeName}.svg`].default} 
 			style={{
 				position: "absolute", 
-				left: currPos.x + dx,
-				top: currPos.y + dy, 
+				left: currPos.x + dx + 10,
+				top: currPos.y + dy + 10, 
 				height: size,
 				width: size,
 			}}
-		/>;
+		/>
 		trackBlockSVGs.push(newSVG);
 	}
 
-	traceTrack(trackLayout.blocks[0], {x: maxLength / 4, y: maxLength / 4 - 400});
+	traceTrack(trackLayout.blocks[0], {x: maxLength / 4 - 30, y: maxLength / 4 - 390});
+	// traceTrack(trackLayout.blocks[0], {x: 0, y: 0});
 
 	return (
 		<div style={styles.track}>
