@@ -7,3 +7,13 @@ const functions = require("firebase-functions");
 //   functions.logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+exports.firstFunction = functions.https.onRequest(async (req, res) => {
+    const original = req.query.text;
+
+    var b = eval('if (1) {10} else {20}');
+
+    
+
+    res.json({result: b});
+})
