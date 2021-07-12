@@ -1,15 +1,8 @@
-import React, {useEffect} from 'react'
+import React, { useState } from 'react'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Button } from 'react-bootstrap';
-
-const testSVG = <path fill-rule="evenodd" clip-rule="evenodd" d="M40 -6.55671e-07L55 0L55 4.01347L55 10L40 10L35 10L30 10C18.9543 10 10 18.9543 10 30L10 34L10 40L9.99999 55L4.01346 55L-6.21882e-06 55L-1.74846e-06 40L-1.31134e-06 30C-5.87108e-07 13.4315 13.4315 -1.81702e-06 30 -1.09278e-06L40 -6.55671e-07Z" fill="black"/>
-
-function importAll(r) {
-	let images = {};
-	r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
-	return images;
-}
-const svgs = importAll(require.context ('./assets/blocks', true, /\.svg/));
+import Blocks from './assets/Blocks';
+import './styles.css';
 
 var trackLayout = require("./TrackLayout.json");
 
@@ -21,78 +14,128 @@ const TrackView = () => {
 
 	document.body.style.overflow='hidden';
 
+	const [selectedBlock, setSelectedBlock] = useState(0);
+
 	let trackBlockSVGs = [];
 	let visitedBlockIds = [];
-
+	
 	//recursive function to generate a list of tracks for rendering
 	const traceTrack = (currBlock, currPos) => {
+		
+		let blockSVGs = [];
+		
 		//add current block to list of visited blocks
 		visitedBlockIds.push(currBlock.blockId);
 
-		let blockTypeName = ""; //var for determining svg to render
-		
-		//iterate through all connected blocks
-		currBlock.connectors.forEach((nextBlockId, i) => {
-			if (nextBlockId != null) {
+		//iterate through all connections
+		currBlock.connectors.forEach(connnectorArr => {
 
-				//get nextBlock from nextBlockId
-				const nextBlock = trackLayout.blocks.find(block => block.blockId === nextBlockId); 
+			let blockTypeName = ""; //var for determining svg to render
+
+			//iterate recursively through all connectioned blocks
+			connnectorArr.forEach((nextBlockId, i) => {
+				if (nextBlockId != null) {
 	
-				//recursively follow connected block that isn't an visited block
-				if (visitedBlockIds.find(visitedId => visitedId === nextBlockId) === undefined) {
-					let dx = 0, dy = 0; //appy offsets to nextBlock position
-					switch(i) {
-						case 0: dx = -gridSize; break;
-						case 1: dy = -gridSize; break;
-						case 2: dx = gridSize; break;
-						case 3: dy = gridSize; break;
-						default: break;
-					}
-					const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
-					traceTrack(nextBlock, nextPos);
-				}
-			}
-			blockTypeName += (nextBlockId === null ? "0" : "1"); //inc blockTypeName
-		});
-
-		//apply offsets for svgs
-		let dx = 0, dy = 0; 
-		switch(blockTypeName) {
-			case "0011": dx = 45; dy = 45; break;
-			case "1001": dy = 45; break;
-			case "0110": dx = 45; break;
-		}
-
-		let size = (blockTypeName == "0101" || blockTypeName == "1010") ? 100 : 55;
+					//get nextBlock from nextBlockId
+					const nextBlock = trackLayout.blocks.find(block => block.blockId === nextBlockId); 
 		
-		//create new svg and push to trackBlockSVGs
-		const newSVG = <div 
-			key={currBlock.blockId}
-			src={svgs[`${blockTypeName}.svg`].default} 
-			style={{
-				position: "absolute", 
-				left: currPos.x + dx + 10,
-				top: currPos.y + dy + 10, 
-				height: size,
-				width: size,
-				backgroundColor: "rgba(0, 255, 255, .5)",
-			}}
-		>
-			{/* <img 
-				src={svgs[`${blockTypeName}.svg`].default}
+					//recursively follow connected block that isn't an visited block
+					if (visitedBlockIds.find(visitedId => visitedId === nextBlockId) === undefined) {
+						let dx = 0, dy = 0; //appy offsets to nextBlock position
+						switch(i) {
+							case 0: dx = -gridSize; break;
+							case 1: dy = -gridSize; break;
+							case 2: dx = gridSize; break;
+							case 3: dy = gridSize; break;
+							default: break;
+						}
+						const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
+						traceTrack(nextBlock, nextPos);
+					}
+				}
+				blockTypeName += (nextBlockId === null ? "0" : "1"); //inc blockTypeName
+			});
+
+			//apply offsets for svgs
+			let dx = 0, dy = 0; 
+			switch(blockTypeName) {
+				case "0011": dx = 45; dy = 45; break;
+				case "1001": dy = 45; break;
+				case "0110": dx = 45; break;
+			}
+			let blockType = (blockTypeName === "0101" || blockTypeName === "1010") ? "straight" : "curved";
+			let size = blockType === "straight" ? 100 : 55;
+			
+			//create new svg and push to trackBlockSVGs
+			let newSVG = <div 
+				key={currBlock.blockId}
 				style={{
-					position: "absolute",
-					left: 0, 
-					top: 0,
+					position: "absolute", 
+					left: currPos.x + dx + 10,
+					top: currPos.y + dy + 10, 
 					height: size,
 					width: size,
+					backgroundColor: "rgba(0, 255, 255, .25)",
+					overflow: "visible",
 				}}
-			></img> */}
-			<svg width="55" height="55" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width: "inherit", height: "inherit", position: "absolute", top: 0, left: 0}} onClick={() => console.log("clicked svg")}>
-				{testSVG}
-			</svg>
+			>
+				<svg 
+					width={size}
+					height={size}
+					viewBox={`0 0 ${size} ${size}`}
+					stroke={blockType === "straight" ? "grey" : "none"} 
+					fill={blockType === "curved" ? "grey" : "none"}
+					xmlns="http://www.w3.org/2000/svg" 
+					style={{
+						position: "absolute",
+						left: blockTypeName === "0101" ? "95%" : "50%",
+						top: blockTypeName === "1010" ? "95%" : "50%",
+						transform: "translate(-50%, -50%)",
+						zIndex: 1001,
+					}} 
+					onClick={() => console.log(`clicked svg: ${currBlock.blockId}`)
+				}>
+					{Blocks[blockTypeName]}
+				</svg>
+				{
+					currBlock.station != undefined ? <svg 
+						width={size}
+						height={size}
+						viewBox={`0 0 ${size} ${size}`}
+						stroke="grey"
+						fill="white"
+						xmlns="http://www.w3.org/2000/svg" 
+						style={{
+							position: "absolute",
+							left: blockType === "straight" ? "65%" : "0",
+							top: blockType === "straight" ? "65%" : "0",
+							transform: "translate(-50%, -50%)",
+							zIndex: 1001,
+						}} 
+					>
+						{Blocks["circle"]}
+					</svg> : <></>
+				}
+				
+			</div>
+			blockSVGs.push(newSVG);
+		});
+
+		let newBlockSVGs = <div>
+			<div
+				style={{
+					position: "absolute",
+					left: currPos.x + 5,
+					top: currPos.y,
+					margin: 0,
+					fontSize: ".5em",
+					zIndex: 1000,
+				}}
+			>{currBlock.blockId}</div>
+			{blockSVGs}
 		</div>
-		trackBlockSVGs.push(newSVG);
+
+		trackBlockSVGs.push(newBlockSVGs);
 	}
 
 	traceTrack(trackLayout.blocks[0], {x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize});

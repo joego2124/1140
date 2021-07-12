@@ -1,44 +1,36 @@
 {
 	"blocks": [
-		{
-			"blockId": 0,
-			"connectors": [null, null, 1, 9]
-		},
-		{
-			"blockId": 1,
-			"connectors": [0, null, 2, null]
-		},
-		{
-			"blockId": 2,
-			"connectors": [1, null, 3, null]
-		},
-		{
-			"blockId": 3,
-			"connectors": [2, null, null, 4]
-		},
-		{
-			"blockId": 4,
-			"connectors": [null, 3, null, 5]
-		},
-		{
-			"blockId": 5,
-			"connectors": [6, 4, null, null]
-		},
-		{
-			"blockId": 6,
-			"connectors": [7, null, 5, null]
-		},
-		{
-			"blockId": 7,
-			"connectors": [8, null, 6, null]
-		},
-		{
-			"blockId": 8,
-			"connectors": [null, 9, 7, null]
-		},
-		{
-			"blockId": 9,
-			"connectors": [null, 0, null, 8]
-		}
+		{ "blockId": -1,  "section": "YARD", "connectors": [[null, 9, null, null]]},
+
+		{ "blockId": 1,   "section": "A", "connectors": [[null, null, 2, 15]]},
+		{ "blockId": 2,   "section": "A", "connectors": [[1, null, 3, null]]},
+		{ "blockId": 3,   "section": "A", "connectors": [[2, null, 4, null]]},
+
+		{ "blockId": 4,   "section": "B", "connectors": [[3, null, 5, null]]},
+		{ "blockId": 5,   "section": "B", "connectors": [[4, 6, null, null]]},
+		{ "blockId": 6,   "section": "B", "connectors": [[null, null, 7, 5]]},
+
+		{ "blockId": 7,   "section": "C", "connectors": [[6, null, 7.1, null]], "station": "SHADYSIDE"},
+		{ "blockId": 7.1, "section": "C", "connectors": [[7, null, null, 8]]},
+		{ "blockId": 8,   "section": "C", "connectors": [[null, 7.1, null, 9]]},
+		{ "blockId": 9,   "section": "C", "connectors": [[null, 8, null, -1], [10, 8, null, null]]},
+		
+		{ "blockId": 10,  "section": "D", "connectors": [[11, null, 9, null]]},
+		{ "blockId": 11,  "section": "D", "connectors": [[12, null, 10, null]]},
+		{ "blockId": 12,  "section": "D", "connectors": [[13, null, 11, null]]},
+
+		{ "blockId": 13,  "section": "E", "connectors": [[14, null, 12, null]]},
+		{ "blockId": 14,  "section": "E", "connectors": [[15, null, 13, null]]},
+		{ "blockId": 15,  "section": "E", "connectors": [[16, 1, null, null], [16, null, 14, null]]},
+
+		{ "blockId": 16,  "section": "F", "connectors": [[17, null, 15, null]], "station": "HERRON AVE"},
+		{ "blockId": 17,  "section": "F", "connectors": [[18, null, 16, null]]},
+		{ "blockId": 18,  "section": "F", "connectors": [[19, null, 17, null]]},
+		{ "blockId": 19,  "section": "F", "connectors": [[20, null, 18, null]]},
+		{ "blockId": 20,  "section": "F", "connectors": [[21, null, 19, null]]},
+
+		{ "blockId": 21,  "section": "G", "connectors": [[null, null, 20, 22]], "station": "SWISSVILLE"},
+		{ "blockId": 22,  "section": "G", "connectors": [[null, 21, null, 23]]},
+		{ "blockId": 23,  "section": "G", "connectors": [[null, 22, null, null]]}
 	]
 }
