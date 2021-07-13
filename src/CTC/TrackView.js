@@ -96,19 +96,19 @@ const TrackView = () => {
 					onClick={() => console.log(`clicked svg: ${currBlock.blockId}`)
 				}>
 					{Blocks[blockTypeName]}
-				</svg>
+				</svg>	
 				{
 					currBlock.station != undefined ? <svg 
-						width={size}
-						height={size}
-						viewBox={`0 0 ${size} ${size}`}
+						width={100}
+						height={100}
+						viewBox={`0 0 ${100} ${100}`}
 						stroke="grey"
 						fill="white"
 						xmlns="http://www.w3.org/2000/svg" 
 						style={{
 							position: "absolute",
-							left: blockType === "straight" ? "65%" : "0",
-							top: blockType === "straight" ? "65%" : "0",
+							left: blockType === "straight" ? "65%" : "37.5%",
+							top: blockType === "straight" ? "65%" : "37.5%",
 							transform: "translate(-50%, -50%)",
 							zIndex: 1001,
 						}} 
@@ -116,7 +116,6 @@ const TrackView = () => {
 						{Blocks["circle"]}
 					</svg> : <></>
 				}
-				
 			</div>
 			blockSVGs.push(newSVG);
 		});
