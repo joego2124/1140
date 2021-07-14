@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Button, Container, Row  } from 'react-bootstrap';
-import {DatabaseGet} from '../Database';
-import { BsCircleFill } from "react-icons/bs";
+import { DatabaseGet } from '../Database';
+import { BsCircleFill } from 'react-icons/bs';
 
-function VarIndicator({varName, message, parentName}) {
-	
-	const [vari, setVari] = useState(false);
+function VarIndicator({ varName, message, parentName }) {
+  const [vari, setVari] = useState(false);
 
-	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [parentName]);
+  useEffect(() => {
+    setTimeout(() => DatabaseGet(setVari, varName, parentName), 500);
+  }, [parentName]);
 
 	return (
 		<div className="componentDiv">
@@ -17,4 +17,4 @@ function VarIndicator({varName, message, parentName}) {
 	)
 }
 
-export default VarIndicator
+export default VarIndicator;

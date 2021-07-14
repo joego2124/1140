@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import config from '../config';
 import Firebase from "firebase";
-// import { SpeedContext } from '../SpeedProvider';
-// import TrackView from './TrackView';
-// import TrainsPanel from './TrainsPanel';
-import MainPanel from './MainPanel';
+import PropertiesPanel from './PropertiesPanel';
+import StatesPanel from './StatesPanel';
+import TrackView from './TrackView';
+import UploadLayoutButton from './UploadLayoutButton';
+import { left } from '@popperjs/core';
 
 function TrackModel() {
+
+	document.body.style.overflow='hidden';
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -15,12 +18,49 @@ function TrackModel() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
+	const [parentName, setParentName] = useState('Block1');
+
 	return (
-		<div>
-			<header className="App-header">
-				<MainPanel />
-			</header>
-		</div>
+		<>
+			<div style={{
+				paddingTop: 20,
+				textAlign: "left",
+				paddingLeft: 100
+			}}>
+				<UploadLayoutButton />
+			</div>
+			<div style={{
+				paddingTop: 50,
+				textAlign: "right",
+				paddingRight: 340
+			}}>
+				<h2>Test of Interactive Track Layout</h2>
+			</div>
+			<div style={{paddingTop: 140,
+							textAlign: "right",
+							paddingRight: 500 }}>
+					<TrackView setParentName={setParentName}/>
+			</div>
+			<div>
+				<h2 style={{paddingTop: 220,
+							textAlign: "left",
+							paddingLeft: 80 }}>
+					Currently Selected: {parentName}
+				</h2>
+			</div>
+			<div style={{
+				display: "flex",
+				flexDirection: "row",
+				justifyContent: "center",
+				alignItems: "flex-end",
+				bottom: 0,
+				width: "100%",
+				position: "absolute",
+			}}>
+				<PropertiesPanel parentName={parentName}/>
+				<StatesPanel parentName={parentName}/>
+			</div>
+		</>
 	)
 }
 
