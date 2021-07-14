@@ -1,10 +1,43 @@
 import React, { useState } from 'react'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Blocks from './assets/Blocks';
 import './styles.css';
 
 var trackLayout = require("./TrackLayout.json");
+
+const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <div>
+	<div 
+		onClick={() => console.log(`clicked svg:`)}
+		style={{ 
+			position: "absolute", 
+			zIndex: 1002, 
+			top: blockType === "straight" ? "47.5%" : "5%", 
+			left: blockType === "straight" ? "50%" : "9%", 
+			transform: "translate(-50%, -50%)",
+			fontWeight: 550,
+			color: stroke
+			// backgroundColor: "red" 
+	}}>{centerElement}</div>
+	<svg 
+		width={75}
+		height={75}
+		viewBox={`0 0 ${100} ${100}`}
+		stroke={stroke}
+		fill={fill}
+		xmlns="http://www.w3.org/2000/svg" 
+		style={{
+			position: "absolute",
+			left: blockType === "straight" ? "61%" : "29.5%",
+			top: blockType === "straight" ? "61%" : "29.5%",
+			transform: "translate(-50%, -50%)",
+			zIndex: 1001,
+		}} 
+		onClick={() => console.log(`clicked svg:`)}
+	>
+		{Blocks["circle"]}
+	</svg>
+</div>
 
 const gridBlocks = 50;
 const gridSize = 120;
@@ -63,9 +96,12 @@ const TrackView = () => {
 				case "1001": dy = 45; break;
 				case "0110": dx = 45; break;
 			}
+
+			//conditional vars
 			let blockType = (blockTypeName === "0101" || blockTypeName === "1010") ? "straight" : "curved";
 			let size = blockType === "straight" ? 100 : 55;
-			
+			let color = `rgb(128, 128, 128, ${blockSVGs.length > 0 ? .25 : 1})`;
+
 			//create new svg and push to trackBlockSVGs
 			let newSVG = <div 
 				key={currBlock.blockId}
@@ -75,7 +111,7 @@ const TrackView = () => {
 					top: currPos.y + dy + 10, 
 					height: size,
 					width: size,
-					backgroundColor: "rgba(0, 255, 255, .25)",
+					// backgroundColor: "rgba(0, 255, 255, .25)",
 					overflow: "visible",
 				}}
 			>
@@ -83,39 +119,26 @@ const TrackView = () => {
 					width={size}
 					height={size}
 					viewBox={`0 0 ${size} ${size}`}
-					stroke={blockType === "straight" ? "grey" : "none"} 
-					fill={blockType === "curved" ? "grey" : "none"}
+					stroke={blockType === "straight" ? color : "none"} 
+					fill={blockType === "curved" ? color : "none"}
 					xmlns="http://www.w3.org/2000/svg" 
 					style={{
 						position: "absolute",
 						left: blockTypeName === "0101" ? "95%" : "50%",
 						top: blockTypeName === "1010" ? "95%" : "50%",
 						transform: "translate(-50%, -50%)",
-						zIndex: 1001,
+						zIndex: 1000,
 					}} 
-					onClick={() => console.log(`clicked svg: ${currBlock.blockId}`)
-				}>
+					onClick={() => console.log(`clicked svg: ${currBlock.blockId}`)}
+				>
 					{Blocks[blockTypeName]}
 				</svg>	
-				{
-					currBlock.station != undefined ? <svg 
-						width={100}
-						height={100}
-						viewBox={`0 0 ${100} ${100}`}
-						stroke="grey"
-						fill="white"
-						xmlns="http://www.w3.org/2000/svg" 
-						style={{
-							position: "absolute",
-							left: blockType === "straight" ? "65%" : "37.5%",
-							top: blockType === "straight" ? "65%" : "37.5%",
-							transform: "translate(-50%, -50%)",
-							zIndex: 1001,
-						}} 
-					>
-						{Blocks["circle"]}
-					</svg> : <></>
-				}
+				<OverlayTrigger
+					placement="top"
+					overlay={<Tooltip>{currBlock.station}</Tooltip>}
+				>
+					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", "grey") : <></>}
+				</OverlayTrigger>
 			</div>
 			blockSVGs.push(newSVG);
 		});
@@ -127,10 +150,10 @@ const TrackView = () => {
 					left: currPos.x + 5,
 					top: currPos.y,
 					margin: 0,
-					fontSize: ".5em",
+					fontSize: ".35em",
 					zIndex: 1000,
 				}}
-			>{currBlock.blockId}</div>
+			>{`${currBlock.section}${currBlock.blockId}`}</div>
 			{blockSVGs}
 		</div>
 
