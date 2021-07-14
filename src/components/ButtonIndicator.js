@@ -4,11 +4,12 @@ import {DatabaseGet, DatabaseSet} from '../Database';
 import { BsCircleFill } from "react-icons/bs";
 import "./componentStyles.css";
 
-function ButtonIndicator({varName, message, parentName}) {
-	
-	const [vari, setVari] = useState(false);
+function ButtonIndicator({ varName, message, parentName }) {
+  const [vari, setVari] = useState(false);
 
-	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [parentName]);
+  useEffect(() => {
+    setTimeout(() => DatabaseGet(setVari, varName, parentName), 500);
+  }, [parentName]);
 
 	return (
 		<div className="componentDiv">
@@ -21,4 +22,4 @@ function ButtonIndicator({varName, message, parentName}) {
 	)
 }
 
-export default ButtonIndicator
+export default ButtonIndicator;
