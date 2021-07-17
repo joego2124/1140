@@ -15,7 +15,7 @@ function ButtonIndicator({ varName, message, parentName }) {
 		<div className="componentDiv">
 			<Button variant="light" className="componentButton" 
 					onClick={()=>{DatabaseSet(vari == true ? false : true, varName, parentName)}}>
-				<div className="componentButtonText">{message}</div>
+				<h3 className="componentButtonText">{message}</h3>
 			</Button>
 			<BsCircleFill className="indicator" size="1.5em" color={vari ? 'green' : "#C44242"}/>
 		</div>

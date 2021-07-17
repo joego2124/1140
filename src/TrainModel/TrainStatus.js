@@ -20,9 +20,9 @@ function TrainStatus(parentName) {
 			<h1>Train Status</h1>
 			<Container>
 				<Col>
-					<VarDisplay parentName={parentName} varName='NextStation' message='Next Station'/>
-					<VarDisplay parentName={parentName} varName='CurrentStation' message='Current Station'/>
-					<VarDisplay parentName={parentName} varName='CommandedPower' message='Commanded Power [W]'/>
+					{/* <VarDisplay parentName={parentName} varName='NextStation' message='Next Station'/> */}
+					{/* <VarDisplay parentName={parentName} varName='CurrentStation' message='Current Station'/> */}
+					<VarDisplay parentName={parentName} varName='Power' message='Commanded Power [W]'/>
 					<VarDisplay parentName={parentName} varName='Passengers' message='Passengers'/>
 					<h3>Crew: 2</h3>
 					<VarIndicator parentName={parentName} varName='ExternalLightState' message='External Lights'/>

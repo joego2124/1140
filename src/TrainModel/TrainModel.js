@@ -4,40 +4,27 @@ import TrainsPanel from './TrainsPanel';
 import TrackStatus from './TrackStatus';
 import TrainStatus from './TrainStatus';
 import PhysicsStatus from './PhysicsStatus';
+import "./trainModelStyles.css";
+import { DatabaseList } from '../Database';
 
 function TrainModel() {
 
 	const [parentName, setParentName] = useState('TRN1');
+	const [trainList, setTrainList] = useState([]);
+
+	useEffect(() => {setTimeout(()=>{DatabaseList(setTrainList, 'TrainList'); }, 500);}, [] );
 
 	return (
 		<div>
 		<header className="App-header">
-			{/* <Container styles={{
-				display: "flex",
-				flexDirection: "row",
-				justifyContent: "space-between",
-				width: "100%",
-			}}>
-				<PhysicsStatus/>
-				<PhysicsStatus/>
-				<PhysicsStatus/>
-			<Container/> */}
-			<Container style={{height:"100%"}}>
-				<Col>
-					<TrainsPanel setParentName={setParentName}/>
-				</Col>
-				<Col style={{width: '60vh'}}>
-					<Row>
-						<TrackStatus parentName={parentName}/>
-					</Row>
-					<Row>
-						<PhysicsStatus parentName={parentName}/>
-					</Row>
-				</Col>
-				<Col style={{height:"100vh",width: '90vh'}}>
-					<TrainStatus parentName={parentName}/>
-				</Col>
-			</Container>
+			<div className="trainModelRowPadded">
+				<TrainsPanel setParentName={setParentName} trainList={trainList} className="trainModelList"/>
+				<div className="trainModelColumn">
+					<TrackStatus parentName={parentName} className="trainModelItem"/>
+					<PhysicsStatus parentName={parentName} className="trainModelItem"/>
+				</div>
+				<TrainStatus parentName={parentName} className="trainModelItem"/>
+			</div>
 		</header>
 		</div>
 	)
