@@ -11,7 +11,7 @@ function VarIndicator({ varName, message, parentName }) {
 
 	return (
 		<div className="componentDiv">
-			<div className="indicatorText">{message}</div>
+			<h3 className="indicatorText">{message}</h3>
 			<BsCircleFill className="indicator" size="1.0em" color={vari ? 'green' : "#C44242"}/>
 		</div>
 	)
