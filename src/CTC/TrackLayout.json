@@ -31,6 +31,12 @@
 
 		{ "blockId": 21,  "section": "G", "connectors": [[null, null, 20, 22]], "station": "SWISSVILLE"},
 		{ "blockId": 22,  "section": "G", "connectors": [[null, 21, null, 23]]},
-		{ "blockId": 23,  "section": "G", "connectors": [[null, 22, null, null]]}
+		{ "blockId": 23,  "section": "G", "connectors": [[null, 22, null, 24]]},
+
+		{ "blockId": 24,  "section": "H", "connectors": [[null, 23, null, 25]]},
+		{ "blockId": 25,  "section": "H", "connectors": [[null, 24, null, 26]]},
+		{ "blockId": 26,  "section": "H", "connectors": [[null, 25, null, 27]]},
+		{ "blockId": 27,  "section": "H", "connectors": [[null, 24, null, null]]}
+
 	]
 }
