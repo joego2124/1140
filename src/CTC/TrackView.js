@@ -168,9 +168,9 @@ const TrackView = () => {
 			<TransformWrapper 
 				limitToBounds={false} 
 				minScale={.01} 
-				initialPositionX={-maxLength / 4}
-				initialPositionY={-maxLength / 4}
-				initialScale={2}
+				initialPositionX={-maxLength / 4.5}
+				initialPositionY={-maxLength / 2.7}
+				initialScale={0.85}
 				panning = {{velocityDisabled: true}} 
 			>
 				<TransformComponent>

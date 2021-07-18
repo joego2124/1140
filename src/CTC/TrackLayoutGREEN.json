@@ -1,6 +1,6 @@
 {
 	"blocks": [
-		{ "blockId": -1,  "section": "YARD", "connectors": [[null, 9, null, null]]},
+		{ "blockId": -1,  "section": "YARD", "connectors": [[null, null, null, null]]},
 
 		{ "blockId": 1,   "section": "A", "connectors": [[null, 12, 2, null]]},
 		{ "blockId": 2,   "section": "A", "connectors": [[1, null, null, 3]], "station": "PIONEER"},
@@ -12,7 +12,7 @@
 
 		{ "blockId": 7,   "section": "C", "connectors": [[6, 8, null, null]]},
 		{ "blockId": 8,   "section": "C", "connectors": [[null, 9, null, 7]]},
-		{ "blockId": 9,   "section": "C", "connectors": [[null, 9.1, null, 8]]},
+		{ "blockId": 9,   "section": "C", "connectors": [[null, 9.1, null, 8]], "station": "PIONEER"},
 		{ "blockId": 9.1,  "section": "C", "connectors": [[10, null, 9.1, null]]},
 		{ "blockId": 10,   "section": "C", "connectors": [[10.1, null, 10, null]]},
 		{ "blockId": 11,   "section": "C", "connectors": [[12, null, 10.1, null]]},
