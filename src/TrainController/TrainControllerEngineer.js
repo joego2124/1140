@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import config from '../config';
 import Firebase from "firebase";
-import Gains from './Gains';
+import GainOptions from './GainOptions';
 import TrainStatusRO from './TrainStatusRO';
 import TrainsPanel from '../CTC/TrainsPanel.js';
 
-function TCHW() {
+function TrainControllerEngineer() {
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -43,7 +43,7 @@ function TCHW() {
 						border: '1px solid #ddd',
 						flexGrow: '1'
 					}}>
-						<Gains/>
+						<GainOptions/>
 						<div />
 					</div>
 				</div>
@@ -54,4 +54,4 @@ function TCHW() {
 	)
 }
 
-export default TCHW
+export default TrainControllerEngineer
