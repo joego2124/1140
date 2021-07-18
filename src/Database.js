@@ -61,7 +61,10 @@ function DatabaseSet(value, varName, parentName){
     if (!path) {
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
     } else {
-        Firebase.database().ref(path).set(value);
+        try {
+            // console.warn(value);
+            Firebase.database().ref(path).set(value);
+        } catch (e) {console.warn(e);}
     }
 }
 
