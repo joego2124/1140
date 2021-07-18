@@ -4,18 +4,18 @@ import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function BrakingOptions(parentName) {
+function ModeOptions(parentName) {
     return (
         <div>
-            <h3>BRAKING</h3>
+            <h3>MODES</h3>
             <Container>
                 <Col>
-                    <ButtonIndicator parentName={parentName} varName='EBrakeStatus' message='Emergency Brake'/>
-                    <ButtonIndicator parentName={parentName} varName='SBrakeStatus' message='Service Brake'/>
+                    <ButtonIndicator parentName={parentName} varName='AutomaticMode' message='Automatic Mode'/>
+                    <ButtonIndicator parentName={parentName} varName='ManualMode' message='Manual Mode'/>
                 </Col>
             </Container>
         </div>
     )
 }
 
-export default BrakingOptions
+export default ModeOptions

@@ -4,18 +4,18 @@ import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function BrakingOptions(parentName) {
+function LightOptions(parentName) {
     return (
         <div>
-            <h3>BRAKING</h3>
+            <h3>LIGHTS</h3>
             <Container>
                 <Col>
-                    <ButtonIndicator parentName={parentName} varName='EBrakeStatus' message='Emergency Brake'/>
-                    <ButtonIndicator parentName={parentName} varName='SBrakeStatus' message='Service Brake'/>
+                    <ButtonIndicator parentName={parentName} varName='InternalLightState' message='Internal Lights'/>
+                    <ButtonIndicator parentName={parentName} varName='ExternalLightState' message='External Lights'/>
                 </Col>
             </Container>
         </div>
     )
 }
 
-export default BrakingOptions
+export default LightOptions
