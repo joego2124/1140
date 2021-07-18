@@ -3,17 +3,25 @@ import { Button, Container, Col, Row  } from 'react-bootstrap';
 import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
+import { DatabaseSet, DatabaseGet } from '../Database';
 
 function TrainStatus(parentName) {
+	const [EDoorStatus, setEDoorStatus] = useState(false);
+	const [EBrakeStatus, setEBrakeStatus] = useState(false);
+
+	useEffect(() => {setTimeout(()=>{DatabaseGet(setEDoorStatus, 'EDoorStatus', parentName); }, 500);}, [parentName]);
+	useEffect(() => {setTimeout(()=>{DatabaseGet(setEBrakeStatus, 'EBrakeStatus', parentName); }, 500);}, [parentName]);
+
+	useEffect(() => {DatabaseSet(EDoorStatus, 'RightDoorStatus', parentName);DatabaseSet(EDoorStatus, 'LeftDoorStatus', parentName);}, [EDoorStatus])
+	useEffect(() => {DatabaseSet(EBrakeStatus, 'SBrakeStatus', parentName);}, [EBrakeStatus])
 	
-	const [nextStation, setNextStation] = useState('default');
 	return (
 		<div style={{borderStyle: 'solid', height:"90%", width: '105%'}}>
 			<h1>Train Status</h1>
 			<Container>
 				<Col>
-					<VarDisplay parentName={parentName} varName='NextStation' message='Next Station'/>
-					<VarDisplay parentName={parentName} varName='CurrentStation' message='Current Station'/>
+					{/* <VarDisplay parentName={parentName} varName='NextStation' message='Next Station'/> */}
+					{/* <VarDisplay parentName={parentName} varName='CurrentStation' message='Current Station'/> */}
 					<VarDisplay parentName={parentName} varName='Power' message='Commanded Power [W]'/>
 					<VarDisplay parentName={parentName} varName='Passengers' message='Passengers'/>
 					<h3>Crew: 2</h3>
