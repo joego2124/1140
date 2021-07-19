@@ -8,6 +8,48 @@ import AddTrainModal from './AddTrainModal';
 
 import { DatabaseGet, DatabaseSet }  from "../Database";
 
+var trackLayout = require("./TrackLayout.json");
+
+function routeTrain(trackLayout, startBlockId, endBlockId) {
+	let route = [], visited = [];
+	let found = false;
+	
+	//recursive function to find route
+	function bfs(currId) {
+		//get current block from track layout
+		let currBlock = trackLayout.blocks.find(v => v.blockId == currId);
+		
+		//recursion end cases
+		if (currBlock.blockId == endBlockId || found) {
+			found = true;
+			return;
+		}
+
+		console.log(`currId: ${currId}`);
+
+		visited.push(currId); //add current block id to visited list
+		route.push(currId) //add current block id to route 
+		
+		//iterate through current block's connections
+		currBlock.connectors.forEach(connections => {
+			//iterate through connection block id's
+			connections.forEach(nextBlockId => {
+				//check to make sure next block id is valid and not already visited
+				// console.log(nextBlockId, visited.find(v => v == nextBlockId));
+				if (nextBlockId != null && visited.find(v => v == nextBlockId) == undefined) { 
+					return bfs(nextBlockId);
+				}
+			});
+		});
+
+		if (!found) route.pop(currId); //remove current block id after exhausting all options
+	}
+
+	bfs(startBlockId);
+
+	return route;
+}
+
 function CTC() {
 
 	const [scheduleModalShow, setScheduleModalShow] = useState(false);
@@ -18,6 +60,8 @@ function CTC() {
 	useEffect(() => {
 		DatabaseGet(setTrainsList, "TrainList");
 	}, []);
+
+	console.log(routeTrain(trackLayout, 16, 7));
 
 	return (
 		<div>
@@ -33,6 +77,7 @@ function CTC() {
 				/>
 				<TrackView
 					selectedTrain={selectedTrain}
+					routeTrain={routeTrain}
 				/>
 			</header>
 			<ScheduleModal
