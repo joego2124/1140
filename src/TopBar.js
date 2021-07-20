@@ -1,15 +1,45 @@
 import portrait from "./portrait.png"
-import { React, useContext } from 'react'
+import { React, useContext, useEffect, useState } from 'react'
 import { Image, Navbar, Dropdown, Form, Button, Nav, ButtonGroup } from 'react-bootstrap'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
-import { SpeedContext } from './SpeedProvider';
+// import { SpeedContext } from './SpeedProvider';
 // import firebaseApp from './base';
 import Firebase from "firebase";
 import config from './config';
 
 function TopBar() {
 
-	const [speedState, setSpeedState] = useContext(SpeedContext);
+	//REMOVED SPEEDSTATE CONTEXT SINCE IT WAS CASUSING PAIN AND SUFFERING
+	// const [speedState, setSpeedState] = useContext(SpeedContext);
+	const [speed, setspeed] = useState(1);
+	const [pause, setpause] = useState(true);
+
+	useEffect(() => {
+		Firebase.database().ref('/SimulationClock/speed').on('value', snapshot => {
+			const state = snapshot.val();
+			// setSpeedState({
+			// 	...speedState, 
+			// 	speed: state,
+			// });
+			setspeed(state);
+			console.log('set speed database:',state, speed);
+			// console.log('set speed database:',state, speedState.speed);
+		})
+	}, []);
+		
+	useEffect(() => {
+		Firebase.database().ref('/SimulationClock/paused').on('value', snapshot => {
+			const state = snapshot.val();
+			// setSpeedState({
+			// 	...speedState, 
+			// 	paused: state,
+			// });
+			setpause(state);
+			console.log('set pause database:',state, pause);
+			// console.log('set pause database:',state, speedState.paused);
+		})
+	}, []);
+
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -18,11 +48,28 @@ function TopBar() {
 	}
 
 	function setSpeed(newSpeed) {
-		Firebase.database().ref('/speedSettings/speed').set(newSpeed);
+		Firebase.database().ref('/SimulationClock/speed').set(newSpeed);
 	}
 
 	function setPaused(newPaused) {
-		Firebase.database().ref('/speedSettings/paused').set(newPaused);
+		Firebase.database().ref('/SimulationClock/paused').set(newPaused);
+		console.log('setting paused');
+		// setTimeout(() => clockTick(), 1000);
+	}
+
+	async function clockTick() {
+		if(!pause) {
+		// if(!speedState.paused) {
+			
+			Firebase.database().ref('/SimulationClock/Time').transaction( time => {
+				return time + 1;
+			});
+			console.log('tick: paused', pause, 'speed', speed);
+
+			if(!pause)
+				setTimeout(() => clockTick(), 1000 * (1/speed));
+			// setTimeout(() => clockTick(), 1000 * (1/speedState.speed));
+		}
 	}
 
 	return (
@@ -45,25 +92,21 @@ function TopBar() {
 
 					{/* Play/Pause Button */}
 					<Button style={styles.pausePlay} onClick={() => {
-						var newPaused = !speedState.paused;
+						var newPaused = !pause;
+						// var newPaused = !speedState.paused;
 						setPaused(newPaused);
-						setSpeedState({
-							...speedState, 
-							paused: newPaused,
-						});
+						clockTick();
 					}}>
-						{ speedState.paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
+						{ pause ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
+						{/* { speedState.paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> } */}
 					</Button>
 
 					{/* Speed Dropdown */}
 					<Dropdown as={ButtonGroup} onSelect={ selected => {
 						setSpeed(Number(selected));
-						setSpeedState({
-							...speedState, 
-							speed: Number(selected)
-						 });
 					}} alignRight>
-						<Button style={styles.speedButton}>{ `x${speedState.speed}` }</Button>
+						<Button style={styles.speedButton}>{ `x${speed}` }</Button>
+						{/* <Button style={styles.speedButton}>{ `x${speedState.speed}` }</Button> */}
 
 						<Dropdown.Toggle split style={styles.speedDropdown} id="dropdown-split-basic" />
 
