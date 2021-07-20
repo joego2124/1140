@@ -10,7 +10,7 @@ import { DatabaseGet, DatabaseSet }  from "../Database";
 
 var trackLayout = require("./TrackLayout.json");
 
-function routeTrain(trackLayout, startBlockId, endBlockId) {
+function pathfind(startBlockId, endBlockId) {
 	let route = [], visited = [];
 	let found = false;
 	
@@ -50,6 +50,19 @@ function routeTrain(trackLayout, startBlockId, endBlockId) {
 	return route;
 }
 
+function routeTrain(stations) {
+	let yardId = trackLayout.blocks.find(v => v.section === "YARD").blockId;
+	let prevStationId = yardId;
+	let route = [];
+	stations.sort((a, b) => a - b).forEach(nextStationId => {
+		let subroute = pathfind(prevStationId, nextStationId);
+		route.concat(subroute);
+		prevStationId = nextStationId;
+	});
+	route.concat(pathfind(prevStationId, yardId));
+	return route;
+}
+
 function CTC() {
 
 	const [scheduleModalShow, setScheduleModalShow] = useState(false);
@@ -61,7 +74,7 @@ function CTC() {
 		DatabaseGet(setTrainsList, "TrainList");
 	}, []);
 
-	console.log(routeTrain(trackLayout, 16, 7));
+	console.log(routeTrain([35, 16]));
 
 	return (
 		<div>
