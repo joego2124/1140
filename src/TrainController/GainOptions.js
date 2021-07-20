@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
-const Gains = () => {
+const GainOptions = () => {
 
     document.body.style.overflow='hidden';
 
@@ -100,4 +100,4 @@ const Gains = () => {
     )
 }
 
-export default Gains
+export default GainOptions
