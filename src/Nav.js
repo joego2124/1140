@@ -46,17 +46,17 @@ function NavComponent() {
           </NavIcon>
           <NavText>Train Model</NavText>
         </NavItem>
-        <NavItem eventKey='TrainController'>
+        <NavItem eventKey='TrainControllerDriver'>
           <NavIcon>
             <AiOutlineControl size='1.75em' />
           </NavIcon>
-          <NavText>Train Controller</NavText>
+          <NavText>Train Controller (Driver)</NavText>
         </NavItem>
-        <NavItem eventKey='TCHW'>
+        <NavItem eventKey='TrainControllerEngineer'>
           <NavIcon>
             <AiOutlineControl size='1.75em' />
           </NavIcon>
-          <NavText>TCHW</NavText>
+          <NavText>Train Controller (Engineer)</NavText>
         </NavItem>
       </SideNav.Nav>
     </SideNav>
