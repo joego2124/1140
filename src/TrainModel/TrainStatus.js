@@ -6,14 +6,14 @@ import ButtonIndicator from '../components/ButtonIndicator';
 import { DatabaseSet, DatabaseGet } from '../Database';
 
 function TrainStatus(parentName) {
-	const [EDoorStatus, setEDoorStatus] = useState(false);
-	const [EBrakeStatus, setEBrakeStatus] = useState(false);
+	// const [EDoorStatus, setEDoorStatus] = useState(false);
+	// const [EBrakeStatus, setEBrakeStatus] = useState(false);
 
-	useEffect(() => {setTimeout(()=>{DatabaseGet(setEDoorStatus, 'EDoorStatus', parentName); }, 500);}, [parentName]);
-	useEffect(() => {setTimeout(()=>{DatabaseGet(setEBrakeStatus, 'EBrakeStatus', parentName); }, 500);}, [parentName]);
+	// useEffect(() => {setTimeout(()=>{DatabaseGet(setEDoorStatus, 'EDoorStatus', parentName); }, 500);}, [parentName]);
+	// useEffect(() => {setTimeout(()=>{DatabaseGet(setEBrakeStatus, 'EBrakeStatus', parentName); }, 500);}, [parentName]);
 
-	useEffect(() => {DatabaseSet(EDoorStatus, 'RightDoorStatus', parentName);DatabaseSet(EDoorStatus, 'LeftDoorStatus', parentName);}, [EDoorStatus])
-	useEffect(() => {DatabaseSet(EBrakeStatus, 'SBrakeStatus', parentName);}, [EBrakeStatus])
+	// useEffect(() => {DatabaseSet(EDoorStatus, 'RightDoorStatus', parentName);DatabaseSet(EDoorStatus, 'LeftDoorStatus', parentName);}, [EDoorStatus])
+	// useEffect(() => {DatabaseSet(EBrakeStatus, 'SBrakeStatus', parentName);}, [EBrakeStatus])
 	
 	return (
 		<div style={{borderStyle: 'solid', height:"90%", width: '105%'}}>
