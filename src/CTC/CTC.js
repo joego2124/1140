@@ -1,41 +1,49 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import config from '../config';
-import Firebase from "firebase";
-import { SpeedContext } from '../SpeedProvider';
 import TrackView from './TrackView';
 import TrainsPanel from './TrainsPanel';
 import MainPanel from './MainPanel';
+import ScheduleModal from './ScheduleModal';
+import AddTrainModal from './AddTrainModal';
+
+import { DatabaseGet, DatabaseSet }  from "../Database";
 
 function CTC() {
 
-	if (!Firebase.apps.length) {
-		Firebase.initializeApp(config);
-	}else {
-		Firebase.app(); // if already initialized, use that one
-	}
+	const [scheduleModalShow, setScheduleModalShow] = useState(false);
+	const [addTrainModal, setAddTrainModal] = useState(false);
+	const [selectedTrain, setSelectedTrain] = useState({});
+	const [trainsList, setTrainsList] = useState({});
 
-	// function getLedData() {
-	// 	let ref = Firebase.database().ref('/LED_STATUS');
-	// 	ref.on('value', snapshot => {
-	// 		const state = `${snapshot.val()}`;
-	// 		setLedState(state === "ON" ? true : false);
-	// 	});
-	// }
-
-	// function setLedData(newState) {
-	// 	Firebase.database().ref('/LED_STATUS').set(newState ? "ON" : "OFF");
-	// }
-
-	// useEffect(() => getLedData(), []);
+	useEffect(() => {
+		DatabaseGet(setTrainsList, "TrainList");
+	}, []);
 
 	return (
 		<div>
 			<header className="App-header">
-				<TrainsPanel />
-				<MainPanel />
-				<TrackView/>
+				<TrainsPanel 
+					setSelectedTrain={setSelectedTrain}
+					setAddTrainModal={setAddTrainModal}
+					trainsList={trainsList}
+				/>
+				<MainPanel 
+					setModalShow={setScheduleModalShow} 
+					selectedTrain={selectedTrain}
+				/>
+				<TrackView
+					selectedTrain={selectedTrain}
+				/>
 			</header>
+			<ScheduleModal
+        show={scheduleModalShow}
+        onHide={() => setScheduleModalShow(false)}
+				trainsList={trainsList}
+      />
+			<AddTrainModal 
+				show={addTrainModal}
+				onHide={() => setAddTrainModal(false)}
+			/>
 		</div>
 	)
 }
