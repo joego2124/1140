@@ -9,6 +9,8 @@ import TempWaysideView from './TempWaysideView';
 const WaysideController = () => {
   document.body.style.overflow = 'hidden';
 
+  const [selectedWayside, setSelectedWayside] = useState([]);
+
   if (!Firebase.apps.length) {
     Firebase.initializeApp(config);
   } else {
@@ -19,8 +21,9 @@ const WaysideController = () => {
     <div>
       <header className='App-header'>
         <TempWaysideView />
-        <WaysidePanel />
-        <BottomPanel />
+        <p>{selectedWayside[0]?.BlockNumber}</p>
+        <WaysidePanel setterForSelectedWayside={setSelectedWayside} />
+        <BottomPanel getterForSelectedWayside={selectedWayside} />
       </header>
     </div>
   );
