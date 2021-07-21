@@ -101,14 +101,14 @@ const TrackView = ({selectedTrain, trainsList}) => {
 			//conditional vars
 			let blockType = (blockTypeName === "0101" || blockTypeName === "1010") ? "straight" : "curved";
 			let size = blockType === "straight" ? 100 : 55;
-			let color = `rgb(${lineName === "greenLine" ? "60,97,80" : "95,60,67"}, ${blockSVGs.length > 0 ? .25 : 1})`;
+			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${blockSVGs.length > 0 ? .25 : 1})`;
 
 			Object.entries(trainsList).forEach(trainArr => {
 				let targBlockId = Math.floor(trainArr[1].CurrentBlock);
 				let compBlockId = Math.floor(currBlock.blockId);
 				if (targBlockId == compBlockId) {
 					console.log(trainArr[0], trainArr[1]);
-					color = `rgb(255, 0, 0, ${blockSVGs.length > 0 ? .25 : 1})`;
+					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
 				}
 			});
 			
