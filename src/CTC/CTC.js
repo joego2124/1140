@@ -10,61 +10,74 @@ import { DatabaseGet, DatabaseSet }  from "../Database";
 
 var trackLayout = require("./TrackLayout.json");
 
-function routeTrain(stations) {
-	let yardId = trackLayout.blocks.find(v => v.section === "YARD").blockId;
-	let prevStationId = yardId, prevBlockId = yardId;
-	let route = [];
+function bfs(startBlockId, endBlockId, _prevBlockId) {
+	console.warn("STARTING PATHFIND");
 
-	//get subroute between stations
-	function pathfind(startBlockId, endBlockId) {
-		let solutions = [];
-		let subRoute = [], visited = [];
-		let found = false;
-		
-		//recursive function to find sub route
-		function bfs(currId) {
-			//get current block from track layout
-			let currBlock = trackLayout.blocks.find(v => v.blockId == currId);
-			
-			//recursion end cases
-			if (currId == endBlockId || found) {
-				found = true;
-				return;
+	let startBlock = trackLayout.blocks.find(v => v.blockId === startBlockId);
+	let _prevBlock = trackLayout.blocks.find(v => v.blockId === _prevBlockId);
+	
+	let stack = [[{current: startBlock, previous: _prevBlock}]];
+
+	let counter = 0;
+	while (true) {
+
+		let currBranches = stack[stack.length - 1], newBranches = [];
+		console.log(stack[stack.length - 1]);
+
+		for (let k = 0; k < currBranches.length; k++) {
+			let currentBlock = currBranches[k].current;
+			let prevBlock = currBranches[k].previous;
+
+			console.log(`currentBlock: ${currentBlock.blockId}, prevBlock: ${prevBlock.blockId}`);
+
+			if (currentBlock.blockId == endBlockId) {
+				console.log("found solution");
+
+				let solution = [currentBlock.blockId];
+				let tempBlock = prevBlock;
+				for (let i = stack.length - 2; i > 0; i--) {
+					let currentLayer = stack[i];
+					let currentBlockLink = currentLayer.find(v => v.current == tempBlock);
+					solution.push(currentBlockLink.current.blockId);
+					tempBlock = currentBlockLink.previous;
+				}
+				console.log(solution);
+
+				return true;
 			}
-	
-			console.log(`currId: ${currId}, prevBlockId: ${prevBlockId}`);
-	
-			subRoute.push(currId) //add current block id to sub route 
-			
-			//iterate through current block's connections
-			currBlock.connectors.forEach(connections => {
-				//iterate through connection block id's
-				connections.forEach(nextBlockId => {
-					//check to make sure next block id exists
-					if (nextBlockId === null) return;
 
-					//check same travel configuration hasn't occurred previously
-					if (visited.find(v => v.from == currId && v.to == nextBlockId) != undefined) return;
-
-					//check we're not going backwards and repeating
-					if (nextBlockId === prevBlockId) return;
-
-					visited.push({from: currId, to: nextBlockId});
-					prevBlockId = currId;
-					return bfs(nextBlockId);
-				});
-			});
-	
-			if (!found) subRoute.pop(currId); //remove current block id after exhausting all options
+			for (let i = 0; i < currentBlock.connectors.length; i++) {
+				for (let j = 0; j < currentBlock.connectors[i].length; j++) {
+					let neighborBlockId = currentBlock.connectors[i][j];
+					if (neighborBlockId != null && neighborBlockId != prevBlock.blockId) {
+						if (currentBlock.connectors[i].find(id => id === prevBlock.blockId) != undefined) {
+							let neighborBlock = trackLayout.blocks.find(v => v.blockId === neighborBlockId);
+							newBranches.push({
+								current: neighborBlock,
+								previous: currentBlock,
+							});
+						}
+					}
+				}
+			}
 		}
-	
-		bfs(startBlockId);
-	
-		return subRoute;
-	}
 
-	prevBlockId = 34;
-	console.log(pathfind(35, 34));
+		stack.push(newBranches);
+		counter++;
+	}
+	
+	console.warn("END PATHFIND");
+}
+
+// function routeTrain(stations) {
+// 	let yardId = trackLayout.blocks.find(v => v.section === "YARD").blockId;
+// 	let prevStationId = yardId, prevBlockId = yardId;
+// 	let route = [];
+
+	
+
+// 	prevBlockId = 34;
+// 	console.log(pathfind(35, 34));
 
 	//iterate through each station and find path
 	// stations.sort((a, b) => a - b).forEach(nextStationId => {
@@ -80,8 +93,8 @@ function routeTrain(stations) {
 	// route = route.concat(pathfind(prevStationId, yardId));
 	// route.push(yardId); //push yard block as final since pathfind does not
 	
-	return route;
-}
+// 	return route;
+// }
 
 function CTC() {
 
@@ -94,7 +107,8 @@ function CTC() {
 		DatabaseGet(setTrainsList, "TrainList");
 	}, []);
 
-	console.log(routeTrain([35, 16]));
+	// console.log(routeTrain([35, 16]));
+	console.log(bfs(9, 60, -1));
 
 	return (
 		<div>
@@ -110,7 +124,7 @@ function CTC() {
 				/>
 				<TrackView
 					selectedTrain={selectedTrain}
-					routeTrain={routeTrain}
+					// routeTrain={routeTrain}
 				/>
 			</header>
 			<ScheduleModal
