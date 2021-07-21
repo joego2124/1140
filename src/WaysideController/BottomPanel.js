@@ -7,25 +7,23 @@ import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './styles.css';
 
 import PLCFileUpload from './PLCFileUpload';
-import WaysidePanel from './WaysidePanel';
 
-const BottomPanel = ({ getterForSelectedWayside }) => {
+const BottomPanel = ({ selectedWayside }) => {
   const [open, setOpen] = useState(true);
-  const [blockList, setBlockList] = useState([]);
   const [crossingLights, setCrossingLights] = useState('string');
   const [length, setLength] = useState('string');
-  const [levelCrossing, setLevelCrossing] = useState('string');
+  const [levelCrossingState, setLevelCrossingState] = useState('string');
   const [occupancy, setOccupancy] = useState('string');
   const [speedLimit, setSpeedLimit] = useState('string');
-  const [status, setStatus] = useState('string');
+  const [blockStatus, setBlockStatus] = useState('string');
   const [plcUploaded, setPlcUploaded] = useState(false);
   const [switchCommand, setSwitchCommand] = useState(false);
   const [selectedBlock, setSelectedBlock] = useState('Block 1');
-  const [selectedWayside, setSelectedWayside] = useState(
-    getterForSelectedWayside
-  );
 
-  Firebase.app();
+  function handleBlocks($event) {
+    setSelectedBlock($event.target.value);
+    // getWaysideListData();
+  }
 
   //when updates happen this is called and then it calls appropriate functions to update the page element
   const handleUpdate = () => {
@@ -46,50 +44,35 @@ const BottomPanel = ({ getterForSelectedWayside }) => {
 
   useEffect(() => getSwitchCommandData(), []);
 
-  // function getBlockListData() {
-  //   setSelectedWayside(WaysidePanel.getSelectedWayside());
-  // }
-
-  // useEffect(() => getBlockListData(), []);
-
   function getWaysideListData() {
-    console.log(selectedBlock);
-    console.log(getterForSelectedWayside);
-    let ref = Firebase.database().ref('/WSC/WS-1/Block1');
-    if (selectedBlock == 'Block 1') {
-      ref = Firebase.database().ref('/WSC/WS-1/Block1');
-    } else if (selectedBlock == 'Block 2') {
-      ref = Firebase.database().ref('/WSC/WS-1/Block2');
-    } else if (selectedBlock == 'Block 3') {
-      ref = Firebase.database().ref('/WSC/WS-1/Block3');
-    }
+    let ref = Firebase.database().ref(
+      '/GreenLine/' +
+        selectedBlock.BlockNumber +
+        '/' +
+        selectedBlock.BlockNumber
+    );
     ref.on('value', (snapshot) => {
-      setBlockList(['Block 1', 'Block 2', 'Block 3']);
-      // setCrossingLights(snapshot.val().CrossingLights);
-      // setLength(snapshot.val().Length);
-      // setLevelCrossing(snapshot.val().LevelCrossing);
-      // setOccupancy(snapshot.val().Occupancy);
-      // setSpeedLimit(snapshot.val().SpeedLimit);
-      // setStatus(snapshot.val().Status);
+      setCrossingLights(snapshot.val()?.CrossingLights);
+      setLength(snapshot.val()?.BlockLength);
+      setLevelCrossingState(snapshot.val()?.LevelCrossingState);
+      setOccupancy(snapshot.val()?.Occupancy);
+      setSpeedLimit(snapshot.val()?.SpeedLimit);
+      setBlockStatus(snapshot.val()?.BlockStatus);
     });
   }
 
   useEffect(() => getWaysideListData(), []);
 
-  function handleBlocks($event) {
-    setSelectedBlock($event.target.value);
-    getWaysideListData();
-  }
-
   function WaysideBlocks() {
-    const listItems = blockList.map((blockIndex) => (
-      <option value={blockIndex}>{blockIndex}</option>
+    console.log(selectedWayside);
+    const listItems = selectedWayside.map((key, block) => (
+      <option value={block}>Block {block?.BlockNumber}</option>
     ));
     return (
       <div className='dataSection'>
         <select
           onChange={handleBlocks}
-          value={selectedBlock}
+          value={'Block' + selectedBlock?.BlockNumber}
           className='blockSelect'
         >
           {listItems}
@@ -98,15 +81,15 @@ const BottomPanel = ({ getterForSelectedWayside }) => {
           <div className='dataLeft'>
             <div className='dataName'>
               Status:
-              <div className='dataValue'>{status}</div>
+              <div className='dataValue'>{selectedBlock.BlockStatus}</div>
             </div>
             <div className='dataName'>
               Occupancy:
-              <div className='dataValue'>{occupancy}</div>
+              <div className='dataValue'>{selectedBlock.Occupancy}</div>
             </div>
             <div className='dataName'>
-              Level Crossing: {selectedWayside[0]?.BlockNumber}
-              {levelCrossing == true ? (
+              Level Crossing:
+              {selectedBlock.LevelCrossingState == true ? (
                 <div className='dataValue'>Lowered</div>
               ) : (
                 <div className='dataValue'>Raised</div>
@@ -116,7 +99,7 @@ const BottomPanel = ({ getterForSelectedWayside }) => {
           <div className='dataRight'>
             <div className='dataName'>
               Crossing Lights:
-              {crossingLights == true ? (
+              {selectedBlock.CrossingLights == true ? (
                 <div className='dataValue'>On</div>
               ) : (
                 <div className='dataValue'>Off</div>
@@ -124,11 +107,11 @@ const BottomPanel = ({ getterForSelectedWayside }) => {
             </div>
             <div className='dataName'>
               Speed Limit:
-              <div className='dataValue'>{speedLimit} mph</div>
+              <div className='dataValue'>{selectedBlock.SpeedLimit} mph</div>
             </div>
             <div className='dataName'>
               Length:
-              <div className='dataValue'>{length} feet</div>
+              <div className='dataValue'>{selectedBlock.BlockLength} feet</div>
             </div>
           </div>
         </div>
