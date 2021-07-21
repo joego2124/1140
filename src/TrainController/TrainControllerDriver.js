@@ -8,10 +8,19 @@ import LightOptions from './LightOptions';
 import TemperatureOptions from './TemperatureOptions';
 import FailureStatus from './FailureStatus';
 import TrainsPanel from '../CTC/TrainsPanel.js';
+import { DatabaseGet, DatabaseSet }  from "../Database";
 
 function TrainContollerDriver() {
 
 	const [parentName, setParentName] = useState('TRN1');
+	const [scheduleModalShow, setScheduleModalShow] = useState(false);
+	const [addTrainModal, setAddTrainModal] = useState(false);
+	const [selectedTrain, setSelectedTrain] = useState({});
+	const [trainsList, setTrainsList] = useState({});
+
+	useEffect(() => {
+		DatabaseGet(setTrainsList, "TrainList");
+	}, []);
 
 	return (
 		<div>
@@ -25,7 +34,11 @@ function TrainContollerDriver() {
 					<FailureStatus parentName={parentName}/>
 					<TrainStatus parentName={parentName}/>
 				</Container>
-				<TrainsPanel setParentName={setParentName}/>
+				<TrainsPanel 
+					setSelectedTrain={setSelectedTrain}
+					setAddTrainModal={setAddTrainModal}
+					trainsList={trainsList}
+				/>
 			</header>
 		</div>
 	)
