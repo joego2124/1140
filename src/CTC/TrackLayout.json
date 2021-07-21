@@ -82,7 +82,7 @@
 
 		{ "blockId": 64,  "section": "N", "connectors": [[null, 63, null, 65]]},
 		{ "blockId": 65,  "section": "N", "connectors": [[null, 64, 66, null]]},
-		{ "blockId": 66,  "section": "N", "connectors": [[66, null, null, 52]]},
+		{ "blockId": 66,  "section": "N", "connectors": [[65, null, null, 52]]},
 
 		{ "blockId": 67,  "section": "O", "connectors": [[null, 68, 43, null]]},
 
