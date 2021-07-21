@@ -10,8 +10,7 @@ function DoorOptions(parentName) {
             <h3>DOORS</h3>
             <Container>
                 <Col>
-                    <ButtonIndicator parentName={parentName} varName='EDoorStatus' message='Emergency Doors'/>
-                    <ButtonIndicator parentName={parentName} varName='SDoorStatus' message='Service Doors'/>
+                    <ButtonIndicator parentName={parentName} varName='DoorStatus' message='Toggle Doors'/>
                 </Col>
             </Container>
         </div>
