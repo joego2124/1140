@@ -1,31 +1,21 @@
-import React, { useEffect } from 'react';
-import config from '../config';
-import Firebase from "firebase";
+import React, { useEffect, useState, useContext } from 'react';
+import { Button, Container, Col, Row  } from 'react-bootstrap';
 import GainOptions from './GainOptions';
 import TrainStatusRO from './TrainStatusRO';
 import TrainsPanel from '../CTC/TrainsPanel.js';
+import { DatabaseGet, DatabaseSet }  from "../Database";
 
 function TrainControllerEngineer() {
 
-	if (!Firebase.apps.length) {
-		Firebase.initializeApp(config);
-	}else {
-		Firebase.app(); // if already initialized, use that one
-	}
+	const [parentName, setParentName] = useState('TRN1');
+	const [scheduleModalShow, setScheduleModalShow] = useState(false);
+	const [addTrainModal, setAddTrainModal] = useState(false);
+	const [selectedTrain, setSelectedTrain] = useState({});
+	const [trainsList, setTrainsList] = useState({});
 
-	// function getLedData() {
-	// 	let ref = Firebase.database().ref('/LED_STATUS');
-	// 	ref.on('value', snapshot => {
-	// 		const state = `${snapshot.val()}`;
-	// 		setLedState(state === "ON" ? true : false);
-	// 	});
-	// }
-
-	// function setLedData(newState) {
-	// 	Firebase.database().ref('/LED_STATUS').set(newState ? "ON" : "OFF");
-	// }
-
-	// useEffect(() => getLedData(), []);
+	useEffect(() => {
+		DatabaseGet(setTrainsList, "TrainList");
+	}, []);
 
 	return (
 		<div>
@@ -49,7 +39,9 @@ function TrainControllerEngineer() {
 				</div>
 				<TrainStatusRO />
 			</div>
-			<TrainsPanel />
+			<TrainsPanel 
+					trainsList={trainsList}
+				/>
 		</div>
 	)
 }

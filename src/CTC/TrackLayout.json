@@ -1,4 +1,37 @@
 {
+	"greenLine": [
+		{ "blockId": -1,  "section": "YARD", "connectors": [[null, null, -1.1, 58]]},
+		{ "blockId": -1.1,  "section": "YARD", "connectors": [[-1.1, null, -1.2, null]]},
+		{ "blockId": -1.2,  "section": "YARD", "connectors": [[-1.1, null, null, -1.3]]},
+		{ "blockId": -1.3,  "section": "YARD", "connectors": [[null, -1.2, null, -1.4]]},
+		{ "blockId": -1.4,  "section": "YARD", "connectors": [[null, -1.3, null, -1.5]]},
+		{ "blockId": -1.5,  "section": "YARD", "connectors": [[null, -1.4, null, -1.6]]},
+		{ "blockId": -1.6,  "section": "YARD", "connectors": [[62, -1.5, null, null]]},
+
+		{ "blockId": 56,   "section": "I", "connectors": [[null, null, 57, null]]},
+		{ "blockId": 57,   "section": "I", "connectors": [[56, null, 58, null]]},
+
+		{ "blockId": 58,   "section": "J", "connectors": [[57, -1, null, null], [58, null, null, 59]]},
+		{ "blockId": 59,   "section": "J", "connectors": [[null, 58, 60, null]]},
+		{ "blockId": 60,   "section": "J", "connectors": [[59, null, null, 61]]},
+		{ "blockId": 61,   "section": "J", "connectors": [[null, 60, null, 62]]},
+		{ "blockId": 62,   "section": "J", "connectors": [[null, 61, -1, null], [null, null, -1, 63]]},
+
+		{ "blockId": 63,   "section": "K", "connectors": [[null, 62, null, 64]]},
+		{ "blockId": 64,   "section": "K", "connectors": [[null, 63, null, 65]]},
+		{ "blockId": 65,   "section": "K", "connectors": [[null, 64, null, 66]]},
+		{ "blockId": 66,   "section": "K", "connectors": [[null, 65, null, 67]]},
+		{ "blockId": 67,   "section": "K", "connectors": [[null, 66, null, 68]]},
+		{ "blockId": 68,   "section": "K", "connectors": [[null, 67, null, 69]]},
+
+		{ "blockId": 69,   "section": "L", "connectors": [[null, 68, null, 70]]},
+		{ "blockId": 70,   "section": "L", "connectors": [[null, 69, null, 71]]},
+		{ "blockId": 71,   "section": "L", "connectors": [[72, 70, null, null]]},
+		{ "blockId": 72,   "section": "L", "connectors": [[73, null, 71, null]]},
+		{ "blockId": 73,   "section": "L", "connectors": [[74, null, 72, null]], "station": "DORMONT"},
+
+		{ "blockId": 74,   "section": "M", "connectors": [[null, null, 73, null]]}
+	],
 	"redLine": [
 		{ "blockId": -1,  "section": "YARD", "connectors": [[null, 9, null, null]]},
 
@@ -102,38 +135,5 @@
 		{ "blockId": 76,  "section": "T", "connectors": [[null, 76.1, null, 75]]},
 		{ "blockId": 76.1,  "section": "T", "connectors": [[null, null, 27, 76]]}
 
-	],
-	"greenLine": [
-		{ "blockId": -1,  "section": "YARD", "connectors": [[null, null, -1.1, 58]]},
-		{ "blockId": -1.1,  "section": "YARD", "connectors": [[-1.1, null, -1.2, null]]},
-		{ "blockId": -1.2,  "section": "YARD", "connectors": [[-1.1, null, null, -1.3]]},
-		{ "blockId": -1.3,  "section": "YARD", "connectors": [[null, -1.2, null, -1.4]]},
-		{ "blockId": -1.4,  "section": "YARD", "connectors": [[null, -1.3, null, -1.5]]},
-		{ "blockId": -1.5,  "section": "YARD", "connectors": [[null, -1.4, null, -1.6]]},
-		{ "blockId": -1.6,  "section": "YARD", "connectors": [[62, -1.5, null, null]]},
-
-		{ "blockId": 56,   "section": "I", "connectors": [[null, null, 57, null]]},
-		{ "blockId": 57,   "section": "I", "connectors": [[56, null, 58, null]]},
-
-		{ "blockId": 58,   "section": "J", "connectors": [[57, -1, null, null], [58, null, null, 59]]},
-		{ "blockId": 59,   "section": "J", "connectors": [[null, 58, 60, null]]},
-		{ "blockId": 60,   "section": "J", "connectors": [[59, null, null, 61]]},
-		{ "blockId": 61,   "section": "J", "connectors": [[null, 60, null, 62]]},
-		{ "blockId": 62,   "section": "J", "connectors": [[null, 61, -1, null], [null, null, -1, 63]]},
-
-		{ "blockId": 63,   "section": "K", "connectors": [[null, 62, null, 64]]},
-		{ "blockId": 64,   "section": "K", "connectors": [[null, 63, null, 65]]},
-		{ "blockId": 65,   "section": "K", "connectors": [[null, 64, null, 66]]},
-		{ "blockId": 66,   "section": "K", "connectors": [[null, 65, null, 67]]},
-		{ "blockId": 67,   "section": "K", "connectors": [[null, 66, null, 68]]},
-		{ "blockId": 68,   "section": "K", "connectors": [[null, 67, null, 69]]},
-
-		{ "blockId": 69,   "section": "L", "connectors": [[null, 68, null, 70]]},
-		{ "blockId": 70,   "section": "L", "connectors": [[null, 69, null, 71]]},
-		{ "blockId": 71,   "section": "L", "connectors": [[72, 70, null, null]]},
-		{ "blockId": 72,   "section": "L", "connectors": [[73, null, 71, null]]},
-		{ "blockId": 73,   "section": "L", "connectors": [[74, null, 72, null]], "station": "DORMONT"},
-
-		{ "blockId": 74,   "section": "M", "connectors": [[null, null, 73, null]]}
 	]
 }
