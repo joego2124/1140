@@ -70,7 +70,7 @@ const TrackView = () => {
 				if (nextBlockId != null) {
 	
 					//get nextBlock from nextBlockId
-					const nextBlock = trackLayout.blocks.find(block => block.blockId === nextBlockId); 
+					const nextBlock = trackLayout.greenLine.find(block => block.blockId === nextBlockId); 
 		
 					//recursively follow connected block that isn't an visited block
 					if (visitedBlockIds.find(visitedId => visitedId === nextBlockId) === undefined) {
@@ -160,7 +160,12 @@ const TrackView = () => {
 		trackBlockSVGs.push(newBlockSVGs);
 	}
 
-	traceTrack(trackLayout.blocks[0], {x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize});
+	// for (const [key, value] of Object.entries(trackLayout))
+	// {
+	// 	traceTrack( trackLayout[key], {x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize} );
+	// }
+	traceTrack(trackLayout.greenLine[0], {x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize});
+	// traceTrack(trackLayout.greenLine[0], {x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize});
 	// traceTrack(trackLayout.blocks[0], {x: 0, y: 0});
 
 	return (
