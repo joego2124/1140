@@ -2,28 +2,24 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, Container, Row  } from 'react-bootstrap';
 import {DatabaseGet, DatabaseSet} from '../Database';
 import { BsCircleFill } from "react-icons/bs";
+import "./componentStyles.css";
 
-function ButtonIndicator({varName, message, parentName}) {
-	
-	const [vari, setVari] = useState(false);
+function ButtonIndicator({ varName, message, parentName }) {
+  const [vari, setVari] = useState(false);
 
-	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [parentName]);
+  useEffect(() => {
+    setTimeout(() => DatabaseGet(setVari, varName, parentName), 500);
+  }, [parentName]);
 
 	return (
-		<div>
-<<<<<<< HEAD
-			<Container>
-				<Row>
-					<Button onClick={()=>{DatabaseSet(vari == true ? false : true, varName, parentName)}}>{message}</Button>
-                    <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>
-				</Row>
-			</Container>
-=======
-			<Button onClick={()=>{DatabaseSet(vari == true ? false : true, varName, parentName)}}>{message}</Button>
-            <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>
->>>>>>> benBranch
+		<div className="componentDiv">
+			<Button variant="light" className="componentButton" 
+					onClick={()=>{DatabaseSet(vari == true ? false : true, varName, parentName)}}>
+				<h3 className="componentButtonText">{message}</h3>
+			</Button>
+			<BsCircleFill className="indicator" size="1.5em" color={vari ? 'green' : "#C44242"}/>
 		</div>
 	)
 }
 
-export default ButtonIndicator
+export default ButtonIndicator;
