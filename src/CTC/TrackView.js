@@ -4,7 +4,7 @@ import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Blocks from './assets/Blocks';
 import './styles.css';
 
-var trackLayout = require("./TrackLayout.json");
+var trackLayout = require("./TrackLayoutGreenSegment.json");
 
 const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <div>
 	<div 

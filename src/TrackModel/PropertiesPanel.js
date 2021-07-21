@@ -9,6 +9,24 @@ import config from '../config';
 import Firebase from "firebase";
 import WSMDisplay from './WSMVarDisplay';
 
+// const [blockList, setBlockList] = useState([]);
+
+// function getBlockListData() {
+//     let tempList = [];
+//     let ref = Firebase.database().ref('/RedLine');
+//     ref.on('value', (snapshot) => {
+//       for (const [key, value] of Object.entries(snapshot.val())) {
+//         for (const [i, v] of Object.entries(value)) {
+//           console.log(i, v);
+//           tempList.push(v);
+//         }
+//       }
+//       setBlockList(tempList);
+//       console.log(tempList);
+//       console.log(blockList);
+//     });
+//   }
+
 function PropertiesPanel(parentName) {
 
 	if (!Firebase.apps.length) {
