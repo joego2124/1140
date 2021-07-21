@@ -10,7 +10,6 @@ function ModeOptions(parentName) {
             <h3>MODES</h3>
             <Container>
                 <Col>
-                    <ButtonIndicator parentName={parentName} varName='AutomaticMode' message='Automatic Mode'/>
                     <ButtonIndicator parentName={parentName} varName='ManualMode' message='Manual Mode'/>
                 </Col>
             </Container>
