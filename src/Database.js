@@ -104,8 +104,23 @@ function DatabaseSet(value, varName, parentName){
 }
 
 function DatabaseGet(setter, varName, parentName){
+<<<<<<< HEAD
     
     var path = findPath(varName, parentName);
+=======
+    if(parentName != undefined){
+        var parentNameCleaned = Object.values(parentName)[0];
+        var parent = findById(jsonTree, `${parentNameCleaned}`.toLowerCase(), '');
+        if(!parent){
+            console.warn(`PARENT ${parentNameCleaned} NOT FOUND IN RTDB TREE`);
+        } else {
+            var path = findById(Object.values(parent.o)[0], varName.toLowerCase(), parent.newPath)?.newPath;
+        }
+    } else {
+        // var path = findPath(varName.toLowerCase());
+				var path = varName;
+    }
+>>>>>>> update-track-view
 
     if (!path) {
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
