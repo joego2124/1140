@@ -7,8 +7,9 @@ import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './styles.css';
 
 import PLCFileUpload from './PLCFileUpload';
+import WaysidePanel from './WaysidePanel';
 
-const BottomPanel = () => {
+const BottomPanel = ({ getterForSelectedWayside }) => {
   const [open, setOpen] = useState(true);
   const [blockList, setBlockList] = useState([]);
   const [crossingLights, setCrossingLights] = useState('string');
@@ -20,6 +21,9 @@ const BottomPanel = () => {
   const [plcUploaded, setPlcUploaded] = useState(false);
   const [switchCommand, setSwitchCommand] = useState(false);
   const [selectedBlock, setSelectedBlock] = useState('Block 1');
+  const [selectedWayside, setSelectedWayside] = useState(
+    getterForSelectedWayside
+  );
 
   Firebase.app();
 
@@ -42,8 +46,15 @@ const BottomPanel = () => {
 
   useEffect(() => getSwitchCommandData(), []);
 
+  // function getBlockListData() {
+  //   setSelectedWayside(WaysidePanel.getSelectedWayside());
+  // }
+
+  // useEffect(() => getBlockListData(), []);
+
   function getWaysideListData() {
     console.log(selectedBlock);
+    console.log(getterForSelectedWayside);
     let ref = Firebase.database().ref('/WSC/WS-1/Block1');
     if (selectedBlock == 'Block 1') {
       ref = Firebase.database().ref('/WSC/WS-1/Block1');
@@ -54,12 +65,12 @@ const BottomPanel = () => {
     }
     ref.on('value', (snapshot) => {
       setBlockList(['Block 1', 'Block 2', 'Block 3']);
-      setCrossingLights(snapshot.val().CrossingLights);
-      setLength(snapshot.val().Length);
-      setLevelCrossing(snapshot.val().LevelCrossing);
-      setOccupancy(snapshot.val().Occupancy);
-      setSpeedLimit(snapshot.val().SpeedLimit);
-      setStatus(snapshot.val().Status);
+      // setCrossingLights(snapshot.val().CrossingLights);
+      // setLength(snapshot.val().Length);
+      // setLevelCrossing(snapshot.val().LevelCrossing);
+      // setOccupancy(snapshot.val().Occupancy);
+      // setSpeedLimit(snapshot.val().SpeedLimit);
+      // setStatus(snapshot.val().Status);
     });
   }
 
@@ -94,7 +105,7 @@ const BottomPanel = () => {
               <div className='dataValue'>{occupancy}</div>
             </div>
             <div className='dataName'>
-              Level Crossing:
+              Level Crossing: {selectedWayside[0]?.BlockNumber}
               {levelCrossing == true ? (
                 <div className='dataValue'>Lowered</div>
               ) : (
@@ -161,7 +172,7 @@ const BottomPanel = () => {
             Move Switch
             <div className='dataName'>
               Current State:
-              <div className='dataValue'>{switchCommand.toString()}</div>
+              {/* <div className='dataValue'>{switchCommand.toString()}</div> */}
             </div>
             <Button
               variant='light'
