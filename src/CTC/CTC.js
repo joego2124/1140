@@ -33,6 +33,7 @@ function CTC() {
 				/>
 				<TrackView
 					selectedTrain={selectedTrain}
+					trainsList={trainsList}
 				/>
 			</header>
 			<ScheduleModal
