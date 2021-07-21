@@ -6,9 +6,9 @@ import './styles.css';
 
 var trackLayout = require("./TrackLayout.json");
 
-const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <div>
+const trackBlockCircle = (blockType, centerElement, fill, stroke, clickHander) => <div>
 	<div 
-		onClick={() => console.log(`clicked svg:`)}
+		onClick={clickHander}
 		style={{ 
 			position: "absolute", 
 			zIndex: 1002, 
@@ -33,7 +33,7 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <d
 			transform: "translate(-50%, -50%)",
 			zIndex: 1001,
 		}} 
-		onClick={() => console.log(`clicked svg:`)}
+		onClick={clickHander}
 	>
 		{Blocks["circle"]}
 	</svg>
@@ -102,9 +102,14 @@ const TrackView = () => {
 			let size = blockType === "straight" ? 100 : 55;
 			let color = `rgb(128, 128, 128, ${blockSVGs.length > 0 ? .25 : 1})`;
 
+			const clickHandler = () => {
+				console.log(`clicked svg: ${currBlock.blockId}`);
+				setSelectedBlock(currBlock.blockId);
+			}
+
 			//create new svg and push to trackBlockSVGs
 			let newSVG = <div 
-				key={currBlock.blockId}
+				key={blockSVGs.length}
 				style={{
 					position: "absolute", 
 					left: currPos.x + dx + 10,
@@ -129,7 +134,7 @@ const TrackView = () => {
 						transform: "translate(-50%, -50%)",
 						zIndex: 1000,
 					}} 
-					onClick={() => console.log(`clicked svg: ${currBlock.blockId}`)}
+					onClick={clickHandler}
 				>
 					{Blocks[blockTypeName]}
 				</svg>	
@@ -137,13 +142,13 @@ const TrackView = () => {
 					placement="top"
 					overlay={<Tooltip>{currBlock.station}</Tooltip>}
 				>
-					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", "grey") : <></>}
+					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", "grey", clickHandler) : <></>}
 				</OverlayTrigger>
 			</div>
 			blockSVGs.push(newSVG);
 		});
 
-		let newBlockSVGs = <div>
+		let newBlockSVGs = <div key={currBlock.blockId}>
 			<div
 				style={{
 					position: "absolute",
