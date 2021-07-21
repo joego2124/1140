@@ -1,32 +1,20 @@
 import React, { useEffect, useState, useContext } from 'react';
-<<<<<<< HEAD
-import { Button, Container, Row  } from 'react-bootstrap';
-=======
->>>>>>> benBranch
-import {DatabaseGet} from '../Database';
-import { BsCircleFill } from "react-icons/bs";
+import { DatabaseGet } from '../Database';
+import { BsCircleFill } from 'react-icons/bs';
 
-function VarIndicator({varName, message, parentName}) {
-	
-	const [vari, setVari] = useState(false);
+function VarIndicator({ varName, message, parentName }) {
+  const [vari, setVari] = useState(false);
 
-	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [parentName]);
+  useEffect(() => {
+    setTimeout(() => DatabaseGet(setVari, varName, parentName), 500);
+  }, [parentName]);
 
 	return (
-		<div>
-<<<<<<< HEAD
-			<Container>
-				<Row>
-					<h3>{message}</h3>
-                    <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>
-				</Row>
-			</Container>
-=======
-            <BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>{' '}
-            {message}
->>>>>>> benBranch
+		<div className="componentDiv">
+			<h3 className="indicatorText">{message}</h3>
+			<BsCircleFill className="indicator" size="1.0em" color={vari ? 'green' : "#C44242"}/>
 		</div>
 	)
 }
 
-export default VarIndicator
+export default VarIndicator;
