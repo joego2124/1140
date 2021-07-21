@@ -13,6 +13,7 @@ function TrainStatus(parentName) {
                 <Col>
                     <VarDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit'/>
                     <VarDisplay parentName={parentName} varName='CurrentSpeed' message='Current Speed'/>
+                    <VarDisplay parentName={parentName} varName='Authority' message='Authority'/>
                     <VarInput parentName={parentName} varName='SetpointSpeed' message='Setpoint Speed'/>
                 </Col>
             </Container>
