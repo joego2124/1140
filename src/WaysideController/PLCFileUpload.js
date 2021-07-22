@@ -23,7 +23,7 @@ const PLCFileUpload = ({ setter }) => {
     // parser.parseFile(plc);
     // reader.readAsText(acceptedFiles);
     if (acceptedFiles.length > 0) {
-      setter(true);
+      setter(1);
     }
   }, []);
 

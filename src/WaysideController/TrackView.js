@@ -54,25 +54,48 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({ selectedWayside }) => {
+const TrackView = ({ selectedWayside, setSelectedBlock }) => {
   document.body.style.overflow = 'hidden';
 
-  const [selectedBlock, setSelectedBlock] = useState(0);
+  //   const [selectedBlock, setSelectedBlock] = useState(0);
+  console.log(selectedWayside);
 
   let trackBlockSVGs = [];
   let visitedBlockIds = [];
-  let lineName;
+  let lineName = 'greenLine';
 
   //recursive function to generate a list of tracks for rendering
   const traceTrack = (currBlock, currPos, trackLayoutList) => {
     let blockSVGs = [];
-    console.log(currBlock, currPos, trackLayoutList);
     //add current block to list of visited blocks
     visitedBlockIds.push(currBlock.blockId);
 
     //iterate through all connections
-    currBlock.connectors.forEach((connnectorArr) => {
+    currBlock.connectors.forEach((connnectorArr, i) => {
       let blockTypeName = ''; //var for determining svg to render
+
+      //check if switch block
+      //   let switchBlock = false;
+      //   if (currBlock.connectors.length > 1) {
+      //     switchBlock = true;
+      //   }
+
+      //   if (switchBlock == true) {
+      //     let switchB = selectedWayside.find(
+      //       (v) => v.BlockNumber == currBlock.blockId
+      //     );
+      //     if (switchB?.SwitchState == 0 && currBlock.blockId == 62) {
+      //       connnectorArr = [null, 61, -1, null];
+      //     } else if (switchB?.SwitchState == 1 && currBlock.blockId == 62) {
+      //       connnectorArr = [null, null, -1, 63];
+      //     } else if (switchB?.SwitchState == 0 && currBlock.blockId == 58) {
+      //       connnectorArr = [57, -1, null, null];
+      //     } else if (switchB?.SwitchState == 1 && currBlock.blockId == 58) {
+      //       connnectorArr = [58, null, null, 59];
+      //     }
+      //   } else {
+      //     connnectorArr = connnectorArr;
+      //   }
 
       //iterate recursively through all connectioned blocks
       connnectorArr.forEach((nextBlockId, i) => {
@@ -140,7 +163,15 @@ const TrackView = ({ selectedWayside }) => {
       let size = blockType === 'straight' ? 100 : 55;
       let color = `rgb(${
         lineName === 'greenLine' ? '49,135,133' : '196,73,76'
-      }, ${blockSVGs.length > 0 ? 0.25 : 1})`;
+      }, ${
+        currBlock.connectors.length > 1
+          ? i !=
+            selectedWayside.find((v) => v.BlockNumber == currBlock.blockId)
+              .SwitchState
+            ? 0.25
+            : 1
+          : 1
+      })`;
 
       //   Object.entries(mappedBlocks).forEach((trainArr) => {
       //     let targBlockId = Math.floor(trainArr[1].CurrentBlock);
@@ -153,9 +184,19 @@ const TrackView = ({ selectedWayside }) => {
 
       const clickHandler = () => {
         console.log(`svg clicked: ${currBlock.blockId}`);
-      };
 
-      console.log(blockTypeName);
+        if (selectedWayside != undefined) {
+          let selBlock = selectedWayside?.find(
+            (v) => v.BlockNumber == currBlock.blockId
+          );
+          console.log(selBlock);
+          setSelectedBlock(
+            selectedWayside?.find((v) => v.BlockNumber == currBlock.blockId)
+          );
+        } else {
+          setSelectedBlock(selectedWayside[0]);
+        }
+      };
 
       //create new svg and push to trackBlockSVGs
       let newSVG = (
