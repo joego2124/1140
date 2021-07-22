@@ -54,7 +54,7 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({ selectedWayside, setSelectedBlock }) => {
+const TrackView = ({ selectedWayside, setSelectedBlock, trainsList }) => {
   document.body.style.overflow = 'hidden';
 
   //   const [selectedBlock, setSelectedBlock] = useState(0);
@@ -73,29 +73,6 @@ const TrackView = ({ selectedWayside, setSelectedBlock }) => {
     //iterate through all connections
     currBlock.connectors.forEach((connnectorArr, i) => {
       let blockTypeName = ''; //var for determining svg to render
-
-      //check if switch block
-      //   let switchBlock = false;
-      //   if (currBlock.connectors.length > 1) {
-      //     switchBlock = true;
-      //   }
-
-      //   if (switchBlock == true) {
-      //     let switchB = selectedWayside.find(
-      //       (v) => v.BlockNumber == currBlock.blockId
-      //     );
-      //     if (switchB?.SwitchState == 0 && currBlock.blockId == 62) {
-      //       connnectorArr = [null, 61, -1, null];
-      //     } else if (switchB?.SwitchState == 1 && currBlock.blockId == 62) {
-      //       connnectorArr = [null, null, -1, 63];
-      //     } else if (switchB?.SwitchState == 0 && currBlock.blockId == 58) {
-      //       connnectorArr = [57, -1, null, null];
-      //     } else if (switchB?.SwitchState == 1 && currBlock.blockId == 58) {
-      //       connnectorArr = [58, null, null, 59];
-      //     }
-      //   } else {
-      //     connnectorArr = connnectorArr;
-      //   }
 
       //iterate recursively through all connectioned blocks
       connnectorArr.forEach((nextBlockId, i) => {
@@ -173,14 +150,14 @@ const TrackView = ({ selectedWayside, setSelectedBlock }) => {
           : 1
       })`;
 
-      //   Object.entries(mappedBlocks).forEach((trainArr) => {
-      //     let targBlockId = Math.floor(trainArr[1].CurrentBlock);
-      //     let compBlockId = Math.floor(currBlock.blockId);
-      //     if (targBlockId == compBlockId) {
-      //       console.log(trainArr[0], trainArr[1]);
-      //       color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? 0.25 : 1})`;
-      //     }
-      //   });
+      Object.entries(trainsList).forEach((trainArr) => {
+        let targBlockId = Math.floor(trainArr[1].CurrentBlock);
+        let compBlockId = Math.floor(currBlock.blockId);
+        if (targBlockId == compBlockId) {
+          console.log(trainArr[0], trainArr[1]);
+          color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? 0.25 : 1})`;
+        }
+      });
 
       const clickHandler = () => {
         console.log(`svg clicked: ${currBlock.blockId}`);
@@ -268,8 +245,16 @@ const TrackView = ({ selectedWayside, setSelectedBlock }) => {
   if (selectedWayside?.length > 0) {
     mappedBlocks = selectedWayside?.map((block) => {
       let mappedBlock = trackLayout.greenLine.find(
-        (v) => v.blockId == block.BlockNumber
+        (v) => Math.trunc(v.blockId) == block.BlockNumber
       );
+      //   if (block.BlockNumber == -1) {
+      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.1));
+      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.2));
+      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.3));
+      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.4));
+      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.5));
+      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.6));
+      //   }
       return mappedBlock;
     });
   }
