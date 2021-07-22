@@ -82,7 +82,7 @@ function routeTrain(stations, lineColor) {
 	let prevStationId = lineColor === "red" ? -1.1 : -1.5;
 	let route = [prevStationId, lineColor === "red" ? -1 : -1.6];
 	
-	console.log("starting route train");
+	// console.log("starting route train");
 
 	// iterate through each station and find path
 	stations.forEach(nextStationId => {
@@ -118,7 +118,7 @@ function CTC() {
 		// });
 	}, [trainsList]);
 
-	console.log(routeTrain([16, 25, 35, 7, -1], "red", true));
+	// console.log(routeTrain([16, 25, 35, 7, -1], "red", true));
 
 	return (
 		<div>
@@ -146,6 +146,7 @@ function CTC() {
 				show={addTrainModal}
 				trainsList={trainsList}
 				onHide={() => setAddTrainModal(false)}
+				routeTrain={routeTrain}
 			/>
 		</div>
 	)
