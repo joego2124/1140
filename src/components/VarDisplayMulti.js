@@ -17,7 +17,7 @@ function VarDisplay({ message, path/*, callback*/}) {
         });
     }
     }, 500);
-  }, [parentName]);
+  }, [path]);
 
 	// useEffect(() => {if(callback != undefined) callback(vari);}, [vari]);
 

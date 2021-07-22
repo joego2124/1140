@@ -43,11 +43,11 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({selectedTrain, trainsList}) => {
+const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
 
 	document.body.style.overflow='hidden';
 
-	const [selectedBlock, setSelectedBlock] = useState(0);
+	// const [selectedBlock, setSelectedBlock] = useState(0);
 
 	let trackBlockSVGs = [];
 	let visitedBlockIds = [];
@@ -114,7 +114,7 @@ const TrackView = ({selectedTrain, trainsList}) => {
 
 			const clickHandler = () => {
 				console.log(`svg clicked: ${currBlock.blockId}`);
-				setSelectedBlock( currBlock.blockId );
+				setSelectedBlock( `${currBlock.blockId}` );
 			}
 			
 			//create new svg and push to trackBlockSVGs

@@ -65,12 +65,11 @@ function TrackModel() {
 							paddingRight: 500 }}> */}
 					<TrackView setParentName={setParentName} setSelectedBlock={setSelectedBlock} trainsList={trainsList}/>
 			</div>
-			<div>
-				<h2 style={{paddingTop: 220,
-							textAlign: "left",
-							paddingLeft: 80 }}>
-					Currently Selected: {parentName}
-				</h2>
+			<div style={{
+				display: "flex",
+				flexDirection: "column"
+			}}>
+					<h2> Currently Selected: {selectedBlock} </h2>
 			</div>
 			<div style={{
 				display: "flex",
