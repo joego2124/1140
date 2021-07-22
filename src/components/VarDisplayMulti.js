@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Firebase from "firebase";
 
-function VarDisplay({ message, path/*, callback*/}) {
+function VarDisplay({ message, path }) {
 	
 	const [vari, setVari] = useState('default');
 

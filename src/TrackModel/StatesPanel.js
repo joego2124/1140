@@ -12,8 +12,10 @@ import WSMIndicator from './WSMVarIndicator';
 import WSMInverseIndicator from './WSMInverseVarIndicator';
 import { DatabaseSet } from '../Database';
 import { DatabaseGet } from '../Database';
+import VarDisplay from '../components/VarDisplayMulti';
+import DatabaseGetMulti from '../components/DatabaseMulti';
 
-function StatesPanel(parentName){
+function StatesPanel({selectedBlock}){
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -22,21 +24,24 @@ function StatesPanel(parentName){
 	}
 
 	const [actualTemp, setTemp] = useState(0);
-	const [desiredTemp, setDesTemp] = useState(0);
-	const [trackOccup, setTrackOccup] = useState(0);
-	const [failBrokenRail, setFailBrokenRail] = useState(0);
-	const [failTrackCirc, setFailTrackCirc] = useState(0);
-	const [failBeacon, setFailBeacon] = useState(0);
+	// const [desiredTemp, setDesTemp] = useState(0);
+	// const [trackOccup, setTrackOccup] = useState(0);
+	// const [failBrokenRail, setFailBrokenRail] = useState(0);
+	// const [failTrackCirc, setFailTrackCirc] = useState(0);
+	// const [failBeacon, setFailBeacon] = useState(0);
 
-	useEffect(() => {setTimeout(() => DatabaseGet(setTemp, 'Temperature', parentName), 500);}, [parentName]);
-	useEffect(() => {setTimeout(() => DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName),500);}, [parentName]);
-	useEffect(() => {setTimeout(() => DatabaseGet(setTrackOccup, 'TrackOccupancy', parentName), 500);}, [parentName]);
-	useEffect(() => {setTimeout(() => DatabaseGet(setFailBrokenRail, 'FailureBrokenRail', parentName),500);}, [parentName]);
-	useEffect(() => {setTimeout(() => DatabaseGet(setFailTrackCirc, 'FailureTrackCircuit', parentName),500);}, [parentName]);
-	useEffect(() => {setTimeout(() => DatabaseGet(setFailBeacon, 'BeaconFailure', parentName),500);}, [parentName]);
+	console.log( `INSIDE STATES PANEL: ${selectedBlock}` );
+	useEffect(() => {setTimeout(() => DatabaseGetMulti(setTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
+	console.log( `Temperature: `, actualTemp );
+	// useEffect(() => {setTimeout(() => DatabaseGet(setTemp, 'Temperature', parentName), 500);}, [parentName]);
+	// useEffect(() => {setTimeout(() => DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName),500);}, [parentName]);
+	// useEffect(() => {setTimeout(() => DatabaseGet(setTrackOccup, 'TrackOccupancy', parentName), 500);}, [parentName]);
+	// useEffect(() => {setTimeout(() => DatabaseGet(setFailBrokenRail, 'FailureBrokenRail', parentName),500);}, [parentName]);
+	// useEffect(() => {setTimeout(() => DatabaseGet(setFailTrackCirc, 'FailureTrackCircuit', parentName),500);}, [parentName]);
+	// useEffect(() => {setTimeout(() => DatabaseGet(setFailBeacon, 'BeaconFailure', parentName),500);}, [parentName]);
 
 	// Checking if track heater needs to be turned on
-	useEffect(() => {DatabaseSet((actualTemp < desiredTemp) ? true : false, "TrackHeater", parentName)}, [actualTemp, desiredTemp, parentName]);
+	// useEffect(() => {DatabaseSet((actualTemp < desiredTemp) ? true : false, "TrackHeater", parentName)}, [actualTemp, desiredTemp, parentName]);
 	// Disable track components if a failure is detected
 	// useEffect(() => {DatabaseSet(failBrokenRail ? false : true, "TrackOccupancy", parentName);}, [failBrokenRail]);
 
@@ -56,17 +61,18 @@ function StatesPanel(parentName){
 				<Container fluid>
 					<Row>
 						<Col xs={4}>
-							<h4>
+							<VarDisplay message='Current Temperature' path={`/GreenLine/${selectedBlock}/Temperature`} />
+							{/* <h4>
 								<WSMIndicator parentName={parentName} varName='TrackOccupancy' message='AVAILABILITY'/>
 							</h4>
 							<p></p>
 							<p></p>
 							<p><WSMInverseIndicator parentName={parentName} varName='TrackOccupancy' message='Track occupied?'/></p>
 							<p><WSMInverseIndicator parentName={parentName} varName='MaintenanceStatus' message='Track under maintenance?'/></p>
-							<p><WSMInverseIndicator parentName={parentName} varName='MaxCapacity' message='Maximum capacity?'/></p>
+							<p><WSMInverseIndicator parentName={parentName} varName='MaxCapacity' message='Maximum capacity?'/></p> */}
 						</Col>
 						<Col>
-							<h4>TRACK ELEMENTS</h4>
+							{/* <h4>TRACK ELEMENTS</h4>
 							<p></p>
 							<p></p>
 							<WSMDisplay parentName={parentName} varName='Beacon' message='Beacon Info'/>
@@ -76,10 +82,10 @@ function StatesPanel(parentName){
 							<WSMInverseIndicator parentName={parentName} varName='RailwayCrossingState' message='Railway Crossing'/>
 							<p></p>
 							<WSMInverseIndicator parentName={parentName} varName='TrackHeater' message='Track Heater'/>
-							<WSMDisplay parentName={parentName} varName='Temperature' message='Current Temperature [°F]'/>
+							<WSMDisplay parentName={parentName} varName='Temperature' message='Current Temperature [°F]'/> */}
 						</Col>
 						<Col>
-							<h4>PASSENGERS</h4>
+							{/* <h4>PASSENGERS</h4>
 							<p></p>
 							<p></p>
 							<WSMDisplay parentName={parentName} varName='PassBoarding' message='Boarding'/>
@@ -99,7 +105,7 @@ function StatesPanel(parentName){
 								<Button variant="outline-dark" onClick={()=>{DatabaseSet(!failBeacon, 'BeaconFailure', parentName);}}>
 									<WSMInverseIndicator parentName={parentName} varName='BeaconFailure' message='Beacon Failure'/>
 								</Button>
-							</p>
+							</p> */}
 						</Col>
 					</Row>
 				</Container>

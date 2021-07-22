@@ -35,7 +35,7 @@ function PropertiesPanel({selectedBlock}) {
 	}else {
 		Firebase.app(); // if already initialized, use that one
 	}
-	console.log(`selected block: ${selectedBlock}`)
+	// console.log(`PropertiesPanel selected block: ${selectedBlock}`)
 
 	return (
 		// Properties title

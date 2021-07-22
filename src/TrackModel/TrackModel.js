@@ -20,11 +20,11 @@ function TrackModel() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	const [parentName, setParentName] = useState('Block1');
+	// const [parentName, setParentName] = useState('Block1');
 	const [trainsList, setTrainsList] = useState({});
 	const [jsonTree, setJsonTree] = useState([]);
 	const [blockList, setBlockList] = useState([]);
-	const [selectedBlock, setSelectedBlock] = useState({});
+	const [selectedBlock, setSelectedBlock] = useState(`1`);
 
 	useEffect(() => {
 		DatabaseGet(setTrainsList, "TrainList");
@@ -41,6 +41,7 @@ function TrackModel() {
 		setBlockList(tempList);
 	}
 
+	useEffect(() => console.log(`IN TRACKMODEL: ${selectedBlock}`), [selectedBlock]);
 	useEffect(() => getBlockListData(), [jsonTree]);
 
 	return (
@@ -60,16 +61,14 @@ function TrackModel() {
 				<h2>Test of Interactive Track Layout</h2>
 			</div> */}
 			<div>
-			{/* <div style={{paddingTop: 140,
-							textAlign: "right",
-							paddingRight: 500 }}> */}
-					<TrackView setParentName={setParentName} setSelectedBlock={setSelectedBlock} trainsList={trainsList}/>
+				<TrackView setSelectedBlock={setSelectedBlock} trainsList={trainsList} />
 			</div>
 			<div style={{
-				display: "flex",
-				flexDirection: "column"
+				position: "absolute",
+				top: "100px",
+				right: "100px"
 			}}>
-					<h2> Currently Selected: {selectedBlock} </h2>
+				<h2> {`Currently Selected: ${selectedBlock}`} </h2>
 			</div>
 			<div style={{
 				display: "flex",
@@ -81,8 +80,8 @@ function TrackModel() {
 				width: "100%",
 				position: "absolute",
 			}}>
-				<PropertiesPanel selectedBlock={selectedBlock} blockList={blockList}/>
-				{/* <StatesPanel parentName={parentName}/> */}
+				<PropertiesPanel selectedBlock={selectedBlock} />
+				<StatesPanel selectedBlock={selectedBlock} />
 			</div>
 		</>
 	)
