@@ -6,9 +6,9 @@ import './styles.css';
 
 var trackLayout = require("./TrackLayout.json");
 
-const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <div>
+const trackBlockCircle = (blockType, centerElement, fill, stroke, clickHandler) => <div>
 	<div 
-		onClick={() => console.log(`clicked svg:`)}
+		onClick={clickHandler}
 		style={{ 
 			position: "absolute", 
 			zIndex: 1002, 
@@ -17,7 +17,6 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <d
 			transform: "translate(-50%, -50%)",
 			fontWeight: 550,
 			color: stroke
-			// backgroundColor: "red" 
 	}}>{centerElement}</div>
 	<svg 
 		width={75}
@@ -33,7 +32,7 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <d
 			transform: "translate(-50%, -50%)",
 			zIndex: 1001,
 		}} 
-		onClick={() => console.log(`clicked svg:`)}
+		onClick={clickHandler}
 	>
 		{Blocks["circle"]}
 	</svg>
@@ -107,14 +106,18 @@ const TrackView = ({selectedTrain, trainsList}) => {
 				let targBlockId = Math.floor(trainArr[1].CurrentBlock);
 				let compBlockId = Math.floor(currBlock.blockId);
 				if (targBlockId == compBlockId) {
-					console.log(trainArr[0], trainArr[1]);
+					// console.log(trainArr[0], trainArr[1]);
 					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
 				}
 			});
+
+			const clickHandler = () => {
+				console.log(`svg clicked: ${currBlock.blockId}`);
+			}
 			
 			//create new svg and push to trackBlockSVGs
 			let newSVG = <div 
-				key={currBlock.blockId}
+				key={blockSVGs.length}
 				style={{
 					position: "absolute", 
 					left: currPos.x + dx + 10,
@@ -139,7 +142,7 @@ const TrackView = ({selectedTrain, trainsList}) => {
 						transform: "translate(-50%, -50%)",
 						zIndex: 1000,
 					}} 
-					onClick={() => console.log(`clicked svg: ${currBlock.blockId}`)}
+					onClick={clickHandler}
 				>
 					{Blocks[blockTypeName]}
 				</svg>	
@@ -147,13 +150,13 @@ const TrackView = ({selectedTrain, trainsList}) => {
 					placement="top"
 					overlay={<Tooltip>{currBlock.station}</Tooltip>}
 				>
-					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", color) : <></>}
+					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", color, clickHandler) : <></>}
 				</OverlayTrigger>
 			</div>
 			blockSVGs.push(newSVG);
 		});
 
-		let newBlockSVGs = <div>
+		let newBlockSVGs = <div key={lineName + currBlock.blockId}>
 			<div
 				style={{
 					position: "absolute",

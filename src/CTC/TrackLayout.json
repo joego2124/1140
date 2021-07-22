@@ -15,7 +15,7 @@
 		{ "blockId": 59,   "section": "J", "connectors": [[null, 58, 60, null]]},
 		{ "blockId": 60,   "section": "J", "connectors": [[59, null, null, 61]]},
 		{ "blockId": 61,   "section": "J", "connectors": [[null, 60, null, 62]]},
-		{ "blockId": 62,   "section": "J", "connectors": [[null, 61, -1, null], [null, null, -1, 63]]},
+		{ "blockId": 62,   "section": "J", "connectors": [[null, 61, null, 63], [null, null, -1, 63]]},
 
 		{ "blockId": 63,   "section": "K", "connectors": [[null, 62, null, 64]]},
 		{ "blockId": 64,   "section": "K", "connectors": [[null, 63, null, 65]]},
@@ -33,7 +33,8 @@
 		{ "blockId": 74,   "section": "M", "connectors": [[null, null, 73, null]]}
 	],
 	"redLine": [
-		{ "blockId": -1,  "section": "YARD", "connectors": [[null, 9, null, null]]},
+		{ "blockId": -1,  "section": "YARD", "connectors": [[null, 9, -1.1, null]]},
+		{ "blockId": -1.1,  "section": "YARD", "connectors": [[-1, null, null, null]]},
 
 		{ "blockId": 1,   "section": "A", "connectors": [[null, null, 2, 15]]},
 		{ "blockId": 2,   "section": "A", "connectors": [[1, null, 3, null]]},
@@ -115,7 +116,7 @@
 
 		{ "blockId": 64,  "section": "N", "connectors": [[null, 63, null, 65]]},
 		{ "blockId": 65,  "section": "N", "connectors": [[null, 64, 66, null]]},
-		{ "blockId": 66,  "section": "N", "connectors": [[66, null, null, 52]]},
+		{ "blockId": 66,  "section": "N", "connectors": [[65, null, null, 52]]},
 
 		{ "blockId": 67,  "section": "O", "connectors": [[null, 68, 43, null]]},
 
