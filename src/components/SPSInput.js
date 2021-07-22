@@ -2,15 +2,19 @@ import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Form, Button, Container, Row } from 'react-bootstrap';
 import { DatabaseGet, DatabaseSet } from '../Database';
 
-function VarInput({ varName, message, parentName }) {
+function SPSInput({ varName, message, parentName, selectedTrain }) {
   const [vari, setVari] = useState(false);
 
   useEffect(() => {
     setTimeout(() => DatabaseGet(setVari, varName, parentName), 500);
   }, [parentName]);
-  
+
   const setValue = (val) => {
-    DatabaseSet(val, varName, parentName);
+    console.log(selectedTrain.SpeedLimit);
+    if(val <= selectedTrain.SpeedLimit && selectedTrain.ManualMode == true){
+      let num = parseInt(val);
+      DatabaseSet(num, varName, parentName);
+    }
   }
 
   const setValueEvent = useCallback(
@@ -18,7 +22,7 @@ function VarInput({ varName, message, parentName }) {
         event.preventDefault();
         const {formInput} = event.target.elements;
         setValue(formInput.value);
-    }, []
+    }, [selectedTrain]
 );
 
   return (
@@ -37,4 +41,4 @@ function VarInput({ varName, message, parentName }) {
   );
 }
 
-export default VarInput;
+export default SPSInput;

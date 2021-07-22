@@ -1,20 +1,19 @@
 import React from 'react';
 import { Button, Container, Col, Row  } from 'react-bootstrap';
 import VarDisplay from '../components/VarDisplay';
-import VarIndicator from '../components/VarIndicator';
-import ButtonIndicator from '../components/ButtonIndicator';
-import VarInput from '../components/VarInput';
+import SPSInput from '../components/SPSInput';
 
-function TrainStatus(parentName) {
+function TrainStatus({parentName, selectedTrain}) {
     return (
         <div>
             <h3>SPEED</h3>
             <Container>
                 <Col>
-                    <VarDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit'/>
-                    <VarDisplay parentName={parentName} varName='Velocity' message='Current Speed'/>
-                    <VarDisplay parentName={parentName} varName='SetpointSpeed' message='Setpoint Speed'/>
-                    <VarInput parentName={parentName} varName='SetpointSpeed' message='Setpoint Speed'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='Power' message='Power' units='kW'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='SpeedLimit' message='Speed Limit' units='mph'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='Velocity' message='Velocity' units='mph'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='SetpointSpeed' message='Setpoint Speed' units='mph'/>
+                    <SPSInput selectedTrain={selectedTrain} parentName={parentName} varName='SetpointSpeed' message='Setpoint Speed' units='mph'/>
                 </Col>
             </Container>
         </div>

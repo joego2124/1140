@@ -15,7 +15,7 @@
 		{ "blockId": 59,   "section": "J", "connectors": [[null, 58, 60, null]]},
 		{ "blockId": 60,   "section": "J", "connectors": [[59, null, null, 61]]},
 		{ "blockId": 61,   "section": "J", "connectors": [[null, 60, null, 62]]},
-		{ "blockId": 62,   "section": "J", "connectors": [[null, 61, -1, null], [null, null, -1, 63]]},
+		{ "blockId": 62,   "section": "J", "connectors": [[null, 61, null, 63], [null, null, -1, 63]]},
 
 		{ "blockId": 63,   "section": "K", "connectors": [[null, 62, null, 64]]},
 		{ "blockId": 64,   "section": "K", "connectors": [[null, 63, null, 65]]},
@@ -33,7 +33,8 @@
 		{ "blockId": 74,   "section": "M", "connectors": [[null, null, 73, null]]}
 	],
 	"redLine": [
-		{ "blockId": -1,  "section": "YARD", "connectors": [[null, 9, null, null]]},
+		{ "blockId": -1,  "section": "YARD", "connectors": [[null, 9, -1.1, null]]},
+		{ "blockId": -1.1,  "section": "YARD", "connectors": [[-1, null, null, null]]},
 
 		{ "blockId": 1,   "section": "A", "connectors": [[null, null, 2, 15]]},
 		{ "blockId": 2,   "section": "A", "connectors": [[1, null, 3, null]]},
@@ -74,7 +75,7 @@
 		{ "blockId": 29,  "section": "H", "connectors": [[null, 28, null, 30]]},
 		{ "blockId": 30,  "section": "H", "connectors": [[null, 29, null, 31]]},
 		{ "blockId": 31,  "section": "H", "connectors": [[null, 30, null, 32]]},
-		{ "blockId": 32,  "section": "H", "connectors": [[null, 31, null, 33], [72, 31, null, null]]},
+		{ "blockId": 32,  "section": "H", "connectors": [[null, 31, null, 33], [72, null, null, 33]]},
 		{ "blockId": 33,  "section": "H", "connectors": [[null, 32, null, 34]]},
 		{ "blockId": 34,  "section": "H", "connectors": [[null, 33, null, 35]]},
 		{ "blockId": 35,  "section": "H", "connectors": [[null, 34, null, 36]], "station": "STEEL PLAZA"},
@@ -85,7 +86,7 @@
 		{ "blockId": 40,  "section": "H", "connectors": [[null, 39, null, 41]]},
 		{ "blockId": 41,  "section": "H", "connectors": [[null, 40, null, 42]]},
 		{ "blockId": 42,  "section": "H", "connectors": [[null, 41, null, 43]]},
-		{ "blockId": 43,  "section": "H", "connectors": [[null, 42, null, 44], [67, 42, null, null]]},
+		{ "blockId": 43,  "section": "H", "connectors": [[null, 42, null, 44], [67, null, null, 44]]},
 		{ "blockId": 44,  "section": "H", "connectors": [[null, 43, null, 45]]},
 		{ "blockId": 45,  "section": "H", "connectors": [[null, 44, null, 46]], "station": "FIRST AVE"},
 

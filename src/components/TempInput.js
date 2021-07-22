@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Form, Button, Container, Row } from 'react-bootstrap';
 import { DatabaseGet, DatabaseSet } from '../Database';
 
-function VarInput({ varName, message, parentName }) {
+function TempInput({ varName, message, parentName }) {
   const [vari, setVari] = useState(false);
 
   useEffect(() => {
@@ -10,7 +10,10 @@ function VarInput({ varName, message, parentName }) {
   }, [parentName]);
   
   const setValue = (val) => {
-    DatabaseSet(val, varName, parentName);
+    if (val <= 72 && val >= 68) {
+      let num = parseInt(val)
+        DatabaseSet(num, varName, parentName);
+    }
   }
 
   const setValueEvent = useCallback(
@@ -37,4 +40,4 @@ function VarInput({ varName, message, parentName }) {
   );
 }
 
-export default VarInput;
+export default TempInput;
