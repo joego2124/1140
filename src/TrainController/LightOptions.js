@@ -4,14 +4,14 @@ import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function LightOptions(parentName) {
+function LightOptions(parentName, selectedTrain) {
     return (
         <div>
             <h3>LIGHTS</h3>
             <Container>
                 <Col>
-                    <ButtonIndicator parentName={parentName} varName='InternalLightState' message='Internal Lights'/>
-                    <ButtonIndicator parentName={parentName} varName='ExternalLightState' message='External Lights'/>
+                    <ButtonIndicator selectedTrain={selectedTrain} parentName={parentName} varName='InternalLightState' message='Internal Lights'/>
+                    <ButtonIndicator selectedTrain={selectedTrain} parentName={parentName} varName='ExternalLightState' message='External Lights'/>
                 </Col>
             </Container>
         </div>
