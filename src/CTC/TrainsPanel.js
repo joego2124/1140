@@ -14,22 +14,6 @@ const TrainsPanel = ({
 }) => {
 
 	const [open, setOpen] = useState(true);
-	const [trainsButtonList, setTrainsButtonList] = useState({});
-
-	useEffect(() => {
-		var buttonList = [];
-		for (const [trainName, trainObj] of Object.entries(trainsList)) {
-			buttonList.push(
-				<Button variant="light" className="trainButton" key={trainName}>
-					<div className="buttonDiv">
-						<BsCircleFill size="1.5em" color="#C44242"/>
-						<div className="buttonText" onClick={() => setSelectedTrain(trainObj)}>{`${trainName}`}</div>
-					</div>
-				</Button>
-			);
-		}
-		setTrainsButtonList(buttonList);
-	}, [trainsList]);
 
 	return (
 		<div>
@@ -41,7 +25,17 @@ const TrainsPanel = ({
 				onRequestClose={() => setOpen(false)}
 			>
 				<div className="trainPanelHolder">
-					{trainsButtonList}
+					{
+						Object.entries(trainsList).map(arr => {
+							let trainName = arr[0], trainObj = arr[1];
+							return	<Button variant="light" className="trainButton" key={trainName} onClick={() => setSelectedTrain(trainObj)}>
+								<div className="buttonDiv">
+									<BsCircleFill size="1.5em" color="#C44242"/>
+									<div className="buttonText" >{`${trainName}`}</div>
+								</div>
+							</Button>
+						})
+					}
 					<Button 
 						variant="light" 
 						className="addTrainButton"
