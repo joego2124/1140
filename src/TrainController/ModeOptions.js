@@ -4,13 +4,13 @@ import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function ModeOptions(parentName) {
+function ModeOptions(parentName, selectedTrain) {
     return (
         <div>
             <h3>MODES</h3>
             <Container>
                 <Col>
-                    <ButtonIndicator parentName={parentName} varName='ManualMode' message='Manual Mode'/>
+                    <ButtonIndicator selectedTrain={selectedTrain} parentName={parentName} varName='ManualMode' message='Manual Mode'/>
                 </Col>
             </Container>
         </div>
