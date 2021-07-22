@@ -77,27 +77,21 @@ function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
 	console.warn(`END PATHFIND: NO SOLUTION FOUND FROM ${startBlockId} TO ${endBlockId} STARTING AT ${_prevBlockId}`);
 }
 
-function routeTrain(stations, lineColor, returnToYard) {
-	let yardId = trackLayout.blocks.find(v => v.section === "YARD").blockId;
-	let prevStationId = yardId;
-	let route = [];
+function routeTrain(stations, lineColor) {
 	let lineLayout = lineColor == "red" ? trackLayout.redLine : trackLayout.greenLine;
+	let prevStationId = lineColor === "red" ? -1.1 : -1.5;
+	let route = [prevStationId, lineColor === "red" ? -1 : -1.6];
 	
+	console.log("starting route train");
+
 	// iterate through each station and find path
 	stations.forEach(nextStationId => {
-		let subroute = bfs(lineColor === "red" ? -1 : -1, nextStationId, lineColor === "red" ? -1.1 : -1.1, lineLayout);
+		let subroute = bfs(route[route.length - 1], nextStationId, route[route.length - 2], lineLayout);
+		console.log(subroute);
 		route = route.concat(subroute);
 		prevStationId = nextStationId;
 	});
 
-	console.log("routing back to yard");
-
-	//go back to yard
-	if (returnToYard) {
-		route = route.concat(bfs(prevStationId, lineColor === "red" ? -1 : -1, route[route.length - 1], lineLayout));
-		route.push(yardId); //push yard block as final since pathfind does not
-	}
-	
 	return route;
 }
 
@@ -107,13 +101,24 @@ function CTC() {
 	const [addTrainModal, setAddTrainModal] = useState(false);
 	const [selectedTrain, setSelectedTrain] = useState({});
 	const [trainsList, setTrainsList] = useState({});
-
+	
+	//update trains list
 	useEffect(() => {
 		DatabaseGet(setTrainsList, "TrainList");
 	}, []);
 
-	// console.log(routeTrain([35, 16]));
-	console.log(bfs(9, 16, -1, trackLayout.redLine));
+	//updates based on train list
+	useEffect(() => {
+		// trainsList.forEach(train => {
+		// 	if (train.route != undefined) {
+				
+		// 	} else {
+		// 		console.warn(`${train.trainId} does not have a route`);
+		// 	}
+		// });
+	}, [trainsList]);
+
+	console.log(routeTrain([16, 25, 35, 7, -1], "red", true));
 
 	return (
 		<div>
@@ -139,6 +144,7 @@ function CTC() {
       />
 			<AddTrainModal 
 				show={addTrainModal}
+				trainsList={trainsList}
 				onHide={() => setAddTrainModal(false)}
 			/>
 		</div>

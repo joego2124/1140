@@ -11,7 +11,6 @@ const MainPanel = ({
 }) => {
 
 	const [open, setOpen] = useState(true);
-	const [maintenanceMode, setMaintenanceMode] = useState(false);
 	const [manualMode, setManualMode] = useState(false);
 	
 	console.log(selectedTrain);
@@ -30,11 +29,6 @@ const MainPanel = ({
 
 					<div className = "controlPanelSection" style={{maxWidth: '225px', minWidth: '225px'}}>
 						<div className="modeSection">
-							<Button 
-								className="button"
-								variant={`${!maintenanceMode ? 'outline-': ''}dark`}
-								onClick={() => setMaintenanceMode(!maintenanceMode)}
-							>Maintenance Mode</Button>
 							<Button 
 								className="button"
 								variant={`${!manualMode ? 'outline-': ''}dark`}
