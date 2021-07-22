@@ -22,10 +22,26 @@ function TrackModel() {
 
 	const [parentName, setParentName] = useState('Block1');
 	const [trainsList, setTrainsList] = useState({});
+	const [jsonTree, setJsonTree] = useState([]);
+	const [blockList, setBlockList] = useState([]);
+	const [selectedBlock, setSelectedBlock] = useState({});
 
 	useEffect(() => {
 		DatabaseGet(setTrainsList, "TrainList");
 	}, []);
+	useEffect(() => {
+		DatabaseGet(setJsonTree, "GreenLine");
+	}, []);
+
+	function getBlockListData() {
+		let tempList = [];
+		for (const [key,value] of Object.entries(jsonTree)) {
+			tempList.push(value);
+		}
+		setBlockList(tempList);
+	}
+
+	useEffect(() => getBlockListData(), [jsonTree]);
 
 	return (
 		<>
@@ -47,7 +63,7 @@ function TrackModel() {
 			{/* <div style={{paddingTop: 140,
 							textAlign: "right",
 							paddingRight: 500 }}> */}
-					<TrackView setParentName={setParentName} trainsList={trainsList}/>
+					<TrackView setParentName={setParentName} setSelectedBlock={setSelectedBlock} trainsList={trainsList}/>
 			</div>
 			<div>
 				<h2 style={{paddingTop: 220,
@@ -59,13 +75,14 @@ function TrackModel() {
 			<div style={{
 				display: "flex",
 				flexDirection: "row",
-				justifyContent: "center",
+				justifyContent: "flex-start",
 				alignItems: "flex-end",
+				alignContent: "flex-start",
 				bottom: 0,
 				width: "100%",
 				position: "absolute",
 			}}>
-				{/* <PropertiesPanel parentName={parentName}/> */}
+				<PropertiesPanel selectedBlock={selectedBlock} blockList={blockList}/>
 				{/* <StatesPanel parentName={parentName}/> */}
 			</div>
 		</>

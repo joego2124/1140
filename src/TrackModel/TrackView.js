@@ -114,6 +114,7 @@ const TrackView = ({selectedTrain, trainsList}) => {
 
 			const clickHandler = () => {
 				console.log(`svg clicked: ${currBlock.blockId}`);
+				setSelectedBlock( currBlock.blockId );
 			}
 			
 			//create new svg and push to trackBlockSVGs
