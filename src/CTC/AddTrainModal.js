@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import Firebase from "firebase";
-import { Button, Modal, Table, Form } from 'react-bootstrap';
+import { Button, Modal, Table, Form, Select } from 'react-bootstrap';
 
 import { DatabaseGet, DatabaseSet }  from "../Database";
 
@@ -39,6 +39,16 @@ const AddTrainModal = (props) => {
 						console.log(e.target.value);
 						setDest(e.target.value)}}>Set TrainID</Form.Label>
 					<Form.Control placeholder="TRN-EXAMPLE" />
+				</Form.Group>
+				<Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+					<Form.Label>Select Line</Form.Label>
+					<Form.Control
+						as="select"
+						custom
+					>
+						<option value="red">Red Line</option>
+						<option value="green">Green Line</option>
+					</Form.Control>
 				</Form.Group>
 			</Form>
       </Modal.Body>
