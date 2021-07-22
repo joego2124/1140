@@ -49,35 +49,6 @@ const AddTrainModal = (props) => {
 
 	let stationBlocks = trackLayout[lineColor + "Line"].filter(block => block.station != undefined);
 
-	const StationSelection = () => {
-		const stationBlocks = trackLayout[lineColor + "Line"].filter(block => block.station != undefined);
-		const [selectedBlockId, setSelectedBlockId] = useState(stationBlocks[0].blockId);
-		
-		let selectedBlock = stationBlocks.find(block => block.blockId == selectedBlockId);
-		
-		
-		useEffect(() => setSelectedBlockId(stationBlocks[0].blockId), [lineColor]);
-		
-		return <div style={styles.stationSelection}>
-			<Dropdown onSelect={e => setSelectedBlockId(e)} style={styles.selectBlockHolder}>
-				<Dropdown.Toggle variant="dark" style={styles.selectBlockButton}>
-					{selectedBlock != undefined ? selectedBlock.station : "n/a"}
-				</Dropdown.Toggle>
-
-				<Dropdown.Menu as={CustomMenu}>
-					{
-						stationBlocks.map((block, i) =>
-							<Dropdown.Item eventKey={block.blockId}>{block.station}</Dropdown.Item>
-							)
-						}
-				</Dropdown.Menu>
-			</Dropdown>
-			<Button variant="danger" style={styles.removeButton}>
-				<MdRemoveCircleOutline size="1.5em"/>
-			</Button>
-		</div>
-	}
-
 	useEffect(() => {
 		console.log(stationSelections);
 	}, [stationSelections]);
@@ -163,9 +134,7 @@ const AddTrainModal = (props) => {
 						</Button>
 					</div>	
 					
-					<Form.Group onChange={e => {
-						console.log(e.target.value);
-						setDepartureTime(e.target.value)}} className="mb-3" controlId="exampleForm.ControlInput1">
+					<Form.Group onChange={e => setDepartureTime(e.target.value)} className="mb-3" controlId="exampleForm.ControlInput1">
 						<Form.Label>Set Departure Time</Form.Label>
 						<Form.Control type="time"/>
 					</Form.Group>
@@ -177,10 +146,13 @@ const AddTrainModal = (props) => {
         <Button variant="outline-dark" onClick={props.onHide}>Cancel</Button>
 				<Button variant="primary" onClick={ () => {
 					let newTrain = {...trainTemplate}
+					newTrain.TrainId = trainId;
+					newTrain.Stations = stationSelections;
+					newTrain.DepartureTime = departureTime;
 					Firebase.database().ref(`/TrainList/${trainId}`).set(newTrain);
+					console.log(newTrain);
 					props.onHide();
-				}
-				}>Add Train</Button>
+				}}>Add Train</Button>
       </Modal.Footer>
     </Modal>
 	)
@@ -228,10 +200,12 @@ const trainTemplate = {
 	RouteIndex: 0,
 	Route: [],
 	Stations: [],
+	DepartureTime: "12:00",
 
 	Acceleration: 0,
 	AccelerationLimit: 5,
 	Authority: true,
+	BlockAuthority : 0,
 	BrakeFailure: false,
 	CarCount: 1,
 	DecelerationLimit: -5,

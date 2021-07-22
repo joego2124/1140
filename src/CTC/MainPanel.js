@@ -12,8 +12,6 @@ const MainPanel = ({
 
 	const [open, setOpen] = useState(true);
 	const [manualMode, setManualMode] = useState(false);
-	
-	console.log(selectedTrain);
 
 	return (
 		<div>
