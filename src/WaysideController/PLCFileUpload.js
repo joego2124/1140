@@ -6,6 +6,7 @@ import './styles.css';
 
 const PLCFileUpload = ({ setter }) => {
   const onDrop = useCallback((acceptedFiles) => {
+    console.log(acceptedFiles);
     if (acceptedFiles.length > 0) {
       setter(true);
     }
