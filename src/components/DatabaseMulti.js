@@ -1,4 +1,5 @@
 import Firebase from "firebase";
+import { DatabaseGet } from "../Database";
 
 function DatabaseGetMulti({ setterFunction, path }){
 
@@ -13,4 +14,16 @@ function DatabaseGetMulti({ setterFunction, path }){
     }
 }
 
-export default DatabaseGetMulti;
+function DatabaseSetMulti({ value, path }){
+    
+    if (!path) {
+        console.warn(`${path} NOT FOUND IN RTDB TREE`);
+    } else {
+        Firebase.database().ref(path).set(value);
+    }
+}
+
+export {
+    DatabaseGetMulti,
+    DatabaseSetMulti,
+}

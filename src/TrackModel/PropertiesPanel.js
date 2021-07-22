@@ -44,13 +44,13 @@ function PropertiesPanel({selectedBlock}) {
 			background: "#c4c4c4",
 			width: "30%",
 		}}>
-			<h3>PROPERTIES</h3>
 			<div style={{
-				textAlign: "left",
-				paddingLeft: 0,
+				textAlign: "center",
+				paddingLeft: 50,
 				paddingRight: 50,
 				paddingBottom: 10
 			}}>
+				<h3>PROPERTIES</h3>
 				<VarDisplay message='Block Length [m]' path={`/GreenLine/${selectedBlock}/BlockLength`} />
 				<VarDisplay message='Directions of Travel' path={`/GreenLine/${selectedBlock}/DirectionOfTravel`} />
 				<VarDisplay message='Elevation [ft]' path={`/GreenLine/${selectedBlock}/Elevation`} />
