@@ -9,11 +9,12 @@ function VarIndicator({ varName, message, parentName }) {
     setTimeout(() => DatabaseGet(setVari, varName, parentName), 500);
   }, [parentName]);
 
-  return (
-    <div>
-      <BsCircleFill size='1.0em' color={vari ? '#C44242' : 'green'} /> {message}
-    </div>
-  );
+	return (
+		<div className="componentDiv">
+			<h3 className="indicatorText">{message}</h3>
+			<BsCircleFill className="indicator" size="1.0em" color={vari ? 'green' : "#C44242"}/>
+		</div>
+	)
 }
 
 export default VarIndicator;

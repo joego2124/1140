@@ -1,65 +1,21 @@
-import React, { useState, useEffect, useCallback} from 'react'
-import { Form, Button } from 'react-bootstrap'
-import Firebase from 'firebase'
-import Container from 'react-bootstrap/Container'
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
+import React from 'react';
+import { Button, Container, Col, Row  } from 'react-bootstrap';
+import VarDisplay from '../components/VarDisplay';
+import VarIndicator from '../components/VarIndicator';
+import ButtonIndicator from '../components/ButtonIndicator';
 
-const BrakeOptions = () => {
-
-    const [eBrake, setEBrake] = useState(false);
-    const [sBrake, setSBrake] = useState(false);
-
-    Firebase.app();
-
-
-    function getData() {
-		let ref = Firebase.database().ref('/TC/DriverEBrakeCommand');
-		ref.on('value', snapshot => {
-			setEBrake(snapshot.val());
-		});
-        ref = Firebase.database().ref('/TC/DriverSBrakeCommand');
-		ref.on('value', snapshot => {
-			setSBrake(snapshot.val());
-		});
-	}
-
-	function setData(newState, brakeType) {
-        if(brakeType == "e"){
-            Firebase.database().ref('/TC/DriverEBrakeCommand').set(newState);
-        }
-        else if(brakeType == "s"){
-            Firebase.database().ref('/TC/DriverSBrakeCommand').set(newState);
-        }
-	}
-
-    useEffect(getData, []);
-
+function BrakingOptions(parentName) {
     return (
         <div>
-            <h1 style={{
-                padding: '25px',
-            }}>BRAKE OPTIONS</h1>
+            <h3>BRAKING</h3>
             <Container>
-                <Col xs={4}>
-                    <Button 
-                        variant={eBrake ? "primary" : "outline-primary"}
-                        onClick={() => setData(!eBrake, "e")}
-                    >
-                        Emergency Brake
-                    </Button>
-                </Col>
-                <Col xs={4}>
-                    <Button 
-                        variant={sBrake ? "primary" : "outline-primary"}
-                        onClick={() => setData(!sBrake, "s")}
-                    >
-                        Service Brake
-                    </Button>
+                <Col>
+                    <ButtonIndicator parentName={parentName} varName='EBrakeStatus' message='Emergency Brake'/>
+                    <ButtonIndicator parentName={parentName} varName='SBrakeStatus' message='Service Brake'/>
                 </Col>
             </Container>
         </div>
     )
 }
 
-export default BrakeOptions
+export default BrakingOptions

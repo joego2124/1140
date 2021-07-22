@@ -1,6 +1,40 @@
 {
-	"blocks": [
-		{ "blockId": -1,  "section": "YARD", "connectors": [[null, 9, null, null]]},
+	"greenLine": [
+		{ "blockId": -1,  "section": "YARD", "connectors": [[null, null, -1.1, 58]]},
+		{ "blockId": -1.1,  "section": "YARD", "connectors": [[-1.1, null, -1.2, null]]},
+		{ "blockId": -1.2,  "section": "YARD", "connectors": [[-1.1, null, null, -1.3]]},
+		{ "blockId": -1.3,  "section": "YARD", "connectors": [[null, -1.2, null, -1.4]]},
+		{ "blockId": -1.4,  "section": "YARD", "connectors": [[null, -1.3, null, -1.5]]},
+		{ "blockId": -1.5,  "section": "YARD", "connectors": [[null, -1.4, null, -1.6]]},
+		{ "blockId": -1.6,  "section": "YARD", "connectors": [[62, -1.5, null, null]]},
+
+		{ "blockId": 56,   "section": "I", "connectors": [[null, null, 57, null]]},
+		{ "blockId": 57,   "section": "I", "connectors": [[56, null, 58, null]]},
+
+		{ "blockId": 58,   "section": "J", "connectors": [[57, -1, null, null], [58, null, null, 59]]},
+		{ "blockId": 59,   "section": "J", "connectors": [[null, 58, 60, null]]},
+		{ "blockId": 60,   "section": "J", "connectors": [[59, null, null, 61]]},
+		{ "blockId": 61,   "section": "J", "connectors": [[null, 60, null, 62]]},
+		{ "blockId": 62,   "section": "J", "connectors": [[null, 61, null, 63], [null, null, -1, 63]]},
+
+		{ "blockId": 63,   "section": "K", "connectors": [[null, 62, null, 64]]},
+		{ "blockId": 64,   "section": "K", "connectors": [[null, 63, null, 65]]},
+		{ "blockId": 65,   "section": "K", "connectors": [[null, 64, null, 66]]},
+		{ "blockId": 66,   "section": "K", "connectors": [[null, 65, null, 67]]},
+		{ "blockId": 67,   "section": "K", "connectors": [[null, 66, null, 68]]},
+		{ "blockId": 68,   "section": "K", "connectors": [[null, 67, null, 69]]},
+
+		{ "blockId": 69,   "section": "L", "connectors": [[null, 68, null, 70]]},
+		{ "blockId": 70,   "section": "L", "connectors": [[null, 69, null, 71]]},
+		{ "blockId": 71,   "section": "L", "connectors": [[72, 70, null, null]]},
+		{ "blockId": 72,   "section": "L", "connectors": [[73, null, 71, null]]},
+		{ "blockId": 73,   "section": "L", "connectors": [[74, null, 72, null]], "station": "DORMONT"},
+
+		{ "blockId": 74,   "section": "M", "connectors": [[null, null, 73, null]]}
+	],
+	"redLine": [
+		{ "blockId": -1,  "section": "YARD", "connectors": [[null, 9, -1.1, null]]},
+		{ "blockId": -1.1,  "section": "YARD", "connectors": [[-1, null, null, null]]},
 
 		{ "blockId": 1,   "section": "A", "connectors": [[null, null, 2, 15]]},
 		{ "blockId": 2,   "section": "A", "connectors": [[1, null, 3, null]]},
@@ -31,6 +65,76 @@
 
 		{ "blockId": 21,  "section": "G", "connectors": [[null, null, 20, 22]], "station": "SWISSVILLE"},
 		{ "blockId": 22,  "section": "G", "connectors": [[null, 21, null, 23]]},
-		{ "blockId": 23,  "section": "G", "connectors": [[null, 22, null, null]]}
+		{ "blockId": 23,  "section": "G", "connectors": [[null, 22, null, 24]]},
+
+		{ "blockId": 24,  "section": "H", "connectors": [[null, 23, null, 25]]},
+		{ "blockId": 25,  "section": "H", "connectors": [[null, 24, null, 26]], "station": "PENN STATION"},
+		{ "blockId": 26,  "section": "H", "connectors": [[null, 25, null, 27]]},
+		{ "blockId": 27,  "section": "H", "connectors": [[null, 26, null, 28], [76.1, 26, null, null]]},
+		{ "blockId": 28,  "section": "H", "connectors": [[null, 27, null, 29]]},
+		{ "blockId": 29,  "section": "H", "connectors": [[null, 28, null, 30]]},
+		{ "blockId": 30,  "section": "H", "connectors": [[null, 29, null, 31]]},
+		{ "blockId": 31,  "section": "H", "connectors": [[null, 30, null, 32]]},
+		{ "blockId": 32,  "section": "H", "connectors": [[null, 31, null, 33], [72, 31, null, null]]},
+		{ "blockId": 33,  "section": "H", "connectors": [[null, 32, null, 34]]},
+		{ "blockId": 34,  "section": "H", "connectors": [[null, 33, null, 35]]},
+		{ "blockId": 35,  "section": "H", "connectors": [[null, 34, null, 36]], "station": "STEEL PLAZA"},
+		{ "blockId": 36,  "section": "H", "connectors": [[null, 35, null, 37]]},
+		{ "blockId": 37,  "section": "H", "connectors": [[null, 36, null, 38]]},
+		{ "blockId": 38,  "section": "H", "connectors": [[null, 37, null, 39], [71.1, 37, null, null]]},
+		{ "blockId": 39,  "section": "H", "connectors": [[null, 38, null, 40]]},
+		{ "blockId": 40,  "section": "H", "connectors": [[null, 39, null, 41]]},
+		{ "blockId": 41,  "section": "H", "connectors": [[null, 40, null, 42]]},
+		{ "blockId": 42,  "section": "H", "connectors": [[null, 41, null, 43]]},
+		{ "blockId": 43,  "section": "H", "connectors": [[null, 42, null, 44], [67, 42, null, null]]},
+		{ "blockId": 44,  "section": "H", "connectors": [[null, 43, null, 45]]},
+		{ "blockId": 45,  "section": "H", "connectors": [[null, 44, null, 46]], "station": "FIRST AVE"},
+
+		{ "blockId": 46,  "section": "I", "connectors": [[null, 45, null, 47]]},
+		{ "blockId": 47,  "section": "I", "connectors": [[48, 46, null, null]]},
+		{ "blockId": 48,  "section": "I", "connectors": [[49, null, 47, null]], "station": "STATION SQUARE"},
+
+		{ "blockId": 49,  "section": "J", "connectors": [[50, null, 48, null]]},
+		{ "blockId": 50,  "section": "J", "connectors": [[51, null, 49, null]]},
+		{ "blockId": 51,  "section": "J", "connectors": [[52, null, 50, null]]},
+		{ "blockId": 52,  "section": "J", "connectors": [[53, null, 51, null], [null, 66, 51, null]]},
+		{ "blockId": 53,  "section": "J", "connectors": [[54, null, 52, null]]},
+		{ "blockId": 54,  "section": "J", "connectors": [[55, null, 53, null]]},
+
+		{ "blockId": 55,  "section": "K", "connectors": [[null, 56, 54, null]]},
+		{ "blockId": 56,  "section": "K", "connectors": [[null, 57, null, 55]]},
+		{ "blockId": 57,  "section": "K", "connectors": [[null, 58, null, 56]]},
+
+		{ "blockId": 58,  "section": "L", "connectors": [[null, 59, null, 57]]},
+		{ "blockId": 59,  "section": "L", "connectors": [[null, 60, null, 58]]},
+		{ "blockId": 60,  "section": "L", "connectors": [[null, null, 61, 59]], "station": "SOUTH HILLS JUNCTION"},
+
+		{ "blockId": 61,  "section": "M", "connectors": [[60, null, 62, null]]},
+		{ "blockId": 62,  "section": "M", "connectors": [[61, null, null, 62.1]]},
+		{ "blockId": 62.1,  "section": "M", "connectors": [[null, 62, null, 63]]},
+		{ "blockId": 63,  "section": "M", "connectors": [[null, 62.1, null, 64]]},
+
+		{ "blockId": 64,  "section": "N", "connectors": [[null, 63, null, 65]]},
+		{ "blockId": 65,  "section": "N", "connectors": [[null, 64, 66, null]]},
+		{ "blockId": 66,  "section": "N", "connectors": [[65, null, null, 52]]},
+
+		{ "blockId": 67,  "section": "O", "connectors": [[null, 68, 43, null]]},
+
+		{ "blockId": 68,  "section": "P", "connectors": [[null, 69, null, 67]]},
+		{ "blockId": 69,  "section": "P", "connectors": [[null, 70, null, 68]]},
+		{ "blockId": 70,  "section": "P", "connectors": [[null, 71, null, 69]]},
+
+		{ "blockId": 71,  "section": "Q", "connectors": [[null, 71.1, null, 70]]},
+		{ "blockId": 71.1,  "section": "Q", "connectors": [[null, null, 38, 71]]},
+
+		{ "blockId": 72,  "section": "R", "connectors": [[null, 73, 32, null]]},
+
+		{ "blockId": 73,  "section": "S", "connectors": [[null, 74, null, 72]]},
+		{ "blockId": 74,  "section": "S", "connectors": [[null, 75, null, 73]]},
+		{ "blockId": 75,  "section": "S", "connectors": [[null, 76, null, 74]]},
+		
+		{ "blockId": 76,  "section": "T", "connectors": [[null, 76.1, null, 75]]},
+		{ "blockId": 76.1,  "section": "T", "connectors": [[null, null, 27, 76]]}
+
 	]
 }

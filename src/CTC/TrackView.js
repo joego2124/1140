@@ -6,9 +6,9 @@ import './styles.css';
 
 var trackLayout = require("./TrackLayout.json");
 
-const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <div>
+const trackBlockCircle = (blockType, centerElement, fill, stroke, clickHandler) => <div>
 	<div 
-		onClick={() => console.log(`clicked svg:`)}
+		onClick={clickHandler}
 		style={{ 
 			position: "absolute", 
 			zIndex: 1002, 
@@ -17,7 +17,6 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <d
 			transform: "translate(-50%, -50%)",
 			fontWeight: 550,
 			color: stroke
-			// backgroundColor: "red" 
 	}}>{centerElement}</div>
 	<svg 
 		width={75}
@@ -33,7 +32,7 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <d
 			transform: "translate(-50%, -50%)",
 			zIndex: 1001,
 		}} 
-		onClick={() => console.log(`clicked svg:`)}
+		onClick={clickHandler}
 	>
 		{Blocks["circle"]}
 	</svg>
@@ -43,7 +42,7 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = () => {
+const TrackView = ({selectedTrain, trainsList}) => {
 
 	document.body.style.overflow='hidden';
 
@@ -51,9 +50,10 @@ const TrackView = () => {
 
 	let trackBlockSVGs = [];
 	let visitedBlockIds = [];
-	
+	let lineName;
+
 	//recursive function to generate a list of tracks for rendering
-	const traceTrack = (currBlock, currPos) => {
+	const traceTrack = (currBlock, currPos, trackLayoutList) => {
 		
 		let blockSVGs = [];
 		
@@ -70,7 +70,7 @@ const TrackView = () => {
 				if (nextBlockId != null) {
 	
 					//get nextBlock from nextBlockId
-					const nextBlock = trackLayout.blocks.find(block => block.blockId === nextBlockId); 
+					const nextBlock = trackLayoutList.find(block => block.blockId === nextBlockId); 
 		
 					//recursively follow connected block that isn't an visited block
 					if (visitedBlockIds.find(visitedId => visitedId === nextBlockId) === undefined) {
@@ -83,7 +83,7 @@ const TrackView = () => {
 							default: break;
 						}
 						const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
-						traceTrack(nextBlock, nextPos);
+						traceTrack(nextBlock, nextPos, trackLayoutList);
 					}
 				}
 				blockTypeName += (nextBlockId === null ? "0" : "1"); //inc blockTypeName
@@ -96,15 +96,28 @@ const TrackView = () => {
 				case "1001": dy = 45; break;
 				case "0110": dx = 45; break;
 			}
-
+			
 			//conditional vars
 			let blockType = (blockTypeName === "0101" || blockTypeName === "1010") ? "straight" : "curved";
 			let size = blockType === "straight" ? 100 : 55;
-			let color = `rgb(128, 128, 128, ${blockSVGs.length > 0 ? .25 : 1})`;
+			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${blockSVGs.length > 0 ? .25 : 1})`;
 
+			Object.entries(trainsList).forEach(trainArr => {
+				let targBlockId = Math.floor(trainArr[1].CurrentBlock);
+				let compBlockId = Math.floor(currBlock.blockId);
+				if (targBlockId == compBlockId) {
+					// console.log(trainArr[0], trainArr[1]);
+					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
+				}
+			});
+
+			const clickHandler = () => {
+				console.log(`svg clicked: ${currBlock.blockId}`);
+			}
+			
 			//create new svg and push to trackBlockSVGs
 			let newSVG = <div 
-				key={currBlock.blockId}
+				key={blockSVGs.length}
 				style={{
 					position: "absolute", 
 					left: currPos.x + dx + 10,
@@ -129,7 +142,7 @@ const TrackView = () => {
 						transform: "translate(-50%, -50%)",
 						zIndex: 1000,
 					}} 
-					onClick={() => console.log(`clicked svg: ${currBlock.blockId}`)}
+					onClick={clickHandler}
 				>
 					{Blocks[blockTypeName]}
 				</svg>	
@@ -137,13 +150,13 @@ const TrackView = () => {
 					placement="top"
 					overlay={<Tooltip>{currBlock.station}</Tooltip>}
 				>
-					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", "grey") : <></>}
+					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", color, clickHandler) : <></>}
 				</OverlayTrigger>
 			</div>
 			blockSVGs.push(newSVG);
 		});
 
-		let newBlockSVGs = <div>
+		let newBlockSVGs = <div key={lineName + currBlock.blockId}>
 			<div
 				style={{
 					position: "absolute",
@@ -160,17 +173,24 @@ const TrackView = () => {
 		trackBlockSVGs.push(newBlockSVGs);
 	}
 
-	traceTrack(trackLayout.blocks[0], {x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize});
-	// traceTrack(trackLayout.blocks[0], {x: 0, y: 0});
+	for (const [key, value] of Object.entries(trackLayout)) {
+		lineName = key;
+		visitedBlockIds = [];
+		traceTrack(
+			value[0], 
+			{x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize}, 
+			value
+		);
+	}
 
 	return (
 		<div style={styles.track}>
 			<TransformWrapper 
 				limitToBounds={false} 
 				minScale={.01} 
-				initialPositionX={-maxLength / 4}
-				initialPositionY={-maxLength / 4}
-				initialScale={2}
+				initialPositionX={-maxLength / 4.5}
+				initialPositionY={-maxLength / 2.7}
+				initialScale={0.85}
 				panning = {{velocityDisabled: true}} 
 			>
 				<TransformComponent>
