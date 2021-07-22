@@ -107,7 +107,7 @@ const TrackView = ({ selectedWayside }) => {
             }
             const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
             if (
-              selectedWayside.find((v) => v.BlockNumber == nextBlockId) !=
+              selectedWayside?.find((v) => v.BlockNumber == nextBlockId) !=
               undefined
             ) {
               traceTrack(nextBlock, nextPos, trackLayoutList);
@@ -224,8 +224,8 @@ const TrackView = ({ selectedWayside }) => {
   };
 
   let mappedBlocks = 0;
-  if (selectedWayside.length > 0) {
-    mappedBlocks = selectedWayside.map((block) => {
+  if (selectedWayside?.length > 0) {
+    mappedBlocks = selectedWayside?.map((block) => {
       let mappedBlock = trackLayout.greenLine.find(
         (v) => v.blockId == block.BlockNumber
       );
@@ -233,7 +233,7 @@ const TrackView = ({ selectedWayside }) => {
     });
   }
 
-  if (selectedWayside.length > 0) {
+  if (selectedWayside?.length > 0) {
     traceTrack(
       mappedBlocks[0],
       { x: (gridBlocks / 2) * gridSize, y: (gridBlocks / 2) * gridSize },
