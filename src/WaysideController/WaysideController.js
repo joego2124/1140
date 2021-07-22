@@ -18,9 +18,15 @@ const WaysideController = () => {
   const [waysideList, setWaysideList] = useState([]);
   const [jsonTree, setJsonTree] = useState([]);
   const [blockList, setBlockList] = useState([]);
+  const [trainsList, setTrainsList] = useState({});
 
   useEffect(() => {
     DatabaseGet(setJsonTree, 'GreenLine');
+  }, []);
+
+  //update trains list
+  useEffect(() => {
+    DatabaseGet(setTrainsList, 'TrainList');
   }, []);
 
   function getBlockListData() {
@@ -68,6 +74,7 @@ const WaysideController = () => {
           <TrackView
             setSelectedBlock={setSelectedBlock}
             selectedWayside={selectedWayside}
+            trainsList={trainsList}
           />
         ) : (
           <div></div>
