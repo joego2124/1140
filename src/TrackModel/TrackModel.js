@@ -65,8 +65,8 @@ function TrackModel() {
 				width: "100%",
 				position: "absolute",
 			}}>
-				{/* <PropertiesPanel parentName={parentName}/>
-				<StatesPanel parentName={parentName}/> */}
+				{/* <PropertiesPanel parentName={parentName}/> */}
+				{/* <StatesPanel parentName={parentName}/> */}
 			</div>
 		</>
 	)
