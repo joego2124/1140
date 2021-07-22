@@ -61,12 +61,12 @@ function TrackModel() {
 				<h2>Test of Interactive Track Layout</h2>
 			</div> */}
 			<div>
-				<TrackView setSelectedBlock={setSelectedBlock} trainsList={trainsList} />
+				<TrackView setSelectedBlock={setSelectedBlock} trainsList={trainsList} blockList={blockList} />
 			</div>
 			<div style={{
 				position: "absolute",
-				top: "100px",
-				right: "100px"
+				top: "70px",
+				left: "100px"
 			}}>
 				<h2> {`Currently Selected: ${selectedBlock}`} </h2>
 			</div>

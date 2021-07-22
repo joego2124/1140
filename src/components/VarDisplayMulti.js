@@ -19,11 +19,9 @@ function VarDisplay({ message, path }) {
     }, 500);
   }, [path]);
 
-	// useEffect(() => {if(callback != undefined) callback(vari);}, [vari]);
-
 	return (
 		<div className="componentDiv">
-			<h3 className="componentLabel">{message}: </h3>
+			{message}:
 			<div className="componentText">{vari}</div>
 		</div>
 	)

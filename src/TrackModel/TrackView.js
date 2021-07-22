@@ -4,6 +4,8 @@ import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Blocks from '../CTC/assets/Blocks';
 import '../CTC/styles.css';
 import { BsFillSquareFill } from "react-icons/bs";
+import { DatabaseGetMulti } from '../components/DatabaseMulti';
+import { DatabaseSetMulti } from '../components/DatabaseMulti';
 
 var trackLayout = require("../CTC/TrackLayout.json");
 
@@ -43,7 +45,7 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({setSelectedBlock, trainsList}) => {
+const TrackView = ({setSelectedBlock, trainsList, blockList}) => {
 
 	document.body.style.overflow='hidden';
 
@@ -103,11 +105,12 @@ const TrackView = ({setSelectedBlock, trainsList}) => {
 			let size = blockType === "straight" ? 100 : 55;
 			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${blockSVGs.length > 0 ? .25 : 1})`;
 
+			// Darken color of SVG if track is occupied
+			// TODO: remove color of SVG if track is not occupied
 			Object.entries(trainsList).forEach(trainArr => {
 				let targBlockId = Math.floor(trainArr[1].CurrentBlock);
 				let compBlockId = Math.floor(currBlock.blockId);
 				if (targBlockId == compBlockId) {
-					// console.log(trainArr[0], trainArr[1]);
 					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
 				}
 			});
