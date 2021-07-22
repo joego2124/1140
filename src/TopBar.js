@@ -7,36 +7,32 @@ import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import Firebase from "firebase";
 import config from './config';
 
+// import { DatabaseGet } from './Database';
+
 function TopBar() {
 
 	//REMOVED SPEEDSTATE CONTEXT SINCE IT WAS CASUSING PAIN AND SUFFERING
 	// const [speedState, setSpeedState] = useContext(SpeedContext);
-	const [speed, setspeed] = useState(1);
-	const [pause, setpause] = useState(true);
+	const [speed, setSpeed] = useState(0);
+	const [pause, setPause] = useState(true);
 
 	useEffect(() => {
 		Firebase.database().ref('/SimulationClock/speed').on('value', snapshot => {
 			const state = snapshot.val();
-			// setSpeedState({
-			// 	...speedState, 
-			// 	speed: state,
-			// });
-			setspeed(state);
+			setSpeed(state);
 			console.log('set speed database:',state, speed);
-			// console.log('set speed database:',state, speedState.speed);
 		})
 	}, []);
 		
+	// useEffect(() => {
+	// 	setTimeout(() => DatabaseGet(setSpeed, 'speed'), 500);
+	//   }, []);
+
 	useEffect(() => {
 		Firebase.database().ref('/SimulationClock/paused').on('value', snapshot => {
 			const state = snapshot.val();
-			// setSpeedState({
-			// 	...speedState, 
-			// 	paused: state,
-			// });
-			setpause(state);
+			setPause(state);
 			console.log('set pause database:',state, pause);
-			// console.log('set pause database:',state, speedState.paused);
 		})
 	}, []);
 
@@ -47,24 +43,24 @@ function TopBar() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	function setSpeed(newSpeed) {
+	function setDatabaseSpeed(newSpeed) {
 		Firebase.database().ref('/SimulationClock/speed').set(newSpeed);
 	}
 
-	function setPaused(newPaused) {
+	function setDatabasePaused(newPaused) {
 		Firebase.database().ref('/SimulationClock/paused').set(newPaused);
 		console.log('setting paused');
 		// setTimeout(() => clockTick(), 1000);
 	}
 
-	async function clockTick() {
+	function clockTick() {
+		console.log('tick: paused', pause, 'speed', speed);
+		setPause(!pause);
 		if(!pause) {
 		// if(!speedState.paused) {
-			
 			Firebase.database().ref('/SimulationClock/Time').transaction( time => {
 				return time + 1;
 			});
-			console.log('tick: paused', pause, 'speed', speed);
 
 			if(!pause)
 				setTimeout(() => clockTick(), 1000 * (1/speed));
@@ -94,7 +90,7 @@ function TopBar() {
 					<Button style={styles.pausePlay} onClick={() => {
 						var newPaused = !pause;
 						// var newPaused = !speedState.paused;
-						setPaused(newPaused);
+						setDatabasePaused(newPaused);
 						clockTick();
 					}}>
 						{ pause ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
@@ -103,7 +99,7 @@ function TopBar() {
 
 					{/* Speed Dropdown */}
 					<Dropdown as={ButtonGroup} onSelect={ selected => {
-						setSpeed(Number(selected));
+						setDatabaseSpeed(Number(selected));
 					}} alignRight>
 						<Button style={styles.speedButton}>{ `x${speed}` }</Button>
 						{/* <Button style={styles.speedButton}>{ `x${speedState.speed}` }</Button> */}
