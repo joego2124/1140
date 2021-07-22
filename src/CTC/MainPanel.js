@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+	import React, { useState } from 'react';
 import SlidingPane from "react-sliding-pane";
 import { Button, Dropdown } from 'react-bootstrap';
 import ValueIO from "./ValueIO";
