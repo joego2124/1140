@@ -14,6 +14,7 @@ const WaysideController = () => {
   document.body.style.overflow = 'hidden';
 
   const [selectedWayside, setSelectedWayside] = useState([]);
+  const [selectedBlock, setSelectedBlock] = useState([]);
   const [waysideList, setWaysideList] = useState([]);
   const [jsonTree, setJsonTree] = useState([]);
   const [blockList, setBlockList] = useState([]);
@@ -49,11 +50,9 @@ const WaysideController = () => {
       for (let j = 0; j < tempWaysideList[i].length; j++) {
         tempIndividualWaysideBlockList.push(blockList[tempWaysideList[i][j]]);
       }
-      // consgole.log(tempIndividualWaysideBlockList);
       waysides.push(tempIndividualWaysideBlockList);
     }
     setWaysideList(waysides);
-    // console.log(waysides);
   }
 
   useEffect(() => getWaysideListData(), [blockList]);
@@ -66,12 +65,18 @@ const WaysideController = () => {
           waysideList={waysideList}
         />
         {selectedWayside.length > 0 ? (
-          <TrackView selectedWayside={selectedWayside} />
+          <TrackView
+            setSelectedBlock={setSelectedBlock}
+            selectedWayside={selectedWayside}
+          />
         ) : (
           <div></div>
         )}
         {selectedWayside.length > 0 ? (
-          <BottomPanel selectedWayside={selectedWayside} />
+          <BottomPanel
+            selectedBlockFromTrack={selectedBlock}
+            selectedWayside={selectedWayside}
+          />
         ) : (
           <div></div>
         )}
