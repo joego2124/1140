@@ -8,6 +8,7 @@ import DatabaseGet from '../Database'
 import config from '../config';
 import Firebase from "firebase";
 import WSMDisplay from './WSMVarDisplay';
+import VarDisplay from '../components/VarDisplayMulti';
 
 // const [blockList, setBlockList] = useState([]);
 
@@ -27,13 +28,14 @@ import WSMDisplay from './WSMVarDisplay';
 //     });
 //   }
 
-function PropertiesPanel(parentName, selectedBlock) {
+function PropertiesPanel({selectedBlock}) {
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
 	}else {
 		Firebase.app(); // if already initialized, use that one
 	}
+	console.log(`selected block: ${selectedBlock}`)
 
 	return (
 		// Properties title
@@ -45,17 +47,16 @@ function PropertiesPanel(parentName, selectedBlock) {
 			<h3>PROPERTIES</h3>
 			<div style={{
 				textAlign: "left",
-				paddingLeft: 100,
+				paddingLeft: 0,
 				paddingRight: 50,
 				paddingBottom: 10
 			}}>
-				{/* <WSMDisplay varName='BlockLength' message='Block Length [m]' selectedBlock={selectedBlock} /> */}
-				{/* <WSMDisplay parentName={parentName} varName='DirectionsOfTravel' message='Directions of Travel'/>
-				<WSMDisplay parentName={parentName} varName='Elevation' message='Elevation [ft]'/>
-				<WSMDisplay parentName={parentName} varName='DesiredTrackTemperature' message='Desired Track Temperature [°F]'/>
-				<WSMDisplay parentName={parentName} varName='Grade' message='Grade [°]'/>
-				<WSMDisplay parentName={parentName} varName='RailwayCrossing' message='Railway Crossing'/>
-				<WSMDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit [m/h]'/> */}
+				<VarDisplay message='Block Length [m]' path={`/GreenLine/${selectedBlock}/BlockLength`} />
+				<VarDisplay message='Directions of Travel' path={`/GreenLine/${selectedBlock}/DirectionOfTravel`} />
+				<VarDisplay message='Elevation [ft]' path={`/GreenLine/${selectedBlock}/Elevation`} />
+				<VarDisplay message='Desired Track Temperature [°F]' path={`/GreenLine/${selectedBlock}/DesiredTrackTemperature`} />
+				<VarDisplay message='Railway Crossing' path={`/GreenLine/${selectedBlock}/isLevelCrossingBlock`} />
+				<VarDisplay message='Speed Limit [mph]' path={`/GreenLine/${selectedBlock}/SpeedLimit`} />
 				{/* <p style={{textColor: "grey"}}>__</p> */}
 			</div>
 		</div>
