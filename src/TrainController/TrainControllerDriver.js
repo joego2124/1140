@@ -26,13 +26,17 @@ function TrainContollerDriver() {
 		<div>
 			<header className="App-header">
 				<Container>
+					<Col>
 					<DoorOptions parentName={parentName}/>
 					<BrakingOptions parentName={parentName}/>
+					</Col>
+					<Col>
 					<ModeOptions parentName={parentName}/>
 					<LightOptions parentName={parentName}/>
+					</Col>
 					<TemperatureOptions parentName={parentName}/>
 					<FailureStatus parentName={parentName}/>
-					<TrainStatus parentName={parentName}/>
+					<TrainStatus selectedTrain={selectedTrain} parentName={parentName}/>
 				</Container>
 				<TrainsPanel 
 					setSelectedTrain={setSelectedTrain}
