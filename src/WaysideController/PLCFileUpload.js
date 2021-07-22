@@ -6,7 +6,15 @@ import './styles.css';
 
 const PLCFileUpload = ({ setter }) => {
   const onDrop = useCallback((acceptedFiles) => {
+    const fs = require('fs');
+    var text = fs.readFileSync(acceptedFiles, 'utf8');
+    // var reader = new FileReader();
+    // reader.onload = function (e) {
+    //   var contents = e.target.result;
+    //   console.log(contents);
+    // };
     console.log(acceptedFiles);
+    // reader.readAsText(acceptedFiles);
     if (acceptedFiles.length > 0) {
       setter(true);
     }

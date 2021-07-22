@@ -70,7 +70,11 @@ const WaysideController = () => {
         ) : (
           <div></div>
         )}
-        <BottomPanel selectedWayside={selectedWayside} />
+        {selectedWayside.length > 0 ? (
+          <BottomPanel selectedWayside={selectedWayside} />
+        ) : (
+          <div></div>
+        )}
       </header>
     </div>
   );
