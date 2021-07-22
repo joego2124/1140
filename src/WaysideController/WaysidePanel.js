@@ -17,7 +17,6 @@ const WaysidePanel = ({ waysideList, setSelectedWayside }) => {
   useEffect(() => {
     var buttonList = [];
     for (const [waysideName, waysideObj] of Object.entries(waysideList)) {
-      console.log(waysideName, waysideObj);
       buttonList.push(
         <Button variant='light' className='waysideButton' key={waysideName}>
           <div className='buttonDiv'>

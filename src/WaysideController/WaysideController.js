@@ -14,39 +14,30 @@ const WaysideController = () => {
 
   const [selectedWayside, setSelectedWayside] = useState([]);
   const [waysideList, setWaysideList] = useState([]);
+  const [jsonTree, setJsonTree] = useState([]);
   const [blockList, setBlockList] = useState([]);
 
-  // useEffect(() => {
-  //   DatabaseGet(setWaysideList, 'GreenLine');
-  // }, []);
+  useEffect(() => {
+    DatabaseGet(setJsonTree, 'GreenLine');
+  }, []);
 
   function getBlockListData() {
     let tempList = [];
-    let ref = Firebase.database().ref('/GreenLine');
-    ref.on('value', (snapshot) => {
-      for (const [key, value] of Object.entries(snapshot.val())) {
-        for (const [i, v] of Object.entries(value)) {
-          tempList.push(v);
-        }
-      }
-      setBlockList(tempList);
-    });
-
-    // let tempList = [];
-    // for (const [key, value] of Object.entries(waysideList)) {
-    //   for (const [i, v] of Object.entries(value)) {
-    //     tempList.push(v);
-    //   }
-    // }
+    for (const [key, value] of Object.entries(jsonTree)) {
+      tempList.push(value);
+    }
     setBlockList(tempList);
   }
 
-  useEffect(() => getBlockListData(), []);
+  useEffect(() => getBlockListData(), [jsonTree]);
 
   function getWaysideListData() {
-    getBlockListData();
-    console.log(waysideGrouping);
-    let WSC1 = [56, 57, 57, 59, 60, 0];
+    // console.log(waysideGrouping);
+    // let tempGrouping = [];
+    // for (const [key, value] of Object.entries(waysideGrouping)) {
+    //   tempGrouping;
+    // }
+    let WSC1 = [56, 57, 58, 59, 60, 0];
     let WSC2 = [61, 62, 0, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73];
     let tempWaysideList = [WSC1, WSC2];
 
@@ -57,20 +48,19 @@ const WaysideController = () => {
       for (let j = 0; j < tempWaysideList[i].length; j++) {
         tempIndividualWaysideBlockList.push(blockList[tempWaysideList[i][j]]);
       }
-      console.log(tempIndividualWaysideBlockList);
+      // console.log(tempIndividualWaysideBlockList);
       waysides.push(tempIndividualWaysideBlockList);
     }
     setWaysideList(waysides);
-    console.log(waysides);
+    // console.log(waysides);
   }
 
-  useEffect(() => getWaysideListData(), []);
+  useEffect(() => getWaysideListData(), [blockList]);
 
   return (
     <div>
       <header className='App-header'>
         <TempWaysideView />
-        <p>{selectedWayside[0]?.BlockNumber}</p>
         <WaysidePanel
           setSelectedWayside={setSelectedWayside}
           waysideList={waysideList}
