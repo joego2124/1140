@@ -5,6 +5,7 @@ import config from '../config';
 import WaysidePanel from './WaysidePanel';
 import BottomPanel from './BottomPanel';
 import TempWaysideView from './TempWaysideView';
+import TrackView from '../WaysideController/TrackView';
 
 import { DatabaseGet, DatabaseSet } from '../Database';
 var waysideGrouping = require('./WaysideControllers.json');
@@ -48,7 +49,7 @@ const WaysideController = () => {
       for (let j = 0; j < tempWaysideList[i].length; j++) {
         tempIndividualWaysideBlockList.push(blockList[tempWaysideList[i][j]]);
       }
-      // console.log(tempIndividualWaysideBlockList);
+      // consgole.log(tempIndividualWaysideBlockList);
       waysides.push(tempIndividualWaysideBlockList);
     }
     setWaysideList(waysides);
@@ -60,11 +61,15 @@ const WaysideController = () => {
   return (
     <div>
       <header className='App-header'>
-        <TempWaysideView />
         <WaysidePanel
           setSelectedWayside={setSelectedWayside}
           waysideList={waysideList}
         />
+        {selectedWayside.length > 0 ? (
+          <TrackView selectedWayside={selectedWayside} />
+        ) : (
+          <div></div>
+        )}
         <BottomPanel selectedWayside={selectedWayside} />
       </header>
     </div>

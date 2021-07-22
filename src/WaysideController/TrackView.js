@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Blocks from './assets/Blocks';
-import './styles.css';
+import Blocks from '../CTC/assets/Blocks';
+import '../CTC/styles.css';
 
-var trackLayout = require('./TrackLayout.json');
+var trackLayout = require('../CTC/TrackLayout.json');
 
-const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => (
+const trackBlockCircle = (
+  blockType,
+  centerElement,
+  fill,
+  stroke,
+  clickHandler
+) => (
   <div>
     <div
-      onClick={() => console.log(`clicked svg:`)}
+      onClick={clickHandler}
       style={{
         position: 'absolute',
         zIndex: 1002,
@@ -37,7 +43,7 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => (
         transform: 'translate(-50%, -50%)',
         zIndex: 1001,
       }}
-      onClick={() => console.log(`clicked svg:`)}
+      onClick={clickHandler}
     >
       {Blocks['circle']}
     </svg>
@@ -48,7 +54,7 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const WaysideView = ({ selectedTrain, trainsList }) => {
+const TrackView = ({ selectedWayside }) => {
   document.body.style.overflow = 'hidden';
 
   const [selectedBlock, setSelectedBlock] = useState(0);
@@ -60,7 +66,7 @@ const WaysideView = ({ selectedTrain, trainsList }) => {
   //recursive function to generate a list of tracks for rendering
   const traceTrack = (currBlock, currPos, trackLayoutList) => {
     let blockSVGs = [];
-
+    console.log(currBlock, currPos, trackLayoutList);
     //add current block to list of visited blocks
     visitedBlockIds.push(currBlock.blockId);
 
@@ -100,12 +106,16 @@ const WaysideView = ({ selectedTrain, trainsList }) => {
                 break;
             }
             const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
-            traceTrack(nextBlock, nextPos, trackLayoutList);
+            if (
+              selectedWayside.find((v) => v.BlockNumber == nextBlockId) !=
+              undefined
+            ) {
+              traceTrack(nextBlock, nextPos, trackLayoutList);
+            }
           }
         }
         blockTypeName += nextBlockId === null ? '0' : '1'; //inc blockTypeName
       });
-
       //apply offsets for svgs
       let dx = 0,
         dy = 0;
@@ -132,19 +142,25 @@ const WaysideView = ({ selectedTrain, trainsList }) => {
         lineName === 'greenLine' ? '49,135,133' : '196,73,76'
       }, ${blockSVGs.length > 0 ? 0.25 : 1})`;
 
-      Object.entries(trainsList).forEach((trainArr) => {
-        let targBlockId = Math.floor(trainArr[1].CurrentBlock);
-        let compBlockId = Math.floor(currBlock.blockId);
-        if (targBlockId == compBlockId) {
-          console.log(trainArr[0], trainArr[1]);
-          color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? 0.25 : 1})`;
-        }
-      });
+      //   Object.entries(mappedBlocks).forEach((trainArr) => {
+      //     let targBlockId = Math.floor(trainArr[1].CurrentBlock);
+      //     let compBlockId = Math.floor(currBlock.blockId);
+      //     if (targBlockId == compBlockId) {
+      //       console.log(trainArr[0], trainArr[1]);
+      //       color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? 0.25 : 1})`;
+      //     }
+      //   });
+
+      const clickHandler = () => {
+        console.log(`svg clicked: ${currBlock.blockId}`);
+      };
+
+      console.log(blockTypeName);
 
       //create new svg and push to trackBlockSVGs
       let newSVG = (
         <div
-          key={currBlock.blockId}
+          key={blockSVGs.length}
           style={{
             position: 'absolute',
             left: currPos.x + dx + 10,
@@ -169,7 +185,7 @@ const WaysideView = ({ selectedTrain, trainsList }) => {
               transform: 'translate(-50%, -50%)',
               zIndex: 1000,
             }}
-            onClick={() => console.log(`clicked svg: ${currBlock.blockId}`)}
+            onClick={clickHandler}
           >
             {Blocks[blockTypeName]}
           </svg>
@@ -189,7 +205,7 @@ const WaysideView = ({ selectedTrain, trainsList }) => {
     });
 
     let newBlockSVGs = (
-      <div>
+      <div key={currBlock.blockId}>
         <div
           style={{
             position: 'absolute',
@@ -207,13 +223,21 @@ const WaysideView = ({ selectedTrain, trainsList }) => {
     trackBlockSVGs.push(newBlockSVGs);
   };
 
-  for (const [key, value] of Object.entries(trackLayout)) {
-    lineName = key;
-    visitedBlockIds = [];
+  let mappedBlocks = 0;
+  if (selectedWayside.length > 0) {
+    mappedBlocks = selectedWayside.map((block) => {
+      let mappedBlock = trackLayout.greenLine.find(
+        (v) => v.blockId == block.BlockNumber
+      );
+      return mappedBlock;
+    });
+  }
+
+  if (selectedWayside.length > 0) {
     traceTrack(
-      value[0],
+      mappedBlocks[0],
       { x: (gridBlocks / 2) * gridSize, y: (gridBlocks / 2) * gridSize },
-      value
+      mappedBlocks
     );
   }
 
@@ -280,4 +304,4 @@ const styles = {
   },
 };
 
-export default WaysideView;
+export default TrackView;
