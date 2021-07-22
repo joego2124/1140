@@ -4,6 +4,8 @@ import { Button } from 'react-bootstrap';
 
 import './styles.css';
 
+const parser = require('./interpreter.js');
+
 const PLCFileUpload = ({ setter }) => {
   const onDrop = useCallback((acceptedFiles) => {
     const fs = require('fs');
