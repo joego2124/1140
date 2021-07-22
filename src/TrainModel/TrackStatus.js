@@ -7,9 +7,11 @@ import "./trainModelStyles.css";
 
 function TrackStatus(parentName) {
 
-	const [blockID,setBlockId] = useState('Block2');
+	const [blockID,setBlockId] = useState('0');
+	const [line,setLine] = useState('RedLine');
 	
-	useEffect(() => {setTimeout(()=>DatabaseGet(setBlockId, 'CurrentBlock', parentName), 500);}, [parentName]);
+	useEffect(() => {setTimeout(()=>DatabaseGet(setLine, 'Line', parentName), 500);}, [parentName]);
+	useEffect(() => {setTimeout(()=>DatabaseGet(setBlockId, 'CurrentBlock', line), 500);}, [line]);
 
 	// useEffect(setBlockId('Block1'));
 
