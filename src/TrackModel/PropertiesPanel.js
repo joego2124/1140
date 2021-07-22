@@ -27,7 +27,7 @@ import WSMDisplay from './WSMVarDisplay';
 //     });
 //   }
 
-function PropertiesPanel(parentName) {
+function PropertiesPanel(parentName, selectedBlock) {
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -42,21 +42,21 @@ function PropertiesPanel(parentName) {
 			background: "#c4c4c4",
 			width: "30%",
 		}}>
-			<h1>PROPERTIES</h1>
+			<h3>PROPERTIES</h3>
 			<div style={{
 				textAlign: "left",
 				paddingLeft: 100,
 				paddingRight: 50,
 				paddingBottom: 10
 			}}>
-				<WSMDisplay parentName={parentName} varName='BlockSize' message='Block Size [m]'/>
-				<WSMDisplay parentName={parentName} varName='DirectionsOfTravel' message='Directions of Travel'/>
+				{/* <WSMDisplay varName='BlockLength' message='Block Length [m]' selectedBlock={selectedBlock} /> */}
+				{/* <WSMDisplay parentName={parentName} varName='DirectionsOfTravel' message='Directions of Travel'/>
 				<WSMDisplay parentName={parentName} varName='Elevation' message='Elevation [ft]'/>
 				<WSMDisplay parentName={parentName} varName='DesiredTrackTemperature' message='Desired Track Temperature [°F]'/>
 				<WSMDisplay parentName={parentName} varName='Grade' message='Grade [°]'/>
 				<WSMDisplay parentName={parentName} varName='RailwayCrossing' message='Railway Crossing'/>
-				<WSMDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit [m/h]'/>
-				<p style={{textColor: "grey"}}>__</p>
+				<WSMDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit [m/h]'/> */}
+				{/* <p style={{textColor: "grey"}}>__</p> */}
 			</div>
 		</div>
 
