@@ -19,7 +19,7 @@ const BottomPanel = ({ selectedWayside }) => {
   function handleBlocks(event) {
     if (event != undefined) {
       setSelectedBlock(
-        selectedWayside.find((v) => v.BlockNumber == event.target.value)
+        selectedWayside?.find((v) => v.BlockNumber == event.target.value)
       );
     } else {
       setSelectedBlock(selectedWayside[0]);
@@ -47,7 +47,7 @@ const BottomPanel = ({ selectedWayside }) => {
   useEffect(() => handleBlocks(), [selectedWayside]);
 
   function WaysideBlocks() {
-    const listItems = selectedWayside.map((block) => (
+    const listItems = selectedWayside?.map((block) => (
       <option value={block.BlockNumber}>
         {block.BlockNumber == -1 ? 'Yard' : 'Block ' + block.BlockNumber}
       </option>
