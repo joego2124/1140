@@ -73,34 +73,6 @@ const AddTrainModal = (props) => {
       </Modal.Header>
 
       <Modal.Body>
-<<<<<<< HEAD
-			<Form>
-				<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-					<Form.Label>Select Destination</Form.Label>
-					<Form.Control  placeholder="Default Station" />
-				</Form.Group>
-				<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-					<Form.Label>Set Target Arrival Time</Form.Label>
-					<Form.Control placeholder="12:00:00" />
-				</Form.Group>
-				<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-					<Form.Label onChange={e => {
-						console.log(e.target.value);
-						setDest(e.target.value)}}>Set TrainID</Form.Label>
-					<Form.Control placeholder="TRN-EXAMPLE" />
-				</Form.Group>
-				<Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-					<Form.Label>Select Line</Form.Label>
-					<Form.Control
-						as="select"
-						custom
-					>
-						<option value="red">Red Line</option>
-						<option value="green">Green Line</option>
-					</Form.Control>
-				</Form.Group>
-			</Form>
-=======
 				<Form>
 
 					<Form.Group onChange={e => setTrainId(e.target.value)} className="mb-3" controlId="exampleForm.ControlInput1">
@@ -169,7 +141,6 @@ const AddTrainModal = (props) => {
 					</Form.Group>
 					
 				</Form>
->>>>>>> 7ebf5c9aa28e20ec40995a3bf1556ecc5087de80
       </Modal.Body>
 
       <Modal.Footer>
