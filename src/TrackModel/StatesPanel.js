@@ -74,7 +74,7 @@ function StatesPanel({selectedBlock}){
 							<VarDisplay message='Track occupied?' path={`/GreenLine/${selectedBlock}/Occupancy`} />
 							<VarDisplay message='Track under maintenance?' path={`/GreenLine/${selectedBlock}/MaintenanceStatus`} />
 							<VarDisplay message='Maximum capacity?' path={`/GreenLine/${selectedBlock}/MaxCapacity`} />
-							<VarDisplay message='Current Temperature' path={`/GreenLine/${selectedBlock}/Temperature`} />
+							{/* <VarDisplay message='Current Temperature' path={`/GreenLine/${selectedBlock}/Temperature`} /> */}
 							{/* <p><WSMInverseIndicator parentName={parentName} varName='TrackOccupancy' message='Track occupied?'/></p>
 							<p><WSMInverseIndicator parentName={parentName} varName='MaintenanceStatus' message='Track under maintenance?'/></p>
 							<p><WSMInverseIndicator parentName={parentName} varName='MaxCapacity' message='Maximum capacity?'/></p> */}
