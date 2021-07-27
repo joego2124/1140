@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import Firebase from "firebase";
-import { Button, Modal, Table, Form, Select } from 'react-bootstrap';
 import { Button, Modal, Dropdown, Form, FormControl } from 'react-bootstrap';
 import { MdRemoveCircleOutline } from "react-icons/md";
 import { AiOutlinePlus } from "react-icons/ai";
