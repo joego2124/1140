@@ -16,7 +16,7 @@ for i in range(0, 150):
     data = excel_data_df.iloc[i]
 
     temp.append(
-        {(int)(data['Block Number']): {
+        {
             'Line': data['Line'],
             'BlockNumber': (int)(data['Block Number']),
             'Section': data['Section'],
@@ -61,7 +61,6 @@ for i in range(0, 150):
             },
             'Temperature': 0,
             'TrackHeater': 0,
-        }
         })
 
 print(json.dumps(temp, indent=2))

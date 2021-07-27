@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import { DatabaseGet } from '../Database';
 
-function VarDisplay({varName, message, parentName/*, callback*/}) {
+function VarDisplay({varName, message, parentName, units, selectedTrain}) {
 	
 	const [vari, setVari] = useState('default');
 
@@ -12,10 +12,12 @@ function VarDisplay({varName, message, parentName/*, callback*/}) {
 
 	// useEffect(() => {if(callback != undefined) callback(vari);}, [vari]);
 
+	console.log(selectedTrain != undefined ? selectedTrain[varName] : "");
+
 	return (
 		<div className="componentDiv">
-			<h3 className="componentLabel">{message}: </h3>
-			<div className="componentText">{vari}</div>
+			<p className="componentLabel">{message}: </p>
+			<div className="componentText">{selectedTrain != undefined ? selectedTrain[varName] : vari}</div> {units}
 		</div>
 	)
 }

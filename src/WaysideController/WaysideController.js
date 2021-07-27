@@ -5,71 +5,75 @@ import config from '../config';
 import WaysidePanel from './WaysidePanel';
 import BottomPanel from './BottomPanel';
 import TempWaysideView from './TempWaysideView';
+import TrackView from '../WaysideController/TrackView';
+
+import { DatabaseGet, DatabaseSet } from '../Database';
+var waysideGrouping = require('./WaysideControllers.json');
 
 const WaysideController = () => {
   document.body.style.overflow = 'hidden';
 
   const [selectedWayside, setSelectedWayside] = useState([]);
+  const [waysideList, setWaysideList] = useState([]);
+  const [jsonTree, setJsonTree] = useState([]);
+  const [blockList, setBlockList] = useState([]);
 
-  if (!Firebase.apps.length) {
-    Firebase.initializeApp(config);
-  } else {
-    Firebase.app(); // if already initialized, use that one
+  useEffect(() => {
+    DatabaseGet(setJsonTree, 'GreenLine');
+  }, []);
+
+  function getBlockListData() {
+    let tempList = [];
+    for (const [key, value] of Object.entries(jsonTree)) {
+      tempList.push(value);
+    }
+    setBlockList(tempList);
   }
+
+  useEffect(() => getBlockListData(), [jsonTree]);
+
+  function getWaysideListData() {
+    // console.log(waysideGrouping);
+    // let tempGrouping = [];
+    // for (const [key, value] of Object.entries(waysideGrouping)) {
+    //   tempGrouping;
+    // }
+    let WSC1 = [56, 57, 58, 59, 60, 0];
+    let WSC2 = [61, 62, 0, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73];
+    let tempWaysideList = [WSC1, WSC2];
+
+    let tempIndividualWaysideBlockList = [];
+    let waysides = [];
+    for (let i = 0; i < tempWaysideList.length; i++) {
+      tempIndividualWaysideBlockList = [];
+      for (let j = 0; j < tempWaysideList[i].length; j++) {
+        tempIndividualWaysideBlockList.push(blockList[tempWaysideList[i][j]]);
+      }
+      // consgole.log(tempIndividualWaysideBlockList);
+      waysides.push(tempIndividualWaysideBlockList);
+    }
+    setWaysideList(waysides);
+    // console.log(waysides);
+  }
+
+  useEffect(() => getWaysideListData(), [blockList]);
 
   return (
     <div>
       <header className='App-header'>
-        <TempWaysideView />
-        <p>{selectedWayside[0]?.BlockNumber}</p>
-        <WaysidePanel setterForSelectedWayside={setSelectedWayside} />
-        <BottomPanel getterForSelectedWayside={selectedWayside} />
+        <WaysidePanel
+          setSelectedWayside={setSelectedWayside}
+          waysideList={waysideList}
+        />
+        {selectedWayside.length > 0 ? (
+          <TrackView selectedWayside={selectedWayside} />
+        ) : (
+          <div></div>
+        )}
+        <BottomPanel selectedWayside={selectedWayside} />
       </header>
     </div>
   );
-
-  // const [alpha, setAlpha] = useState("empty");
-
-  // Firebase.app();
-
-  // //when updates happen this is called and then it calls appropriate functions to update the page element
-  // const handleUpdate = useCallback(
-  // 	async event => {
-  // 		event.preventDefault();
-  // 		const { alpha } = event.target.elements;
-  // 		console.log(alpha.value);
-  // 		setAlphaData(alpha.value);
-  // 	}, []
-  // );
-
-  // function getAlphaData() {
-  // 	let ref = Firebase.database().ref('/trackController/testdata');
-  // 	ref.on('value', snapshot => {
-  //         setAlpha(snapshot.val());
-  //     });
-  // }
-
-  // function setAlphaData(newState) {
-  // 	Firebase.database().ref('/trackController/testdata').set(newState);
-  // }
-
-  // useEffect(() => getAlphaData());
-
-  // return (
-  //     <div style={{paddingLeft: '4em'}}>
-  //         {alpha}
-
-  //         <Form onSubmit={handleUpdate}>
-  //             <Form.Group className="mb-3" controlId="formBasicEmail">
-  //                 <Form.Label>alpha</Form.Label>
-  //                 <Form.Control name="alpha" placeholder="Data here" />
-  //             </Form.Group>
-  //             <Button variant="primary" type="submit">
-  //                 Submit
-  //             </Button>
-  //         </Form>
-  //     </div>
-  // )
 };
 
 export default WaysideController;

@@ -26,6 +26,7 @@ function VarInput({ varName, message, parentName }) {
         <Container>
             <Form onSubmit={setValueEvent}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Update {message}</Form.Label>
                     <Form.Control name="formInput" placeholder={vari} />
                 </Form.Group>
                 <Button variant="primary" type="submit">

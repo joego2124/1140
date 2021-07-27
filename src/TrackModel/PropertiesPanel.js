@@ -53,10 +53,14 @@ function PropertiesPanel({selectedBlock}) {
 				<h3>PROPERTIES</h3>
 				<VarDisplay message='Block Length [m]' path={`/GreenLine/${selectedBlock}/BlockLength`} />
 				<VarDisplay message='Directions of Travel' path={`/GreenLine/${selectedBlock}/DirectionOfTravel`} />
-				<VarDisplay message='Elevation [ft]' path={`/GreenLine/${selectedBlock}/Elevation`} />
+				<VarDisplay message='Elevation [m]' path={`/GreenLine/${selectedBlock}/Elevation`} />
 				<VarDisplay message='Desired Track Temperature [°F]' path={`/GreenLine/${selectedBlock}/DesiredTrackTemperature`} />
 				<VarDisplay message='Railway Crossing' path={`/GreenLine/${selectedBlock}/isLevelCrossingBlock`} />
 				<VarDisplay message='Speed Limit [mph]' path={`/GreenLine/${selectedBlock}/SpeedLimit`} />
+
+				<Button variant="primary" size="sm" >
+					Set Desired Temp
+				</Button>
 				{/* <p style={{textColor: "grey"}}>__</p> */}
 			</div>
 		</div>

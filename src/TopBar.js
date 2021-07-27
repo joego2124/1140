@@ -2,37 +2,49 @@ import portrait from "./portrait.png"
 import { React, useContext, useEffect, useState } from 'react'
 import { Image, Navbar, Dropdown, Form, Button, Nav, ButtonGroup } from 'react-bootstrap'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
-// import { SpeedContext } from './SpeedProvider';
-// import firebaseApp from './base';
 import Firebase from "firebase";
+import physicsTick from './TrainModel/PhysicsSim';
 import config from './config';
-
-// import { DatabaseGet } from './Database';
 
 function TopBar() {
 
 	//REMOVED SPEEDSTATE CONTEXT SINCE IT WAS CASUSING PAIN AND SUFFERING
-	// const [speedState, setSpeedState] = useContext(SpeedContext);
-	const [speed, setSpeed] = useState(0);
-	const [pause, setPause] = useState(true);
+	// const [speed, setSpeed] = useState(1);
+	// const [pause, setPause] = useState(true);
+	const [time, setTime] = useState(0);
+	var redundantspeed = 1;
+	var redundantpause = true;
 
-	useEffect(() => {
-		Firebase.database().ref('/SimulationClock/speed').on('value', snapshot => {
-			const state = snapshot.val();
-			setSpeed(state);
-			console.log('set speed database:',state, speed);
-		})
-	}, []);
-		
+	function setredundantSpeed(newSpeed){
+		redundantspeed = newSpeed;
+	}
+
+	function setredundantPause(newPause){
+		redundantpause = newPause;
+	}
+
+	//TODO FIX THIS DATABASE PULL SO IT LOADS FROM RTDB CORRECTLY
+
 	// useEffect(() => {
-	// 	setTimeout(() => DatabaseGet(setSpeed, 'speed'), 500);
-	//   }, []);
+	// 	Firebase.database().ref('/SimulationClock/speed').on('value', snapshot => {
+	// 		const state = snapshot.val();
+	// 		setSpeed(state);
+	// 		console.log('set speed database:',state, redundantspeed);
+	// 	})
+	// }, []);
+
+	// useEffect(() => {
+	// 	Firebase.database().ref('/SimulationClock/paused').on('value', snapshot => {
+	// 		const state = snapshot.val();
+	// 		setPause(state);
+	// 		console.log('set pause database:',state, redundantpause);
+	// 	})
+	// }, []);
 
 	useEffect(() => {
-		Firebase.database().ref('/SimulationClock/paused').on('value', snapshot => {
+		Firebase.database().ref('/SimulationClock/Time').on('value', snapshot => {
 			const state = snapshot.val();
-			setPause(state);
-			console.log('set pause database:',state, pause);
+			setTime(state);
 		})
 	}, []);
 
@@ -45,25 +57,34 @@ function TopBar() {
 
 	function setDatabaseSpeed(newSpeed) {
 		Firebase.database().ref('/SimulationClock/speed').set(newSpeed);
+		// setSpeed(newSpeed);
+		// speed=newSpeed;
+			setredundantSpeed(newSpeed);
+		// console.log(speed);
 	}
 
 	function setDatabasePaused(newPaused) {
 		Firebase.database().ref('/SimulationClock/paused').set(newPaused);
 		console.log('setting paused');
-		// setTimeout(() => clockTick(), 1000);
+		// setPause(newPaused);
+		// pause=newPaused;
+			setredundantPause(newPaused);
+		// console.log(pause);
 	}
 
 	function clockTick() {
-		console.log('tick: paused', pause, 'speed', speed);
-		setPause(!pause);
-		if(!pause) {
+		console.log('tick: paused', redundantpause, 'speed', redundantspeed);
+		// setPause(!pause);
+		if(redundantpause == false) {
 		// if(!speedState.paused) {
 			Firebase.database().ref('/SimulationClock/Time').transaction( time => {
 				return time + 1;
 			});
 
-			if(!pause)
-				setTimeout(() => clockTick(), 1000 * (1/speed));
+			physicsTick();
+
+			if(redundantpause == false)
+				setTimeout(() => clockTick(), 1000 * (1/redundantspeed));
 			// setTimeout(() => clockTick(), 1000 * (1/speedState.speed));
 		}
 	}
@@ -84,16 +105,18 @@ function TopBar() {
 				<Form inline>
 
 					{/* Time Display */}
-					<Navbar.Text style={styles.timeDisplay}>12:00:00</Navbar.Text>
+					<Navbar.Text style={styles.timeDisplay}>{time}</Navbar.Text>
 
 					{/* Play/Pause Button */}
 					<Button style={styles.pausePlay} onClick={() => {
-						var newPaused = !pause;
+						var newPaused = !redundantpause;
 						// var newPaused = !speedState.paused;
-						setDatabasePaused(newPaused);
+						console.log('change', redundantpause, 'to ', newPaused);
+						redundantpause = newPaused;
+						// setDatabasePaused(newPaused);
 						clockTick();
 					}}>
-						{ pause ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
+						{ redundantpause ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
 						{/* { speedState.paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> } */}
 					</Button>
 
@@ -101,7 +124,7 @@ function TopBar() {
 					<Dropdown as={ButtonGroup} onSelect={ selected => {
 						setDatabaseSpeed(Number(selected));
 					}} alignRight>
-						<Button style={styles.speedButton}>{ `x${speed}` }</Button>
+						<Button style={styles.speedButton}>{ `x${redundantspeed}` }</Button>
 						{/* <Button style={styles.speedButton}>{ `x${speedState.speed}` }</Button> */}
 
 						<Dropdown.Toggle split style={styles.speedDropdown} id="dropdown-split-basic" />
