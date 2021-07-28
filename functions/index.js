@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 //import from individual files
+const wayside = require('./WaysideFunctions');
 const trainModel = require('./TrainModelFunctions');
 const trainControllerDriver = require('./TrainContollerFunctions');
 
