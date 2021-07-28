@@ -30,7 +30,7 @@ const TrainsPanel = ({
 							let trainName = arr[0], trainObj = arr[1];
 							return	<Button variant="light" className="trainButton" key={trainName} onClick={() => setSelectedTrain(trainObj)}>
 								<div className="buttonDiv">
-									<BsCircleFill size="1.5em" color="#C44242"/>
+									<BsCircleFill size="1.5em" color={trainObj.Line == "red" ? "#C44242" : "rgba(49,135,133, 1)"}/>
 									<div className="buttonText" >{`${trainName}`}</div>
 								</div>
 							</Button>
