@@ -61,11 +61,22 @@ const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
   useEffect(() => setUploadStatusData(), [plcUploaded]);
 
   function setSwitchStateData() {
-    let newState = selectedBlock?.SwitchState == 0 ? 1 : 0;
-    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
-    Firebase.database().ref(link).set(newState);
-    selectedBlock.SwitchState = newState;
+    if (selectedBlock.isSwitchBlock == 1) {
+      let newState = selectedBlock?.SwitchState == 0 ? 1 : 0;
+      let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+      Firebase.database().ref(link).set(newState);
+    }
   }
+
+  function getSwitchStateData() {
+    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      selectedBlock.SwitchState = snapshot.val();
+    });
+  }
+
+  useEffect(() => getSwitchStateData(), [selectedBlock.SwitchState]);
 
   function getOccupancyData() {
     let link = '/GreenLine/' + selectedBlock.BlockNumber + '/Occupancy';

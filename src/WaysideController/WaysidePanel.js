@@ -8,7 +8,7 @@ import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './styles.css';
 import waysideControllers from './WaysideControllers.json';
 
-const WaysidePanel = ({ waysideList, setSelectedWayside }) => {
+const WaysidePanel = ({ waysideColor, waysideList, setSelectedWayside }) => {
   const [open, setOpen] = useState(true);
   const [waysideButtonList, setWaysideButtonList] = useState([]);
 

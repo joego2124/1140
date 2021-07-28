@@ -245,16 +245,8 @@ const TrackView = ({ selectedWayside, setSelectedBlock, trainsList }) => {
   if (selectedWayside?.length > 0) {
     mappedBlocks = selectedWayside?.map((block) => {
       let mappedBlock = trackLayout.greenLine.find(
-        (v) => Math.trunc(v.blockId) == block.BlockNumber
+        (v) => v.blockId == block.BlockNumber
       );
-      //   if (block.BlockNumber == -1) {
-      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.1));
-      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.2));
-      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.3));
-      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.4));
-      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.5));
-      //     mappedBlock.push(trackLayout.greenLine.find((v) => v.blockId == -1.6));
-      //   }
       return mappedBlock;
     });
   }
