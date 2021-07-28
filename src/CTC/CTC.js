@@ -107,20 +107,7 @@ function CTC() {
 	useEffect(() => {
 		DatabaseGet(setTrainsList, "TrainList");
 	}, []);
-
-	//updates based on train list
-	// useEffect(() => {
-	// 	trainsList.forEach(train => {
-	// 		if (train.route != undefined) {
-				
-	// 		} else {
-	// 			console.warn(`${train.trainId} does not have a route`);
-	// 		}
-	// 	});
-	// }, [trainsList]);
-
-	// console.log(routeTrain([16, 25, 35, 7, -1], "red"));
-
+	
 	return (
 		<div>
 			<header className="App-header">
