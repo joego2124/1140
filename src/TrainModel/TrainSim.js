@@ -39,7 +39,7 @@ function makeTrainSim(newTrainId) {
     //     console.log('simulating', this.trainId);
     // } );
     train.simulateTrain = function () {
-            console.log('simulating', this.trainId, Math.abs(this.velocity));
+            // console.log('simulating', this.trainId, Math.abs(this.velocity));
 
             if(this.ebrake == true) {
                 //e brakes
