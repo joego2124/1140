@@ -11,6 +11,8 @@ function TopBar() {
 	const [speed, setSpeed] = useState(1);
 	const [paused, setPaused] = useState(true);
 	const [time, setTime] = useState(0);
+	const [timer, setTimer] = useState();
+	const [formattedTime, setFormattedTime] = useState("12:00");
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -18,6 +20,7 @@ function TopBar() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
+	//running clock
 	function clockTick() {
 		if(!paused) {
 			Firebase.database().ref('/SimulationClock/Time').transaction( time => {
@@ -26,11 +29,13 @@ function TopBar() {
 
 			physicsTick();
 
-			if(!paused)
-				setTimeout(() => clockTick(), 1000 * (1/speed));
+			if(!paused) {
+				setTimer(setTimeout(() => clockTick(), 1000 * (1/speed)));
+			}
 		}
 	}
 
+	//link variable updates on startup and start clockTick
 	useEffect(() => {
 		Firebase.database().ref('/SimulationClock/speed').on('value', snapshot => {
 			setSpeed(snapshot.val());
@@ -43,6 +48,29 @@ function TopBar() {
 		});
 		clockTick();
 	}, []);
+
+	//start or stop clock tick on unpause/pause
+	useEffect(() => {
+		if (!paused) {
+			clockTick();
+		} else {
+			clearTimeout(timer);
+		}
+	}, [paused]);
+
+	//temp work around to restart clock tick everytime speed changes
+	useEffect(() => {
+		clearTimeout(timer);
+		clockTick();
+	}, [speed]);
+	
+	//calculate formatted time when tick time changes
+	useEffect(() => {
+		let totalMinutes = time % 1440;
+		let hours = Math.floor(totalMinutes / 60);
+		let minutes = totalMinutes % 60;
+		setFormattedTime(`${hours > 9 ? hours : "0" + hours}:${minutes > 9 ? minutes : "0" + minutes}`);
+	}, [time]);
 
 	return (
 		<Navbar style={styles.bar} expand="lg">
@@ -60,11 +88,11 @@ function TopBar() {
 				<Form inline>
 
 					{/* Time Display */}
-					<Navbar.Text style={styles.timeDisplay}>{time}</Navbar.Text>
+					<Navbar.Text style={styles.timeDisplay}>{formattedTime}</Navbar.Text>
 
 					{/* Play/Pause Button */}
 					<Button style={styles.pausePlay} onClick={() => {
-						
+						Firebase.database().ref('/SimulationClock/paused').set(!paused);
 					}}>
 						{ paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
 					</Button>

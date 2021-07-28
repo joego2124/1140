@@ -8,7 +8,6 @@ import "firebase/auth";
 import { FirebaseAuthProvider } from "@react-firebase/auth";
 import config from './config';
 
-
 function App() {
 	return (
 		<FirebaseAuthProvider firebase={firebase} {...config}>
