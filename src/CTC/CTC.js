@@ -100,6 +100,7 @@ function CTC() {
 	const [scheduleModalShow, setScheduleModalShow] = useState(false);
 	const [addTrainModal, setAddTrainModal] = useState(false);
 	const [selectedTrain, setSelectedTrain] = useState({});
+	const [selectedBlock, setSelectedBlock] = useState({});
 	const [trainsList, setTrainsList] = useState({});
 	
 	//update trains list
@@ -108,17 +109,17 @@ function CTC() {
 	}, []);
 
 	//updates based on train list
-	useEffect(() => {
-		// trainsList.forEach(train => {
-		// 	if (train.route != undefined) {
+	// useEffect(() => {
+	// 	trainsList.forEach(train => {
+	// 		if (train.route != undefined) {
 				
-		// 	} else {
-		// 		console.warn(`${train.trainId} does not have a route`);
-		// 	}
-		// });
-	}, [trainsList]);
+	// 		} else {
+	// 			console.warn(`${train.trainId} does not have a route`);
+	// 		}
+	// 	});
+	// }, [trainsList]);
 
-	// console.log(routeTrain([16, 25, 35, 7, -1], "red", true));
+	// console.log(routeTrain([16, 25, 35, 7, -1], "red"));
 
 	return (
 		<div>
@@ -131,10 +132,12 @@ function CTC() {
 				<MainPanel 
 					setModalShow={setScheduleModalShow} 
 					selectedTrain={selectedTrain}
+					selectedBlock={selectedBlock}
 				/>
 				<TrackView
 					selectedTrain={selectedTrain}
 					trainsList={trainsList}
+					setSelectedBlock={setSelectedBlock}
 				/>
 			</header>
 			<ScheduleModal
