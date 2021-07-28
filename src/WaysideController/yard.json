@@ -1,49 +1,47 @@
 [
     {
-        "0": {
-            "Line": "Green",
-            "BlockNumber": -1,
-            "Section": 0,
-            "BlockLength": 50.0,
-            "BlockGrade": 0.0,
-            "SpeedLimit": 30.0,
-            "Infrastructure": "Yard",
-            "Elevation": 0.0,
-            "CumulativeElevation": 0.5,
-            "SecondsToTraverseBlock": 6.0,
-            "Authority": 0,
-            "Occupancy": 0,
-            "BlockStatus": 0,
-            "isLevelCrossingBlock": 0,
-            "LevelCrossingState": 0,
-            "isSwitchBlock": 0,
-            "SwitchState": 0,
-            "CrossingLights": 0,
-            "Beacon-1": {
-                "CurrentStation": 0,
-                "NextStation": 0,
-                "StationSide": ""
-            },
-            "Beacon+1": {
-                "CurrentStation": 0,
-                "NextStation": 0,
-                "StationSide": ""
-            },
-            "BeaconFailure": 0,
-            "DesiredTrackTemperature": 0,
-            "DirectionOfTravel": 0,
-            "FailureBrokenRail": 0,
-            "FailureTrackCircuit": 0,
-            "MaintenanceStatus": 0,
-            "MaxCapacity": 0,
-            "Station": {
-                "PassengersBoarding": 0,
-                "PassengersDeparting": 0,
-                "PassengersWaiting": 0,
-                "Tickets": 0
-            },
-            "Temperature": 0,
-            "TrackHeater": 0
-        }
+        "Line": "Green",
+        "BlockNumber": -1,
+        "Section": 0,
+        "BlockLength": 164.042,
+        "BlockGrade": 0.0,
+        "SpeedLimit": 18.64113,
+        "Infrastructure": "YARD",
+        "Elevation": 0.0,
+        "CumulativeElevation": 1.64042,
+        "SecondsToTraverseBlock": 6.0,
+        "Authority": 0,
+        "Occupancy": 0,
+        "BlockStatus": 0,
+        "isLevelCrossingBlock": 0,
+        "LevelCrossingState": 0,
+        "isSwitchBlock": 0,
+        "SwitchState": 0,
+        "CrossingLights": 0,
+        "Beacon-1": {
+            "CurrentStation": 0,
+            "NextStation": 0,
+            "StationSide": ""
+        },
+        "Beacon+1": {
+            "CurrentStation": 0,
+            "NextStation": 0,
+            "StationSide": ""
+        },
+        "BeaconFailure": 0,
+        "DesiredTrackTemperature": 0,
+        "DirectionOfTravel": 0,
+        "FailureBrokenRail": 0,
+        "FailureTrackCircuit": 0,
+        "MaintenanceStatus": 0,
+        "MaxCapacity": 0,
+        "Station": {
+            "PassengersBoarding": 0,
+            "PassengersDeparting": 0,
+            "PassengersWaiting": 0,
+            "Tickets": 0
+        },
+        "Temperature": 0,
+        "TrackHeater": 0
     }
 ]
