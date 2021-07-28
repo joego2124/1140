@@ -54,24 +54,24 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({ selectedWayside }) => {
+const TrackView = ({ selectedWayside, setSelectedBlock, trainsList }) => {
   document.body.style.overflow = 'hidden';
 
-  const [selectedBlock, setSelectedBlock] = useState(0);
+  //   const [selectedBlock, setSelectedBlock] = useState(0);
+  console.log(selectedWayside);
 
   let trackBlockSVGs = [];
   let visitedBlockIds = [];
-  let lineName;
+  let lineName = 'greenLine';
 
   //recursive function to generate a list of tracks for rendering
   const traceTrack = (currBlock, currPos, trackLayoutList) => {
     let blockSVGs = [];
-    console.log(currBlock, currPos, trackLayoutList);
     //add current block to list of visited blocks
     visitedBlockIds.push(currBlock.blockId);
 
     //iterate through all connections
-    currBlock.connectors.forEach((connnectorArr) => {
+    currBlock.connectors.forEach((connnectorArr, i) => {
       let blockTypeName = ''; //var for determining svg to render
 
       //iterate recursively through all connectioned blocks
@@ -107,7 +107,7 @@ const TrackView = ({ selectedWayside }) => {
             }
             const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
             if (
-              selectedWayside.find((v) => v.BlockNumber == nextBlockId) !=
+              selectedWayside?.find((v) => v.BlockNumber == nextBlockId) !=
               undefined
             ) {
               traceTrack(nextBlock, nextPos, trackLayoutList);
@@ -140,22 +140,40 @@ const TrackView = ({ selectedWayside }) => {
       let size = blockType === 'straight' ? 100 : 55;
       let color = `rgb(${
         lineName === 'greenLine' ? '49,135,133' : '196,73,76'
-      }, ${blockSVGs.length > 0 ? 0.25 : 1})`;
+      }, ${
+        currBlock.connectors.length > 1
+          ? i !=
+            selectedWayside.find((v) => v.BlockNumber == currBlock.blockId)
+              .SwitchState
+            ? 0.25
+            : 1
+          : 1
+      })`;
 
-      //   Object.entries(mappedBlocks).forEach((trainArr) => {
-      //     let targBlockId = Math.floor(trainArr[1].CurrentBlock);
-      //     let compBlockId = Math.floor(currBlock.blockId);
-      //     if (targBlockId == compBlockId) {
-      //       console.log(trainArr[0], trainArr[1]);
-      //       color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? 0.25 : 1})`;
-      //     }
-      //   });
+      Object.entries(trainsList).forEach((trainArr) => {
+        let targBlockId = Math.floor(trainArr[1].CurrentBlock);
+        let compBlockId = Math.floor(currBlock.blockId);
+        if (targBlockId == compBlockId) {
+          console.log(trainArr[0], trainArr[1]);
+          color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? 0.25 : 1})`;
+        }
+      });
 
       const clickHandler = () => {
         console.log(`svg clicked: ${currBlock.blockId}`);
-      };
 
-      console.log(blockTypeName);
+        if (selectedWayside != undefined) {
+          let selBlock = selectedWayside?.find(
+            (v) => v.BlockNumber == currBlock.blockId
+          );
+          console.log(selBlock);
+          setSelectedBlock(
+            selectedWayside?.find((v) => v.BlockNumber == currBlock.blockId)
+          );
+        } else {
+          setSelectedBlock(selectedWayside[0]);
+        }
+      };
 
       //create new svg and push to trackBlockSVGs
       let newSVG = (
@@ -224,8 +242,8 @@ const TrackView = ({ selectedWayside }) => {
   };
 
   let mappedBlocks = 0;
-  if (selectedWayside.length > 0) {
-    mappedBlocks = selectedWayside.map((block) => {
+  if (selectedWayside?.length > 0) {
+    mappedBlocks = selectedWayside?.map((block) => {
       let mappedBlock = trackLayout.greenLine.find(
         (v) => v.blockId == block.BlockNumber
       );
@@ -233,7 +251,7 @@ const TrackView = ({ selectedWayside }) => {
     });
   }
 
-  if (selectedWayside.length > 0) {
+  if (selectedWayside?.length > 0) {
     traceTrack(
       mappedBlocks[0],
       { x: (gridBlocks / 2) * gridSize, y: (gridBlocks / 2) * gridSize },

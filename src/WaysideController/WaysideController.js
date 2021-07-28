@@ -14,12 +14,20 @@ const WaysideController = () => {
   document.body.style.overflow = 'hidden';
 
   const [selectedWayside, setSelectedWayside] = useState([]);
+  const [selectedBlock, setSelectedBlock] = useState([]);
   const [waysideList, setWaysideList] = useState([]);
   const [jsonTree, setJsonTree] = useState([]);
   const [blockList, setBlockList] = useState([]);
+  const [trainsList, setTrainsList] = useState({});
+  const [trackColor, setTrackColor] = useState();
 
   useEffect(() => {
     DatabaseGet(setJsonTree, 'GreenLine');
+  }, []);
+
+  //update trains list
+  useEffect(() => {
+    DatabaseGet(setTrainsList, 'TrainList');
   }, []);
 
   function getBlockListData() {
@@ -38,22 +46,21 @@ const WaysideController = () => {
     // for (const [key, value] of Object.entries(waysideGrouping)) {
     //   tempGrouping;
     // }
-    let WSC1 = [56, 57, 58, 59, 60, 0];
-    let WSC2 = [61, 62, 0, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73];
-    let tempWaysideList = [WSC1, WSC2];
+    console.log(waysideGrouping);
 
     let tempIndividualWaysideBlockList = [];
     let waysides = [];
-    for (let i = 0; i < tempWaysideList.length; i++) {
+    console.log(blockList);
+    for (const [index, lineData] of Object.entries(waysideGrouping.GreenLine)) {
       tempIndividualWaysideBlockList = [];
-      for (let j = 0; j < tempWaysideList[i].length; j++) {
-        tempIndividualWaysideBlockList.push(blockList[tempWaysideList[i][j]]);
-      }
-      // consgole.log(tempIndividualWaysideBlockList);
+      lineData.blocks.forEach((blockId) => {
+        tempIndividualWaysideBlockList.push(blockList[blockId]);
+      });
+      console.log(tempIndividualWaysideBlockList);
       waysides.push(tempIndividualWaysideBlockList);
     }
+    console.log(waysides);
     setWaysideList(waysides);
-    // console.log(waysides);
   }
 
   useEffect(() => getWaysideListData(), [blockList]);
@@ -66,11 +73,22 @@ const WaysideController = () => {
           waysideList={waysideList}
         />
         {selectedWayside.length > 0 ? (
-          <TrackView selectedWayside={selectedWayside} />
+          <TrackView
+            setSelectedBlock={setSelectedBlock}
+            selectedWayside={selectedWayside}
+            trainsList={trainsList}
+          />
         ) : (
           <div></div>
         )}
-        <BottomPanel selectedWayside={selectedWayside} />
+        {selectedWayside.length > 0 ? (
+          <BottomPanel
+            selectedBlockFromTrack={selectedBlock}
+            selectedWayside={selectedWayside}
+          />
+        ) : (
+          <div></div>
+        )}
       </header>
     </div>
   );
