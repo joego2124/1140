@@ -34,12 +34,15 @@ const BottomPanel = ({ selectedWayside }) => {
   }
 
   function getOccupancyData() {
-    let link = 'GreenLine/' + selectedBlock.BlockNumber;
-    let ref = Firebase.database().ref(link);
-    ref.on('value', (snapshot) => {
-      let newState = snapshot.val().Occupancy;
-      selectedBlock.Occupancy = newState;
-    });
+    if (selectedBlock != undefined && selectedBlock.BlockNumber != undefined) {
+      let link = '/GreenLine/' + selectedBlock.BlockNumber;
+      let ref = Firebase.database().ref(link);
+      console.log(selectedBlock);
+      ref.on('value', (snapshot) => {
+        let newState = snapshot.val().Occupancy;
+        selectedBlock.Occupancy = newState;
+      });
+    }
   }
 
   useEffect(() => getOccupancyData(), []);
