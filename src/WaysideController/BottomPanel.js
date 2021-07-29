@@ -157,15 +157,11 @@ const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
             </div>
             <div className='dataName'>
               Speed Limit:
-              <div className='dataValue'>
-                {selectedBlock?.SpeedLimit * 0.621371} mph
-              </div>
+              <div className='dataValue'>{selectedBlock?.SpeedLimit} mph</div>
             </div>
             <div className='dataName'>
               Length:
-              <div className='dataValue'>
-                {selectedBlock?.BlockLength * 3.28084} feet
-              </div>
+              <div className='dataValue'>{selectedBlock?.BlockLength} feet</div>
             </div>
           </div>
         </div>
