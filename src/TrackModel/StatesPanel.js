@@ -65,17 +65,19 @@ function StatesPanel({selectedBlock}){
 					<Row>
 						<Col xs={4}>
 							<h4>
-								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/Occupancy`} />
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/Occupancy`} />
 								{' '}AVAILABILITY
-								{/* <WSMIndicator parentName={parentName} varName='TrackOccupancy' message='AVAILABILITY'/> */}
 							</h4>
-							<VarDisplayMulti message='Track occupied?' path={`/GreenLine/${selectedBlock}/Occupancy`} />
-							<VarDisplayMulti message='Track under maintenance?' path={`/GreenLine/${selectedBlock}/MaintenanceStatus`} />
-							<VarDisplayMulti message='Maximum capacity?' path={`/GreenLine/${selectedBlock}/MaxCapacity`} />
-							{/* <VarDisplay message='Current Temperature' path={`/GreenLine/${selectedBlock}/Temperature`} /> */}
-							{/* <p><WSMInverseIndicator parentName={parentName} varName='TrackOccupancy' message='Track occupied?'/></p>
-							<p><WSMInverseIndicator parentName={parentName} varName='MaintenanceStatus' message='Track under maintenance?'/></p>
-							<p><WSMInverseIndicator parentName={parentName} varName='MaxCapacity' message='Maximum capacity?'/></p> */}
+							<div>
+								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/Occupancy`} />
+								{' '}Track occupied?
+								<br />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/MaintenanceStatus`} />
+								{' '}Track under maintenance?
+								<br />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/MaxCapacity`} />
+								{' '}Maximum capacity?
+							</div>
 						</Col>
 						<Col xs={4}>
 							<h4>TRACK ELEMENTS</h4>
@@ -107,10 +109,18 @@ function StatesPanel({selectedBlock}){
 								</ButtonGroup>
 								</div>							
 							</p>
-							<VarDisplayMulti message='Signal State' path={`/GreenLine/${selectedBlock}/CrossingLights`} />
-							<VarDisplayMulti message='Railway Crossing' path={`/GreenLine/${selectedBlock}/LevelCrossingState`} />
-							<VarDisplayMulti message='Track Heater' path={`/GreenLine/${selectedBlock}/TrackHeater`} />
-							<VarDisplayMulti message='Current Temperature [°F]' path={`/GreenLine/${selectedBlock}/Temperature`} />
+							<div>
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/CrossingLights`} />
+								{' '}Signal State
+								<br />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/LevelCrossingState`} />
+								{' '}Railway Crossing
+								<br />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/TrackHeater`} />
+								{' '}Track Heater
+								<br />
+								<VarDisplayMulti message='Current Temperature [°F]' path={`/GreenLine/${selectedBlock}/Temperature`} />
+							</div>
 						</Col>
 						<Col>
 							<h4>PASSENGERS</h4>
