@@ -1,5 +1,6 @@
 import Firebase from "firebase";
-import { DatabaseGet } from "../Database";
+
+// FIXME: DatabaseGetMulti isn't working with the VarIndicators :(
 
 function DatabaseGetMulti({ setterFunction, path }){
 
