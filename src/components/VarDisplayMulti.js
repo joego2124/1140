@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Firebase from "firebase";
 
-function VarDisplay({ message, path }) {
+function VarDisplayMulti({ message, path }) {
 	
 	const [vari, setVari] = useState('default');
 
@@ -27,4 +27,4 @@ function VarDisplay({ message, path }) {
 	)
 }
 
-export default VarDisplay;
+export default VarDisplayMulti;
