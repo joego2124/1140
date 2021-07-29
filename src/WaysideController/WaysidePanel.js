@@ -6,17 +6,17 @@ import { BsCircleFill } from 'react-icons/bs';
 
 import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './styles.css';
-import waysideControllers from './WaysideControllers.json';
 
-const WaysidePanel = ({ waysideColor, waysideList, setSelectedWayside }) => {
+const WaysidePanel = ({ setTrackColor, greenWaysideList, redWaysideList, setSelectedWayside }) => {
   const [open, setOpen] = useState(true);
   const [waysideButtonList, setWaysideButtonList] = useState([]);
+  const [selectedWaysideList, setSelectedWaysideList] = useState();
 
   // Firebase.app();
 
   useEffect(() => {
     var buttonList = [];
-    for (const [waysideName, waysideObj] of Object.entries(waysideList)) {
+    for (const [waysideName, waysideObj] of Object.entries(selectedWaysideList)) {
       buttonList.push(
         <Button variant='light' className='waysideButton' key={waysideName}>
           <div className='buttonDiv'>
@@ -32,7 +32,12 @@ const WaysidePanel = ({ waysideColor, waysideList, setSelectedWayside }) => {
       );
     }
     setWaysideButtonList(buttonList);
-  }, [waysideList]);
+  }, [selectedWaysideList]);
+
+  setColorAndSelectedWayside(selColor) {
+    setTrackColor(selColor);
+    setSelectedWaysideList(selColor == "GreenLine" ? greenWaysideList : redWaysideList);
+  }
 
   return (
     <div>
@@ -49,6 +54,7 @@ const WaysidePanel = ({ waysideColor, waysideList, setSelectedWayside }) => {
         Show Wayside <br />
         Controllers
       </Button>
+
       <SlidingPane
         isOpen={open}
         from='left'
@@ -56,6 +62,16 @@ const WaysidePanel = ({ waysideColor, waysideList, setSelectedWayside }) => {
         style={{ paddingTop: '10rem' }}
         onRequestClose={() => setOpen(false)}
       >
+        <Button
+          onClick={setColorAndSelectedWayside('GreenLine')}
+          className='greenLineButton'
+        >
+          Green Line
+        </Button>
+
+        <Button onClick={setTrackColor('RedLine')} className='redLineButton'>
+          Red Line
+        </Button>
         <div class='waysidePanelHolder'>{waysideButtonList}</div>
       </SlidingPane>
     </div>
