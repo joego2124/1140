@@ -21,6 +21,7 @@ import { SpeedProvider } from './SpeedProvider';
 import 'firebase/auth';
 import { FirebaseAuthConsumer } from '@react-firebase/auth';
 
+
 const PrivateRoute = () => {
 	return (
 			<FirebaseAuthConsumer>
