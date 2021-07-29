@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip, Dropdown, DropdownButton } from 'react-bootstrap';
 import Blocks from './assets/Blocks';
 import './styles.css';
 
@@ -46,7 +46,11 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
 
 	document.body.style.overflow='hidden';
 
-	let trackBlockSVGs = [];
+	const [lineFilter, setLineFilter] = useState("both");
+	const [filteredLineSVGs, setFilteredLineSVGs] = useState([]);
+
+	let greenBlockSVGs = [];
+	let redBlockSVGs = [];
 	let visitedBlockIds = [];
 	let lineName;
 
@@ -114,7 +118,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
 				setSelectedBlock(currBlock);
 			}
 			
-			//create new svg and push to trackBlockSVGs
+			//create new svg and push to track block SVGs
 			let newSVG = <div 
 				key={blockSVGs.length}
 				style={{
@@ -169,7 +173,11 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
 			{blockSVGs}
 		</div>
 
-		trackBlockSVGs.push(newBlockSVGs);
+		if (lineName === "greenLine") {
+			greenBlockSVGs.push(newBlockSVGs);
+		} else {
+			redBlockSVGs.push(newBlockSVGs);
+		}
 	}
 
 	for (const [key, value] of Object.entries(trackLayout)) {
@@ -184,6 +192,26 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
 
 	return (
 		<div style={styles.track}>
+			<DropdownButton 
+				className="filterLineButton"
+				id="dropdown-basic-button" 
+				title={`Line: ${lineFilter}`} 
+				onSelect={e => {
+					setLineFilter(e);
+					let filteredSVGs = [];
+					if (e === "green" || e === "both") {
+						greenBlockSVGs.forEach(svg => filteredSVGs.push(svg));
+					}
+					if (e === "red" || e === "both") {
+						redBlockSVGs.forEach(svg => filteredSVGs.push(svg));
+					}
+					setFilteredLineSVGs(filteredSVGs);
+				}}
+			>
+				<Dropdown.Item eventKey="red">Red</Dropdown.Item>
+				<Dropdown.Item eventKey="green">Green</Dropdown.Item>
+				<Dropdown.Item eventKey="both">Both</Dropdown.Item>
+			</DropdownButton>
 			<TransformWrapper 
 				limitToBounds={false} 
 				minScale={.01} 
@@ -193,23 +221,23 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
 				panning = {{velocityDisabled: true}} 
 			>
 				<TransformComponent>
-				<div style={{width: `${maxLength}px`, height: `${maxLength}px`}}>
-					<div>
-						{trackBlockSVGs}
+					<div style={{width: `${maxLength}px`, height: `${maxLength}px`}}>
+						<div>
+							{filteredLineSVGs}
+						</div>
+						<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+							<defs>
+								<pattern id="smallGrid" width={`${gridSize / 10}`} height={`${gridSize / 10}`} patternUnits="userSpaceOnUse">
+									<path d={`M ${gridSize / 10} 0 L 0 0 0 ${gridSize / 10}`} fill="none" stroke="gray" strokeWidth="0.25"/>
+								</pattern>
+								<pattern id="grid" width={`${gridSize}`} height={`${gridSize}`} patternUnits="userSpaceOnUse">
+									<rect width={`${gridSize}`} height={`${gridSize}`} fill="url(#smallGrid)"/>
+									<path d={`M ${gridSize} 0 L 0 0 0 ${gridSize}`} fill="none" stroke="gray" strokeWidth=".5"/>
+								</pattern>
+							</defs>
+							<rect width="100%" height="100%" fill="url(#grid)" />
+						</svg>
 					</div>
-					<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-						<defs>
-							<pattern id="smallGrid" width={`${gridSize / 10}`} height={`${gridSize / 10}`} patternUnits="userSpaceOnUse">
-								<path d={`M ${gridSize / 10} 0 L 0 0 0 ${gridSize / 10}`} fill="none" stroke="gray" strokeWidth="0.25"/>
-							</pattern>
-							<pattern id="grid" width={`${gridSize}`} height={`${gridSize}`} patternUnits="userSpaceOnUse">
-								<rect width={`${gridSize}`} height={`${gridSize}`} fill="url(#smallGrid)"/>
-								<path d={`M ${gridSize} 0 L 0 0 0 ${gridSize}`} fill="none" stroke="gray" strokeWidth=".5"/>
-							</pattern>
-						</defs>
-						<rect width="100%" height="100%" fill="url(#grid)" />
-					</svg>
-				</div>
 				</TransformComponent>
 			</TransformWrapper>
 		</div>
@@ -220,6 +248,7 @@ const styles = {
 	track: {
 		width: "100%",
 		height: "100%",
+		position: "relative",
 	}
 }
 
