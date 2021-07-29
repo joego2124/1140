@@ -82,14 +82,6 @@
 	height: 80%;
 }
 
-.controlPanelValueContainer {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	margin: 15px;
-}
-
 .controlPanelValueUnitLabel {
 	display: flex;
 	justify-content: space-between;
