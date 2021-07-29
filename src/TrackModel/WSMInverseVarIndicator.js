@@ -21,7 +21,7 @@ function WSMInverseIndicator({ selectedBlock, path }) {
 	  }, [selectedBlock, path]);
 	
 	return (
-		<BsCircleFill size="1.0em" color={vari == 1 ? "#C44242" : 'green'}/>
+		<BsCircleFill size="0.8em" color={vari == 1 ? "#C44242" : 'green'}/>
 	)
 }
 
