@@ -3,12 +3,15 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Blocks from '../CTC/assets/Blocks';
 import '../CTC/styles.css';
+import { BsFillSquareFill } from "react-icons/bs";
+import { DatabaseGetMulti } from '../components/DatabaseMulti';
+import { DatabaseSetMulti } from '../components/DatabaseMulti';
 
 var trackLayout = require("../CTC/TrackLayout.json");
 
-const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <div>
+const trackBlockCircle = (blockType, centerElement, fill, stroke, clickHandler) => <div>
 	<div 
-		onClick={() => console.log(`clicked svg:`)}
+		onClick={clickHandler}
 		style={{ 
 			position: "absolute", 
 			zIndex: 1002, 
@@ -17,7 +20,6 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <d
 			transform: "translate(-50%, -50%)",
 			fontWeight: 550,
 			color: stroke
-			// backgroundColor: "red" 
 	}}>{centerElement}</div>
 	<svg 
 		width={75}
@@ -33,7 +35,7 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, blockId) => <d
 			transform: "translate(-50%, -50%)",
 			zIndex: 1001,
 		}} 
-		onClick={() => console.log(`clicked svg:`)}
+		onClick={clickHandler}
 	>
 		{Blocks["circle"]}
 	</svg>
@@ -43,11 +45,11 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({selectedTrain, trainsList}) => {
+const TrackView = ({setSelectedBlock, trainsList, blockList}) => {
 
 	document.body.style.overflow='hidden';
 
-	const [selectedBlock, setSelectedBlock] = useState(0);
+	// const [selectedBlock, setSelectedBlock] = useState(0);
 
 	let trackBlockSVGs = [];
 	let visitedBlockIds = [];
@@ -103,21 +105,24 @@ const TrackView = ({selectedTrain, trainsList}) => {
 			let size = blockType === "straight" ? 100 : 55;
 			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${blockSVGs.length > 0 ? .25 : 1})`;
 
-			console.log(trainsList);
+			// Darken color of SVG if track is occupied
+			// TODO: remove color of SVG if track is not occupied
 			Object.entries(trainsList).forEach(trainArr => {
-				let targBlockId = Math.abs(trainArr[1].CurrentBlock);
-				targBlockId = Math.floor( targBlockId );
-				let compBlockId = Math.abs(currBlock.blockId);
-				compBlockId = Math.floor( compBlockId );
+				let targBlockId = Math.floor(trainArr[1].CurrentBlock);
+				let compBlockId = Math.floor(currBlock.blockId);
 				if (targBlockId == compBlockId) {
-					console.log(trainArr[0], trainArr[1]);
 					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
 				}
 			});
+
+			const clickHandler = () => {
+				console.log(`svg clicked: ${currBlock.blockId}`);
+				setSelectedBlock( `${currBlock.blockId}` );
+			}
 			
 			//create new svg and push to trackBlockSVGs
 			let newSVG = <div 
-				key={currBlock.blockId}
+				key={blockSVGs.length}
 				style={{
 					position: "absolute", 
 					left: currPos.x + dx + 10,
@@ -142,7 +147,7 @@ const TrackView = ({selectedTrain, trainsList}) => {
 						transform: "translate(-50%, -50%)",
 						zIndex: 1000,
 					}} 
-					onClick={() => console.log(`clicked svg: ${currBlock.blockId}`)}
+					onClick={clickHandler}
 				>
 					{Blocks[blockTypeName]}
 				</svg>	
@@ -150,13 +155,45 @@ const TrackView = ({selectedTrain, trainsList}) => {
 					placement="top"
 					overlay={<Tooltip>{currBlock.station}</Tooltip>}
 				>
-					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", color) : <></>}
+					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", color, clickHandler) : <></>}
 				</OverlayTrigger>
 			</div>
 			blockSVGs.push(newSVG);
 		});
 
-		let newBlockSVGs = <div>
+		let beacons = [];
+		if (currBlock.station != undefined) {
+			currBlock.connectors[0].forEach((id, i) => {
+				if (id === null) return;
+				let dx = 0, dy = 0;
+				let dist = 41;
+				switch(i) {
+					case 0: dx = -dist; break;
+					case 1: dy = -dist; break;
+					case 2: dx = dist; break;
+					case 3: dy = dist; break;
+				}
+				beacons.push(
+					// <OverlayTrigger
+					// 	placement="top"
+					// 	overlay={<Tooltip>{"BEACON"}</Tooltip>}
+					// >
+						<BsFillSquareFill size="50px" style={{
+							position: "absolute", 
+							left: currPos.x + dx + 50,
+							top: currPos.y + dy + 50, 
+							height: "20px",
+							width: "20px",
+							color: `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`,
+							overflow: "visible",
+							zIndex: 3000,
+						}}/>
+					// </OverlayTrigger>
+				);
+			});
+		}
+
+		let newBlockSVGs = <div key={lineName + currBlock.blockId}>
 			<div
 				style={{
 					position: "absolute",
@@ -168,6 +205,7 @@ const TrackView = ({selectedTrain, trainsList}) => {
 				}}
 			>{`${currBlock.section}${currBlock.blockId}`}</div>
 			{blockSVGs}
+			{beacons}
 		</div>
 
 		trackBlockSVGs.push(newBlockSVGs);

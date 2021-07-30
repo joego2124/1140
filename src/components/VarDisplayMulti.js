@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Firebase from "firebase";
 
-function VarDisplay({ message, path/*, callback*/}) {
+function VarDisplay({ message, path }) {
 	
 	const [vari, setVari] = useState('default');
 
@@ -17,13 +17,11 @@ function VarDisplay({ message, path/*, callback*/}) {
         });
     }
     }, 500);
-  }, [parentName]);
-
-	// useEffect(() => {if(callback != undefined) callback(vari);}, [vari]);
+  }, [path]);
 
 	return (
 		<div className="componentDiv">
-			<h3 className="componentLabel">{message}: </h3>
+			{message}:
 			<div className="componentText">{vari}</div>
 		</div>
 	)

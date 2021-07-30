@@ -1,0 +1,16 @@
+WSC1
+
+blocks: 0,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73
+
+switch: 62
+
+branch-1: 61,62,63,64
+branch-2: 3,46
+
+
+IF: occupancy{blocks-61,62,63,64} SET authority{yard} TO 0
+IF: occupancy{blocks-73} SET authority{blocks-70,71,72} TO 0
+IF: occupancy{blocks-61} SET switch TO 1
+IF: authority{yard} SET switch TO 0
+
+
