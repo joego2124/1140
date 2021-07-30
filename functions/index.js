@@ -19,9 +19,6 @@ exports.onSignalFailure = trainControllerDriver.onSignalFailure;
 exports.onIntTempChange = trainControllerDriver.onIntTempChange;
 exports.onDoorOpen = trainControllerDriver.onDoorOpen;
 exports.onSetpointSpeed = trainControllerDriver.onSetpointSpeed;
-exports.onSpeedLimitChange = trainControllerDriver.onSpeedLimitChange;
-exports.onAuthorityChange = trainControllerDriver.onAuthorityChange;
-exports.onAuthorityChange = trainControllerDriver.onSetpointSpeedChange;
 
 
 // exports.trainConsoleTest = trainModel.trainConsoleTest;
