@@ -8,6 +8,7 @@ import "./styles.css"
 const MainPanel = ({
 	setModalShow,
 	selectedTrain,
+	selectedBlock
 }) => {
 
 	const [open, setOpen] = useState(true);
@@ -112,9 +113,10 @@ const MainPanel = ({
 								valueType="input"
 								valueLabel="Switch State"
 								valueData={{
-									value: "Option 1",
+									value: selectedBlock.SwitchState == 1 ? "TRUE" : "FALSE",
 									dropdownList: [
-										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
+										<Dropdown.Item eventKey={0}>FALSE</Dropdown.Item>,
+										<Dropdown.Item eventKey={1}>TRUE</Dropdown.Item>,
 									],
 								}}
 							/>
