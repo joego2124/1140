@@ -38,24 +38,47 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, clickHandler) 
 	</svg>
 </div>
 
-const gridBlocks = 50;
+const gridBlocks = 500;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
+const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) => {
 
 	document.body.style.overflow='hidden';
 
 	const [lineFilter, setLineFilter] = useState("both");
 	const [filteredLineSVGs, setFilteredLineSVGs] = useState([]);
 
+	let updateSelectedBlock = (blockId, color) => {
+		let selectedBlock = blockLists[color].find(block => {
+			let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
+			return roundedBlockId === blockId;
+		});
+		console.log(selectedBlock);
+		setSelectedBlock(selectedBlock);
+	}
+
 	let greenBlockSVGs = [];
 	let redBlockSVGs = [];
 	let visitedBlockIds = [];
 	let lineName;
 
+	function updateFilter(e) {
+		setLineFilter(e);
+		let filteredSVGs = [];
+		if (e === "green" || e === "both") {
+			greenBlockSVGs.forEach(svg => filteredSVGs.push(svg));
+		}
+		if (e === "red" || e === "both") {
+			redBlockSVGs.forEach(svg => filteredSVGs.push(svg));
+		}
+		setFilteredLineSVGs(filteredSVGs);
+	}
+
+	useEffect(() => updateFilter("both"), []); //render track view initially
+
 	//recursive function to generate a list of tracks for rendering
-	const traceTrack = (currBlock, currPos, trackLayoutList) => {
+	const traceTrack = (currBlock, currPos, trackLayoutList, blockLists) => {
 		
 		let blockSVGs = [];
 		
@@ -103,19 +126,21 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
 			let blockType = (blockTypeName === "0101" || blockTypeName === "1010") ? "straight" : "curved";
 			let size = blockType === "straight" ? 100 : 55;
 			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${blockSVGs.length > 0 ? .25 : 1})`;
+			let lineColor = lineName === "greenLine" ? "green" : "red";
 
+			//show occupancy
 			Object.entries(trainsList).forEach(trainArr => {
 				let targBlockId = Math.floor(trainArr[1].CurrentBlock);
 				let compBlockId = Math.floor(currBlock.blockId);
 				if (targBlockId == compBlockId) {
-					// console.log(trainArr[0], trainArr[1]);
 					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
 				}
 			});
 
+			color = currBlock.section === "YARD" ? "grey" : color; //yard blocks are grey
+
 			const clickHandler = () => {
-				console.log(`svg clicked: ${currBlock.blockId}`);
-				setSelectedBlock(currBlock);
+				updateSelectedBlock(currBlock.blockId, lineColor);
 			}
 			
 			//create new svg and push to track block SVGs
@@ -196,17 +221,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
 				className="filterLineButton"
 				id="dropdown-basic-button" 
 				title={`Line: ${lineFilter}`} 
-				onSelect={e => {
-					setLineFilter(e);
-					let filteredSVGs = [];
-					if (e === "green" || e === "both") {
-						greenBlockSVGs.forEach(svg => filteredSVGs.push(svg));
-					}
-					if (e === "red" || e === "both") {
-						redBlockSVGs.forEach(svg => filteredSVGs.push(svg));
-					}
-					setFilteredLineSVGs(filteredSVGs);
-				}}
+				onSelect={e => updateFilter(e)}
 			>
 				<Dropdown.Item eventKey="red">Red</Dropdown.Item>
 				<Dropdown.Item eventKey="green">Green</Dropdown.Item>
@@ -215,8 +230,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock}) => {
 			<TransformWrapper 
 				limitToBounds={false} 
 				minScale={.01} 
-				initialPositionX={-maxLength / 4.5}
-				initialPositionY={-maxLength / 2.7}
+				initialPositionX={-maxLength / 2.5}
+				initialPositionY={-maxLength / 2.35}
 				initialScale={0.85}
 				panning = {{velocityDisabled: true}} 
 			>
