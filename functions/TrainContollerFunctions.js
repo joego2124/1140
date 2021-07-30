@@ -69,3 +69,41 @@ exports.onDoorOpen = functions.database.ref('/TrainList/{trainId}/EDoorStatus').
         }
     });
 })
+
+exports.onSpeedLimitChange = functions.database.ref('/TrainList/{trainId}/SpeedLimit').onUpdate( (change, context) => {
+    const speedLimit = change.after.val();
+    const trainId = context.params.trainId;
+
+    const database = admin.database();
+
+    return database.ref(`/TrainList/${trainId}/BlockAuthority`).get().then( (snapshot) => {
+        const authority = snapshot.val();
+        database.ref(`/TrainList/${trainId}/ManualMode`).get().then( (snapshot) => {
+            if(snapshot.val() == false)
+                database.ref(`/TrainList/${trainId}/SetpointSpeed`).set( (authority == 0 ? 0 : speedLimit) );
+        })
+    });
+})
+
+exports.onAuthorityChange = functions.database.ref('/TrainList/{trainId}/BlockAuthority').onUpdate( (change, context) => {
+    const authority = change.after.val();
+    const trainId = context.params.trainId;
+
+    const database = admin.database();
+
+    return database.ref(`/TrainList/${trainId}/SpeedLimit`).get().then( (snapshot) => {
+        const speedLimit = snapshot.val();
+        database.ref(`/TrainList/${trainId}/ManualMode`).get().then( (snapshot) => {
+            if(snapshot.val() == false)
+                database.ref(`/TrainList/${trainId}/SetpointSpeed`).set( ( authority == 0 ? 0 : speedLimit) );
+        })
+    });
+})
+
+exports.onSetpointSpeedChange = functions.database.ref('/TrainList/{trainId}/SetpointSpeed').onUpdate((change, context) => {
+    const setpointSpeed = change.after.val();
+    const trainId = context.params.trainId;
+    const database = admin.database();
+
+    return database.ref(`/TrainList/${trainId}/Power`).set(setpointSpeed);
+});
