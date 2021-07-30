@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import { DatabaseGet } from '../Database';
 
-function VarDisplay({varName, message, parentName, units, selectedTrain}) {
+function VarDisplay({varName, message, parentName, units}) {
 	
 	const [vari, setVari] = useState('default');
 
@@ -13,7 +13,7 @@ function VarDisplay({varName, message, parentName, units, selectedTrain}) {
 	return (
 		<div className="componentDiv">
 			<p className="componentLabel">{message}: </p>
-			<div className="componentText">{selectedTrain != undefined ? selectedTrain[varName] : vari}</div> {units}
+			<div className="componentText">{vari}</div> {units}
 		</div>
 	)
 }
