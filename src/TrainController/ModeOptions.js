@@ -4,7 +4,7 @@ import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function ModeOptions(parentName, selectedTrain) {
+function ModeOptions({parentName, selectedTrain}) {
     return (
         <div>
             <h3>MODES</h3>

@@ -42,12 +42,16 @@ const CustomMenu = React.forwardRef(
 
 const AddTrainModal = (props) => {
 
-	const [departureTime, setDepartureTime] = useState("12:00:00");
+	const [departureTime, setDepartureTime] = useState("12:00");
 	const [trainId, setTrainId] = useState("TRN-ID");
 	const [lineColor, setLineColor] = useState("red");
 	const [stationSelections, setStationsSelections] = useState([0]);
 
-	let stationBlocks = trackLayout[lineColor + "Line"].filter(block => block.station != undefined);
+	let stationBlocks = [];
+	let lineLayout = trackLayout[lineColor + "Line"];
+	stationBlocks = lineLayout.filter(block => block.station != undefined);
+	stationBlocks.push(lineLayout.find(v => v.blockId === (lineColor === "red" ? -1 : -1.6)));
+	
 
 	useEffect(() => {
 		console.log(stationSelections);
@@ -76,7 +80,7 @@ const AddTrainModal = (props) => {
 
 					<Form.Group onChange={e => setTrainId(e.target.value)} className="mb-3" controlId="exampleForm.ControlInput1">
 						<Form.Label>Set TrainID</Form.Label>
-						<Form.Control placeholder="TRN-EXAMPLE" />
+						<Form.Control placeholder={trainId} />
 					</Form.Group>
 
 					<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -103,13 +107,13 @@ const AddTrainModal = (props) => {
 										forceUpdate();
 									}} style={styles.selectBlockHolder}>
 										<Dropdown.Toggle variant="dark" style={styles.selectBlockButton}>
-											{selectedBlock != undefined ? selectedBlock.station : "Select Station"}
+											{selectedBlock != undefined ? (selectedBlock.station || "YARD") : "Select Station"}
 										</Dropdown.Toggle>
 						
 										<Dropdown.Menu as={CustomMenu}>
 											{
 												stationBlocks.map((block, i) =>
-													<Dropdown.Item eventKey={block.blockId}>{block.station}</Dropdown.Item>
+													<Dropdown.Item eventKey={block.blockId}>{block.station || "YARD"}</Dropdown.Item>
 												)
 											}
 										</Dropdown.Menu>
@@ -136,7 +140,7 @@ const AddTrainModal = (props) => {
 					
 					<Form.Group onChange={e => setDepartureTime(e.target.value)} className="mb-3" controlId="exampleForm.ControlInput1">
 						<Form.Label>Set Departure Time</Form.Label>
-						<Form.Control type="time"/>
+						<Form.Control type="time" value="12:00"/>
 					</Form.Group>
 					
 				</Form>
@@ -149,6 +153,11 @@ const AddTrainModal = (props) => {
 					newTrain.TrainId = trainId;
 					newTrain.Stations = stationSelections;
 					newTrain.DepartureTime = departureTime;
+					newTrain.Line = lineColor;
+					newTrain.Route = props.routeTrain(stationSelections, lineColor);
+					newTrain.CurrentBlock = newTrain.Route[1];
+					newTrain.PreviousBlock = newTrain.Route[1];
+					newTrain.RouteIndex = 1;
 					Firebase.database().ref(`/TrainList/${trainId}`).set(newTrain);
 					console.log(newTrain);
 					props.onHide();
@@ -197,17 +206,19 @@ const styles = {
 const trainTemplate = {
 	TrainId: "",
 	CurrentBlock: 1,
+	PreviousBlock : 0,
 	RouteIndex: 0,
 	Route: [],
 	Stations: [],
 	DepartureTime: "12:00",
+	Line: "green",
 
 	Acceleration: 0,
 	AccelerationLimit: 5,
-	Authority: true,
 	BlockAuthority : 0,
+	BlockLength : 50,
 	BrakeFailure: false,
-	CarCount: 1,
+	CommandedPower : 0,
 	DecelerationLimit: -5,
 	DoorStatus: false,
 	EBrakeStatus: false,
@@ -215,15 +226,18 @@ const trainTemplate = {
 	EngineFailure: false,
 	ExternalLightState: false,
 	ExternalTemperature: 0,
+	Grade : 0,
 	Height: 12,
 	InternalLightState: false,
 	InternalTemperature: 0,
 	LeftDoorStatus: false,
 	Length: 300,
-	Line: "green",
+	LightState : false,
+  Line : "GreenLine",
 	ManualMode: false,
 	Mass: 277817,
 	Passengers: 0,
+	Position : 12.761693798548809,
 	Power: 0,
 	RightDoorStatus: false,
 	SBrakeStatus: false,
@@ -232,6 +246,13 @@ const trainTemplate = {
 	SpeedLimit: 45,
 	Velocity: 0,
 	Width: 10,
+
+	Kp: 35,
+	Ki: 1,
+	uk: 0,
+	ukm1: 0,
+	ek: 0,
+	ekm1: 0,
 }
 
 export default AddTrainModal

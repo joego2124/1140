@@ -5,5 +5,7 @@ export default {
     "1001": <path fill-rule="evenodd" clip-rule="evenodd" d="M15 -6.55671e-07L0 0L1.75434e-07 4.01347L4.37114e-07 10L15 10L20 10L25 10C36.0457 10 45 18.9543 45 30L45 34L45 40L45 55L50.9865 55L55 55L55 40L55 30C55 13.4315 41.5685 -1.81702e-06 25 -1.09278e-06L15 -6.55671e-07Z" fill="current"/>,
     "1010": <path d="M0 5H100" stroke="current" stroke-width="10" stroke-linejoin="round"/>,
     "1100": <path fill-rule="evenodd" clip-rule="evenodd" d="M55 15L55 0L50.9865 -3.50868e-07L45 -8.74228e-07L45 15L45 20L45 25C45 36.0457 36.0457 45 25 45L21 45L15 45L-3.93403e-06 45L-4.45738e-06 50.9865L-4.80825e-06 55L15 55L25 55C41.5685 55 55 41.5685 55 25L55 15Z" fill="current"/>,
-    "circle": <path d="M35 65C51.5685 65 65 51.5685 65 35C65 18.4315 51.5685 5 35 5C18.4315 5 5 18.4315 5 35C5 51.5685 18.43015 65 35 65Z" fill="current" stroke="current" stroke-width="6"/>
+    "circle": <path d="M35 65C51.5685 65 65 51.5685 65 35C65 18.4315 51.5685 5 35 5C18.4315 5 5 18.4315 5 35C5 51.5685 18.43015 65 35 65Z" fill="current" stroke="current" stroke-width="6"/>,
+    "yard": <path d="M 10 10 H 90 V 90 H 10 Z" fill="current" stroke="current"/>
+
 }
