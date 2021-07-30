@@ -4,7 +4,7 @@ import {DatabaseGet, DatabaseSet} from '../Database';
 import { BsCircleFill } from "react-icons/bs";
 import "./componentStyles.css";
 
-function ButtonIndicator({ varName, message, parentName }) {
+function ButtonIndicator({ varName, message, parentName, selectedTrain }) {
   const [vari, setVari] = useState(false);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function ButtonIndicator({ varName, message, parentName }) {
 					onClick={()=>{DatabaseSet(vari == true ? false : true, varName, parentName)}}>
 				<h3 className="componentButtonText">{message}</h3>
 			</Button>
-			<BsCircleFill className="indicator" size="1.5em" color={vari ? 'green' : "#C44242"}/>
+			<BsCircleFill className="indicator" size="1.5em" color={selectedTrain[varName] ? 'green' : "#C44242"}/>
 		</div>
 	)
 }
