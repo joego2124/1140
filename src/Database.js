@@ -6,10 +6,10 @@ var jsonTree;
 function InitializeJsonTree(){
 
 	if (!Firebase.apps.length) {
-        if (window.location.hostname === "localhost") {
-            console.warn("USING EMULATOR DATABASE");
-            Firebase.database().useEmulator('localhost', 9000);
-        }
+        // if (window.location.hostname === "localhost") {
+        //     console.warn("USING EMULATOR DATABASE");
+        //     Firebase.database().useEmulator('localhost', 9000);
+        // }
 		Firebase.initializeApp(config);
 	}else {
 		Firebase.app(); // if already initialized, use that one
