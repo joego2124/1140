@@ -31,7 +31,7 @@ const ValueIO = ({
 					</Dropdown>
 				) : (
 					<div className="controlPanelValueUnitLabel">
-						<div>{valueData.value}</div>
+						<div>{valueData.value != undefined ? valueData.value : "N/A"}</div>
 						{valueData.units === undefined ? (<></>) : (<div>{valueData.units}</div>)}
 					</div>
 				)

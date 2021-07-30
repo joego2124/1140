@@ -10,44 +10,98 @@ import { DatabaseGet, DatabaseSet } from '../Database';
 import PLCFileUpload from './PLCFileUpload';
 import VarDisplay from '../components/VarDisplay';
 
-const BottomPanel = ({ selectedWayside }) => {
+const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
+  console.log(selectedBlockFromTrack);
   const [open, setOpen] = useState(true);
-  const [plcUploaded, setPlcUploaded] = useState(false);
-  const [selectedBlock, setSelectedBlock] = useState([]);
-  const [selectedBlockOccupancy, setSelectedBlockOccupancy] = useState();
+  const [plcUploaded, setPlcUploaded] = useState(0);
+  const [selectedBlock, setSelectedBlock] = useState(selectedBlockFromTrack);
+
+  useEffect(() => handleBlocks('trackSelectedBlock'), [selectedBlockFromTrack]);
 
   function handleBlocks(event) {
-    if (event != undefined) {
+    if (event == 'trackSelectedBlock') {
+      setSelectedBlock(selectedBlockFromTrack);
+    } else if (event != undefined) {
       setSelectedBlock(
-        selectedWayside.find((v) => v.BlockNumber == event.target.value)
+        selectedWayside?.find((v) => v.BlockNumber == event.target.value)
       );
     } else {
       setSelectedBlock(selectedWayside[0]);
     }
   }
 
-  function setSwitchStateData() {
-    let newState = selectedBlock?.SwitchState == 0 ? 1 : 0;
-    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
-    Firebase.database().ref(link).set(newState);
-    selectedBlock.SwitchState = newState;
-  }
-
-  function getOccupancyData() {
-    let link = 'GreenLine/' + selectedBlock.BlockNumber;
+  function getUploadStatusWS0Data() {
+    let link = 'WSC/WSC0/UploadStatus';
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
-      let newState = snapshot.val().Occupancy;
-      selectedBlock.Occupancy = newState;
+      let newState = snapshot.val();
+      setPlcUploaded(newState);
     });
   }
 
-  useEffect(() => getOccupancyData(), []);
+  useEffect(() => getUploadStatusWS0Data(), [selectedWayside]);
+
+  function getUploadStatusWS1Data() {
+    let link = 'WSC/WSC1/UploadStatus';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      let newState = snapshot.val();
+      setPlcUploaded(newState);
+    });
+  }
+
+  useEffect(() => getUploadStatusWS1Data(), [selectedWayside]);
+
+  function setUploadStatusData() {
+    let newState = plcUploaded;
+    let link = 'WSC/WSC1/UploadStatus';
+    Firebase.database().ref(link).set(newState);
+  }
+
+  useEffect(() => setUploadStatusData(), [plcUploaded]);
+
+  function setSwitchStateData() {
+    if (selectedBlock.isSwitchBlock == 1) {
+      let newState = selectedBlock?.SwitchState == 0 ? 1 : 0;
+      let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+      Firebase.database().ref(link).set(newState);
+    }
+  }
+
+  function getSwitchStateData() {
+    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      selectedBlock.SwitchState = snapshot.val();
+    });
+  }
+
+  useEffect(() => getSwitchStateData(), [selectedBlock.SwitchState]);
+
+  function getOccupancyData() {
+    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/Occupancy';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      selectedBlock.Occupancy = snapshot.val();
+    });
+  }
+
+  useEffect(() => getOccupancyData(), [selectedBlock.Occupancy]);
+
+  function getAuthorityData() {
+    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/Authority';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      selectedBlock.Authority = snapshot.val();
+    });
+  }
+
+  useEffect(() => getAuthorityData(), [selectedBlock.Authority]);
 
   useEffect(() => handleBlocks(), [selectedWayside]);
 
   function WaysideBlocks() {
-    const listItems = selectedWayside.map((block) => (
+    const listItems = selectedWayside?.map((block) => (
       <option value={block.BlockNumber}>
         {block.BlockNumber == -1 ? 'Yard' : 'Block ' + block.BlockNumber}
       </option>
@@ -66,6 +120,10 @@ const BottomPanel = ({ selectedWayside }) => {
             <div className='dataName'>
               Status:
               <div className='dataValue'>{selectedBlock?.BlockStatus}</div>
+            </div>
+            <div className='dataName'>
+              Authority:
+              <div className='dataValue'>{selectedBlock?.Authority}</div>
             </div>
             <div className='dataName'>
               Occupancy:
@@ -99,11 +157,15 @@ const BottomPanel = ({ selectedWayside }) => {
             </div>
             <div className='dataName'>
               Speed Limit:
-              <div className='dataValue'>{selectedBlock?.SpeedLimit} mph</div>
+              <div className='dataValue'>
+                {selectedBlock?.SpeedLimit * 0.621371} mph
+              </div>
             </div>
             <div className='dataName'>
               Length:
-              <div className='dataValue'>{selectedBlock?.BlockLength} feet</div>
+              <div className='dataValue'>
+                {selectedBlock?.BlockLength * 3.28084} feet
+              </div>
             </div>
           </div>
         </div>
