@@ -12,13 +12,11 @@ function makeTrainSim(newTrainId) {
     train.position = 0;
     train.sbrake = false;
     train.ebrake = false;
-
     train.line = 'GreenLine';
     train.blocknumber = 0;
     train.previousblocknumber = 0;
     train.blocklength = 0;
     train.grade = 0;
-
     train.switchstate = 0;
 
     Firebase.database().ref(`/TrainList/${newTrainId}/Power`).on('value', snapshot => { train.power = snapshot.val(); });

@@ -232,6 +232,13 @@ const trainTemplate = {
 	SpeedLimit: 45,
 	Velocity: 0,
 	Width: 10,
+
+	Kp: 35,
+	Ki: 1,
+	uk: 0,
+	ukm1: 0,
+	ek: 0,
+	ekm1: 0,
 }
 
 export default AddTrainModal
