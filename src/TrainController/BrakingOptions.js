@@ -4,7 +4,7 @@ import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function BrakingOptions(parentName, selectedTrain) {
+function BrakingOptions({parentName, selectedTrain}) {
     return (
         <div>
             <h3>BRAKING</h3>

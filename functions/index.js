@@ -2,17 +2,23 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 //import from individual files
+<<<<<<< HEAD
+const wayside = require('./WaysideFunctions');
 const trainModel = require('./TrainModelFunctions');
+=======
+const wayside = require('./TrainModelFunctions');
+const trainModel = require('./WaysideFunctions');
+>>>>>>> main
 const trainControllerDriver = require('./TrainContollerFunctions');
 
 var trackLayout = require("./TrackLayout.json");
 
 //imports from train model
 exports.onEDoorUpdate = trainModel.onEDoorUpdate;
-// exports.physicsTick = trainModel.physicsTick;
 exports.changeTrainLength = trainModel.changeTrainLength;
 exports.changePassengers = trainModel.changePassengers;
-// exports.trainConsoleTest = trainModel.trainConsoleTest;
+exports.trainAdded = trainModel.trainAdded;
+exports.trainRemoved = trainModel.trainRemoved;
 
 exports.waysideTick = wayside.runLogic;
 exports.onBrakeFailure = trainControllerDriver.onBrakeFailure;
@@ -22,9 +28,7 @@ exports.onIntTempChange = trainControllerDriver.onIntTempChange;
 exports.onDoorOpen = trainControllerDriver.onDoorOpen;
 exports.onSetpointSpeed = trainControllerDriver.onSetpointSpeed;
 
-exports.trainAdded = trainModel.trainAdded;
-exports.trainRemoved = trainModel.trainRemoved;
-// exports.trainConsoleTest = trainModel.trainConsoleTest;
+
 exports.onCTCTrainCurrentBlockChange = functions.database.ref('/TrainList/{trainId}/CurrentBlock').onUpdate((change, context) => {
   const database = admin.database();
 
@@ -46,13 +50,13 @@ exports.onCTCTrainCurrentBlockChange = functions.database.ref('/TrainList/{train
       
       //iterate through all trains and get authorized blocks for that train
       for (const [trainId, train] of Object.entries(trainListObj)) {
-        for (let i = train.RouteIndex; i < train.RouteIndex + 2; i++) {
+        for (let i = train.RouteIndex; i < train.RouteIndex + 3; i++) {
           if (i < train.Route.length) {
             authorizedBlocks.push(train.Route[i]); //add authorized block's blockId to array
           }
         }
       }
-      console.log(authorizedBlocks);
+      
       //convert authorized blocks to lineLayout format
       let lineLayout = trackLayout[train.Line + "Line"].map(block => {
         return {
@@ -61,6 +65,7 @@ exports.onCTCTrainCurrentBlockChange = functions.database.ref('/TrainList/{train
         }
       });
   
+      console.log(lineLayout);
       database.ref(`/CTC/SuggestedAuthority`).set(lineLayout);
     });
   });
