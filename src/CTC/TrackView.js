@@ -92,7 +92,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 
 	let updateSelectedBlock = (blockId, color) => {
 		let blockDatabaseIndex;
-		console.log(color);
+		console.log(color, blockLists);
 		let selectedBlock = blockLists[color].find((block, index) => {
 			if (index != "databasePath") {
 				let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);

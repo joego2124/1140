@@ -2,6 +2,8 @@ import Firebase from "firebase";
 import { useState } from 'react'
 var trackLayout = require("../CTC/TrackLayout.json");
 
+const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
 function makeTrainSim(newTrainId) {
     var train = {};
     train.trainId = newTrainId;
@@ -12,16 +14,14 @@ function makeTrainSim(newTrainId) {
     train.position = 0;
     train.sbrake = false;
     train.ebrake = false;
-
     train.line = 'GreenLine';
     train.blocknumber = 0;
     train.previousblocknumber = 0;
     train.blocklength = 0;
     train.grade = 0;
-
     train.switchstate = 0;
 
-    Firebase.database().ref(`/TrainList/${newTrainId}/Power`).on('value', snapshot => { train.power = snapshot.val(); });
+    Firebase.database().ref(`/TrainList/${newTrainId}/Power`).on('value', snapshot => { train.power = clamp(snapshot.val(), -120, 120); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Acceleration`).on('value', snapshot => { train.acceleration = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Velocity`).on('value', snapshot => { train.velocity = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Mass`).on('value', snapshot => { train.mass = snapshot.val(); });
@@ -39,7 +39,7 @@ function makeTrainSim(newTrainId) {
     //     console.log('simulating', this.trainId);
     // } );
     train.simulateTrain = function () {
-            // console.log('simulating', this.trainId, Math.abs(this.velocity));
+            console.log('simulating', this.trainId, this.power);
 
             if(this.ebrake == true) {
                 //e brakes
@@ -64,6 +64,8 @@ function makeTrainSim(newTrainId) {
                     }
                 } else {
                     //no brakes
+                    console.log( 
+                        ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : 1) )) - (32.2 * Math.sin(this.grade)) );
                     Firebase.database().ref(`/TrainList/${this.trainId}/Acceleration`).set( 
                         ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : 1) )) - (32.2 * Math.sin(this.grade)) );
                 }
@@ -78,7 +80,7 @@ function makeTrainSim(newTrainId) {
 
             //enter new block
             if(this.position > this.blocklength) {
-                this.position = this.position - this.blocklength;
+                this.position = this.position % this.blocklength;
                 // console.log('test');
                 //get new block id
 
@@ -88,7 +90,7 @@ function makeTrainSim(newTrainId) {
                 // console.log(this.blocknumber);
                 Firebase.database().ref(`/${this.line}/${this.blocknumber}/SwitchState`).once('value', snapshot => {
                     this.switchstate = snapshot.val();
-                    console.log(this.blocknumber,'state', snapshot.val(), this.switchstate, 'db');
+                    // console.log(this.blocknumber,'state', snapshot.val(), this.switchstate, 'db');
                 });
 
                 const temp = this.blocknumber;
@@ -105,7 +107,7 @@ function makeTrainSim(newTrainId) {
                         return;
                     }
                     connectors = block.connectors[(this.switchstate < block.connectors.length -1 ? this.switchstate : 0)];
-                    console.log(connectors, block.connectors, this.switchstate);
+                    // console.log(connectors, block.connectors, this.switchstate);
                 } else {
                     connectors = [58,62];
                 }
@@ -120,7 +122,7 @@ function makeTrainSim(newTrainId) {
                 Firebase.database().ref(`/TrainList/${this.trainId}/CurrentBlock`).set(newblock);
                 Firebase.database().ref(`/TrainList/${this.trainId}/PreviousBlock`).set(temp);
 
-                Firebase.database().ref(`/${this.line}/${newblock}/Occupancy`).set(1);
+                Firebase.database().ref(`/${this.line}/${newblock < 0 ? Math.ceil(newblock) : Math.floor(newblock)}/Occupancy`).set(1);
                 Firebase.database().ref(`/${this.line}/${temp}/Occupancy`).set(0);
 
                 //set new block values
@@ -132,6 +134,9 @@ function makeTrainSim(newTrainId) {
                 });
                 Firebase.database().ref(`/${this.line}/${newblock}/Authority`).once('value', snapshot => {
                     Firebase.database().ref(`/TrainList/${this.trainId}/BlockAuthority`).set(snapshot.val());
+                });
+                Firebase.database().ref(`/${this.line}/${newblock}/SpeedLimit`).once('value', snapshot => {
+                    Firebase.database().ref(`/TrainList/${this.trainId}/SpeedLimit`).set(snapshot.val());
                 });
             }
     }

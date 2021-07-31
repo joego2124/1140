@@ -50,17 +50,17 @@ function PhysicsStatus(parentName) {
 			{/* <Button onClick={physicsTick}>Advance 1 min</Button> */}
 			<div className="trainModelRow">
 				<div className="trainModelColumn">
-					<VarDisplay parentName={parentName} varName='Velocity' message='Velocity [mi/h]'/>
-					<VarDisplay parentName={parentName} varName='Acceleration' message='Acceleration [mi/h^2]'/>
-					<VarDisplay parentName={parentName} varName='Mass' message='Mass [ton]'/>
-					<VarDisplay parentName={parentName} varName='AccelerationLimit' message='Accerleration Limit [mi/h^2]'/>
+					<VarDisplay parentName={parentName} varName='Velocity' message='Velocity [ft/s]'/>
+					<VarDisplay parentName={parentName} varName='Acceleration' message='Acceleration [ft/s^2]'/>
+					<VarDisplay parentName={parentName} varName='Mass' message='Mass [lb]'/>
+					{/* <VarDisplay parentName={parentName} varName='AccelerationLimit' message='Accerleration Limit [mi/h^2]'/> */}
 				</div>
 				<div className="trainModelColumn">
 					<VarDisplay parentName={parentName} varName='Length' message='Length [ft]'/> 
 					{/* calculate using car lengths? */}
 					<VarDisplay parentName={parentName} varName='Width' message='Width [ft]'/>
 					<VarDisplay parentName={parentName} varName='Height' message='Height [ft]'/>
-					<VarDisplay parentName={parentName} varName='DecelerationLimit' message='Deceleration Limit [mi/h^2]'/>
+					{/* <VarDisplay parentName={parentName} varName='DecelerationLimit' message='Deceleration Limit [mi/h^2]'/> */}
 				</div>
 			</div>
 		</div>
