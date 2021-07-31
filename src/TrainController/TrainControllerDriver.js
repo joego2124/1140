@@ -27,15 +27,15 @@ function TrainContollerDriver() {
 			<header className="App-header">
 				<Container>
 					<Col>
-					<DoorOptions parentName={parentName}/>
-					<BrakingOptions parentName={parentName}/>
+					<DoorOptions selectedTrain={selectedTrain} parentName={parentName}/>
+					<BrakingOptions selectedTrain={selectedTrain} parentName={parentName}/>
 					</Col>
 					<Col>
-					<ModeOptions parentName={parentName}/>
-					<LightOptions parentName={parentName}/>
+					<ModeOptions selectedTrain={selectedTrain} parentName={parentName}/>
+					<LightOptions selectedTrain={selectedTrain} parentName={parentName}/>
 					</Col>
-					<TemperatureOptions parentName={parentName}/>
-					<FailureStatus parentName={parentName}/>
+					<TemperatureOptions selectedTrain={selectedTrain} parentName={parentName}/>
+					<FailureStatus selectedTrain={selectedTrain} parentName={parentName}/>
 					<TrainStatus selectedTrain={selectedTrain} parentName={parentName}/>
 				</Container>
 				<TrainsPanel 

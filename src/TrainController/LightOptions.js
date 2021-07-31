@@ -4,7 +4,7 @@ import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function LightOptions(parentName, selectedTrain) {
+function LightOptions({parentName, selectedTrain}) {
     return (
         <div>
             <h3>LIGHTS</h3>

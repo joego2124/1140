@@ -10,15 +10,12 @@ import { DatabaseList } from '../Database';
 function TrainModel() {
 
 	const [parentName, setParentName] = useState('TRN1');
-	const [trainList, setTrainList] = useState([]);
-
-	useEffect(() => {setTimeout(()=>{DatabaseList(setTrainList, 'TrainList'); }, 500);}, [] );
 
 	return (
 		<div>
 		<header className="App-header">
 			<div className="trainModelRowPadded">
-				<TrainsPanel setParentName={setParentName} trainList={trainList} className="trainModelList"/>
+				<TrainsPanel setParentName={setParentName} className="trainModelList"/>
 				<div className="trainModelColumn">
 					<TrackStatus parentName={parentName} className="trainModelItem"/>
 					<PhysicsStatus parentName={parentName} className="trainModelItem"/>

@@ -5,17 +5,9 @@ import makeTrainSim from './TrainSim';
 var simList;
 
 Firebase.database().ref('/TrainIds').on('value', snapshot => {
-    const state = snapshot.val();
-    console.log('read train ids')
     simList = [];
-    state.forEach(element => {
-        console.log(element);
-        // const newtrain = Object.assign({}, train);
-        // // newtrain.trainId = element;
-        // newtrain.setTrainId(element);
-        // simList.push(newtrain);
-
-        simList.push(makeTrainSim(element));
+    Object.entries(snapshot.val()).forEach(arr => { 
+        simList.push(makeTrainSim(arr[1]));
     });
 });
 
