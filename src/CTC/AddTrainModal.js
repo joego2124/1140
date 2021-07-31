@@ -148,7 +148,7 @@ const AddTrainModal = (props) => {
 					newTrain.TrainId = trainId;
 					newTrain.Stations = stationSelections;
 					newTrain.DepartureTime = departureTime;
-					newTrain.Line = lineColor;
+					newTrain.Line = `${lineColor.toUpperCase()}Line`;
 					newTrain.Route = props.routeTrain(stationSelections, lineColor);
 					newTrain.CurrentBlock = newTrain.Route[1];
 					newTrain.PreviousBlock = newTrain.Route[0];
