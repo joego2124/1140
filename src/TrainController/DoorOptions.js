@@ -4,7 +4,7 @@ import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function DoorOptions(parentName, selectedTrain) {
+function DoorOptions({parentName, selectedTrain}) {
     return (
         <div>
             <h3>DOORS</h3>

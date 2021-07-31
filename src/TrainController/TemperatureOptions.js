@@ -6,15 +6,15 @@ import TempInput from '../components/TempInput';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function TemperatureOptions(parentName) {
+function TemperatureOptions({parentName, selectedTrain}) {
     return (
         <div>
             <h3>TEMPERATURE</h3>
             <Container>
                 <Col>
-                    <VarDisplay parentName={parentName} varName='ExternalTemperature' message='Ext. Temp' units='°F'/>
-                    <VarDisplay parentName={parentName} varName='InternalTemperature' message='Int. Temp' units='°F'/>
-                    <TempInput parentName={parentName} varName='InternalTemperature' message='Int. Temp'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='ExternalTemperature' message='Ext. Temp' units='°F'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='InternalTemperature' message='Int. Temp' units='°F'/>
+                    <TempInput selectedTrain={selectedTrain} parentName={parentName} varName='InternalTemperature' message='Int. Temp'/>
                 </Col>
             </Container>
         </div>

@@ -4,6 +4,7 @@ import { Image, Navbar, Dropdown, Form, Button, Nav, ButtonGroup } from 'react-b
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import Firebase from "firebase";
 import physicsTick from './TrainModel/PhysicsSim';
+import updatePower from './TrainController/Power';
 import config from './config';
 
 function TopBar() {
@@ -28,6 +29,7 @@ function TopBar() {
 			});
 
 			physicsTick();
+			updatePower();
 
 			if(!paused) {
 				setTimer(setTimeout(() => clockTick(), 1000 * (1/speed)));
