@@ -68,9 +68,4 @@ function makeTrainSim(newTrainId) {
     return train;
 }
 
-<<<<<<< HEAD
 export default makeTrainSim;
-// export default {trainId, setTrainId, simulateTrain};
-=======
-export default makeTrainSim;
->>>>>>> main
