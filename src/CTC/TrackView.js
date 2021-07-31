@@ -3,6 +3,7 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Button, OverlayTrigger, Tooltip, Dropdown, DropdownButton } from 'react-bootstrap';
 import { BiTrain } from 'react-icons/bi';
 import { IoGitCompareSharp } from 'react-icons/io5';
+import { BsFillSquareFill } from "react-icons/bs";
 import Blocks from './assets/Blocks';
 import './styles.css';
 
