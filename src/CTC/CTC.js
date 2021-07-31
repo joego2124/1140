@@ -33,7 +33,7 @@ function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
 			let currentBlock = currBranches[k].current;
 			let prevBlock = currBranches[k].previous;
 
-			// console.log(`currentBlock: ${currentBlock.blockId}, prevBlock: ${prevBlock.blockId}`);
+			console.log(`currentBlock: ${currentBlock.blockId}, prevBlock: ${prevBlock.blockId}`);
 
 			//if the current leaf block is the destination
 			if (currentBlock.blockId == endBlockId) {

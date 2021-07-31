@@ -69,28 +69,6 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	const [filteredLineSVGs, setFilteredLineSVGs] = useState([]);
 	const [trainSVGs, setTrainSVGs] = useState([]);
 
-	useEffect(() => {
-		setTrainSVGs(Object.entries(trainsList).map(trainArr => {
-			let train = trainArr[1];
-			if (trainArr[0] != "databasePath") {
-				return trackBlockCircle(
-					<BiTrain style={{
-						position: "absolute",
-						top: "50%", 
-						left: "50%",
-						width: 35,
-						height: 35, 
-						transform: "translate(-50%, -50%)",
-					}}/>,
-					"white",
-					"rgb(101, 93, 110, 1)",
-					() => {},
-					trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"].find(block => block.blockId === train.CurrentBlock).position
-				);
-			}
-		}));
-	}, [trainsList]);
-
 	let updateSelectedBlock = (blockId, color) => {
 		let blockDatabaseIndex;
 		console.log(color, blockLists);
@@ -113,6 +91,28 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	let redBlockSVGs = [];
 	let visitedBlockIds = [];
 	let lineName;
+
+	useEffect(() => {
+		setTrainSVGs(Object.entries(trainsList).map(trainArr => {
+			let train = trainArr[1];
+			if (trainArr[0] != "databasePath") {
+				return trackBlockCircle(
+					<BiTrain style={{
+						position: "absolute",
+						top: "50%", 
+						left: "50%",
+						width: 35,
+						height: 35, 
+						transform: "translate(-50%, -50%)",
+					}}/>,
+					"white",
+					"rgb(101, 93, 110, 1)",
+					() => {},
+					trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"].find(block => block.blockId === train.CurrentBlock).position
+				);
+			}
+		}));
+	}, [trainsList]);
 
 	function updateFilter(e) {
 		setLineFilter(e);
@@ -244,21 +244,16 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					case 3: dy = dist; break;
 				}
 				beacons.push(
-					// <OverlayTrigger
-					// 	placement="top"
-					// 	overlay={<Tooltip>{"BEACON"}</Tooltip>}
-					// >
-						<BsFillSquareFill size="50px" style={{
-							position: "absolute", 
-							left: currPos.x + dx + 50,
-							top: currPos.y + dy + 50, 
-							height: "20px",
-							width: "20px",
-							color: `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`,
-							overflow: "visible",
-							zIndex: 3000,
-						}}/>
-					// </OverlayTrigger>
+					<BsFillSquareFill size="50px" style={{
+						position: "absolute", 
+						left: currPos.x + dx + 50,
+						top: currPos.y + dy + 50, 
+						height: "20px",
+						width: "20px",
+						color: `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`,
+						overflow: "visible",
+						zIndex: 1,
+					}}/>
 				);
 			});
 		}
@@ -294,6 +289,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 				}}
 			>{`${currBlock.section}${currBlock.blockId}`}</div>
 			{blockSVGs}
+			{beacons}
 		</div>
 
 		if (lineName === "greenLine") {
