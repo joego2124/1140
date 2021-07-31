@@ -1,8 +1,6 @@
 import React from 'react';
-import { Button, Container, Col, Row  } from 'react-bootstrap';
-import VarDisplay from '../components/VarDisplay';
+import { Container, Col } from 'react-bootstrap';
 import VarIndicator from '../components/VarIndicator';
-import ButtonIndicator from '../components/ButtonIndicator';
 
 function FailureStatus({parentName, selectedTrain}) {
     return (
