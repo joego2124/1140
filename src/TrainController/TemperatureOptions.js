@@ -6,7 +6,7 @@ import TempInput from '../components/TempInput';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
 
-function TemperatureOptions(parentName, selectedTrain) {
+function TemperatureOptions({parentName, selectedTrain}) {
     return (
         <div>
             <h3>TEMPERATURE</h3>

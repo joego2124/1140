@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import SlidingPane from "react-sliding-pane";
 import { Button } from 'react-bootstrap';
 import { AiOutlinePlus } from "react-icons/ai";
@@ -7,7 +7,11 @@ import { BsCircleFill } from "react-icons/bs";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import "../styles.css";
 
-const TrainsPanel = () => {
+const TrainsPanel = ({
+	trainsList,
+	setSelectedTrain,
+	setAddTrainModal
+}) => {
 
 	const [open, setOpen] = useState(true);
 
@@ -21,25 +25,28 @@ const TrainsPanel = () => {
 				onRequestClose={() => setOpen(false)}
 			>
 				<div className="trainPanelHolder">
-					<Button variant="light" className="trainButton">
-						<div className="buttonDiv">
-							<BsCircleFill size="1.5em" color="#C44242"/>
-							<div className="buttonText">RD-01</div>
-						</div>
-					</Button>
-					<Button variant="light" className="trainButton">
-						<div className="buttonDiv">
-							<BsCircleFill size="1.5em" color="#C44242"/>
-							<div className="buttonText">RD-01</div>
-						</div>
-					</Button>
-					<Button variant="light" className="trainButton">
-						<div className="buttonDiv">
-							<BsCircleFill size="1.5em" color="#C44242"/>
-							<div className="buttonText">RD-01</div>
-						</div>
-					</Button>
-					<Button variant="light" className="addTrainButton">
+					{
+						Object.entries(trainsList).map(arr => {
+							let trainName = arr[0], trainObj = arr[1];
+							if (trainName != "databasePath") {
+								return	<Button variant="light" className="trainButton" key={trainName} onClick={() => {
+									trainObj.databasePath = `/TrainList/${trainName}`;
+									trainObj.TrainId = trainName;
+									setSelectedTrain(trainObj);
+								}}>
+									<div className="buttonDiv">
+										<BsCircleFill size="1.5em" color={trainObj.Line == "RedLine" ? "#C44242" : "rgba(49,135,133, 1)"}/>
+										<div className="buttonText" >{`${trainName}`}</div>
+									</div>
+								</Button>
+							}
+						})
+					}
+					<Button 
+						variant="light" 
+						className="addTrainButton"
+						onClick={() => setAddTrainModal(true)}
+					>
 						<AiOutlinePlus size="2em" color="grey"/>
 					</Button>
 				</div>

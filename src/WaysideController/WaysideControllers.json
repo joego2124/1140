@@ -1,0 +1,6 @@
+{
+	"GreenLine": {
+		"WSC1": {"blocks": [56,57,0,58,59,60], "PLCstatus": false},
+		"WSC2": {"blocks": [61,62,0,63,64,65,66,67,68,69,70,71,72,73], "PLCstatus": false}
+	}
+}

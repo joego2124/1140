@@ -4,6 +4,8 @@ import TrainsPanel from './TrainsPanel';
 import TrackStatus from './TrackStatus';
 import TrainStatus from './TrainStatus';
 import PhysicsStatus from './PhysicsStatus';
+import "./trainModelStyles.css";
+import { DatabaseList } from '../Database';
 
 function TrainModel() {
 
@@ -12,20 +14,14 @@ function TrainModel() {
 	return (
 		<div>
 		<header className="App-header">
-			<TrainsPanel setParentName={setParentName}/>
-			<Container style={{height:"100%"}}>
-				<Col style={{width: '60vh'}}>
-					<Row>
-						<TrackStatus parentName={parentName}/>
-					</Row>
-					<Row>
-						<PhysicsStatus parentName={parentName}/>
-					</Row>
-				</Col>
-				<Col style={{height:"100vh",width: '90vh'}}>
-					<TrainStatus parentName={parentName}/>
-				</Col>
-			</Container>
+			<div className="trainModelRowPadded">
+				<TrainsPanel setParentName={setParentName} className="trainModelList"/>
+				<div className="trainModelColumn">
+					<TrackStatus parentName={parentName} className="trainModelItem"/>
+					<PhysicsStatus parentName={parentName} className="trainModelItem"/>
+				</div>
+				<TrainStatus parentName={parentName} className="trainModelItem"/>
+			</div>
 		</header>
 		</div>
 	)

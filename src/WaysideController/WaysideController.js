@@ -5,68 +5,93 @@ import config from '../config';
 import WaysidePanel from './WaysidePanel';
 import BottomPanel from './BottomPanel';
 import TempWaysideView from './TempWaysideView';
+import TrackView from '../WaysideController/TrackView';
+
+import { DatabaseGet, DatabaseSet } from '../Database';
+var waysideGrouping = require('./WaysideControllers.json');
 
 const WaysideController = () => {
   document.body.style.overflow = 'hidden';
 
-  if (!Firebase.apps.length) {
-    Firebase.initializeApp(config);
-  } else {
-    Firebase.app(); // if already initialized, use that one
+  const [selectedWayside, setSelectedWayside] = useState([]);
+  const [selectedBlock, setSelectedBlock] = useState([]);
+  const [waysideList, setWaysideList] = useState([]);
+  const [jsonTree, setJsonTree] = useState([]);
+  const [blockList, setBlockList] = useState([]);
+  const [trainsList, setTrainsList] = useState({});
+  const [trackColor, setTrackColor] = useState();
+
+  useEffect(() => {
+    DatabaseGet(setJsonTree, 'GreenLine');
+  }, []);
+
+  //update trains list
+  useEffect(() => {
+    DatabaseGet(setTrainsList, 'TrainList');
+  }, []);
+
+  function getBlockListData() {
+    let tempList = [];
+    for (const [key, value] of Object.entries(jsonTree)) {
+      tempList.push(value);
+    }
+    setBlockList(tempList);
   }
+
+  useEffect(() => getBlockListData(), [jsonTree]);
+
+  function getWaysideListData() {
+    // console.log(waysideGrouping);
+    // let tempGrouping = [];
+    // for (const [key, value] of Object.entries(waysideGrouping)) {
+    //   tempGrouping;
+    // }
+    console.log(waysideGrouping);
+
+    let tempIndividualWaysideBlockList = [];
+    let waysides = [];
+    console.log(blockList);
+    for (const [index, lineData] of Object.entries(waysideGrouping.GreenLine)) {
+      tempIndividualWaysideBlockList = [];
+      lineData.blocks.forEach((blockId) => {
+        tempIndividualWaysideBlockList.push(blockList[blockId]);
+      });
+      console.log(tempIndividualWaysideBlockList);
+      waysides.push(tempIndividualWaysideBlockList);
+    }
+    console.log(waysides);
+    setWaysideList(waysides);
+  }
+
+  useEffect(() => getWaysideListData(), [blockList]);
 
   return (
     <div>
       <header className='App-header'>
-        <TempWaysideView />
-        <WaysidePanel />
-        <BottomPanel />
+        <WaysidePanel
+          setSelectedWayside={setSelectedWayside}
+          waysideList={waysideList}
+        />
+        {selectedWayside.length > 0 ? (
+          <TrackView
+            setSelectedBlock={setSelectedBlock}
+            selectedWayside={selectedWayside}
+            trainsList={trainsList}
+          />
+        ) : (
+          <div></div>
+        )}
+        {selectedWayside.length > 0 ? (
+          <BottomPanel
+            selectedBlockFromTrack={selectedBlock}
+            selectedWayside={selectedWayside}
+          />
+        ) : (
+          <div></div>
+        )}
       </header>
     </div>
   );
-
-  // const [alpha, setAlpha] = useState("empty");
-
-  // Firebase.app();
-
-  // //when updates happen this is called and then it calls appropriate functions to update the page element
-  // const handleUpdate = useCallback(
-  // 	async event => {
-  // 		event.preventDefault();
-  // 		const { alpha } = event.target.elements;
-  // 		console.log(alpha.value);
-  // 		setAlphaData(alpha.value);
-  // 	}, []
-  // );
-
-  // function getAlphaData() {
-  // 	let ref = Firebase.database().ref('/trackController/testdata');
-  // 	ref.on('value', snapshot => {
-  //         setAlpha(snapshot.val());
-  //     });
-  // }
-
-  // function setAlphaData(newState) {
-  // 	Firebase.database().ref('/trackController/testdata').set(newState);
-  // }
-
-  // useEffect(() => getAlphaData());
-
-  // return (
-  //     <div style={{paddingLeft: '4em'}}>
-  //         {alpha}
-
-  //         <Form onSubmit={handleUpdate}>
-  //             <Form.Group className="mb-3" controlId="formBasicEmail">
-  //                 <Form.Label>alpha</Form.Label>
-  //                 <Form.Control name="alpha" placeholder="Data here" />
-  //             </Form.Group>
-  //             <Button variant="primary" type="submit">
-  //                 Submit
-  //             </Button>
-  //         </Form>
-  //     </div>
-  // )
 };
 
 export default WaysideController;

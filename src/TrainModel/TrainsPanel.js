@@ -1,51 +1,32 @@
-import React, { useState } from 'react'
-import SlidingPane from "react-sliding-pane";
+import React, { useState, useEffect } from 'react'
 import { Button } from 'react-bootstrap';
-import { AiOutlinePlus } from "react-icons/ai";
 import { BsCircleFill } from "react-icons/bs";
 
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import "../styles.css";
+import "./trainModelStyles.css";
+import { DatabaseGet } from '../Database';
 
 const TrainsPanel = (props) => {
 
 	const [open, setOpen] = useState(true);
+	const [trainIds, setTrainIds] = useState([]);
+
+	useEffect(() => {setTimeout(()=>{DatabaseGet(setTrainIds, 'TrainIds'); }, 500);}, [] );
 
 	const setTrain = value => {props.setParentName(value);}
 
 	return (
 		<div>
-			<Button onClick={()=>{setOpen(true);}} className="showTrainButton">Show Trains</Button>
-			<SlidingPane
-				isOpen={open}
-				from="left"
-				width="300px"
-				onRequestClose={() => setOpen(false)}
-			>
-				<div className="trainPanelHolder">
-					<Button variant="light" className="trainButton" onClick={()=>{setTrain('TRN1');}}>
-						<div className="buttonDiv">
-							<BsCircleFill size="1.5em" color="green"/>
-							<div className="buttonText">TRN1</div>
-						</div>
-					</Button>
-					<Button variant="light" className="trainButton" onClick={()=>{setTrain('TRN2');}}>
-						<div className="buttonDiv">
-							<BsCircleFill size="1.5em" color="#C44242"/>
-							<div className="buttonText">TRN2</div>
-						</div>
-					</Button>
-					<Button variant="light" className="trainButton" onClick={()=>{setTrain('TRN3');}}>
-						<div className="buttonDiv">
-							<BsCircleFill size="1.5em" color="#C44242"/>
-							<div className="buttonText">TRN3</div>
-						</div>
-					</Button>
-					<Button variant="light" className="addTrainButton">
-						<AiOutlinePlus size="2em" color="grey"/>
-					</Button>
-				</div>
-			</SlidingPane>
+			<div className="trainPanelHolderFixed">
+				{trainIds.map((trainName) => (
+						<Button variant="light" className="trainButton" onClick={()=>{props.setParentName(trainName);}}>
+							<div className="buttonDiv">
+								<BsCircleFill size="1.5em" color="green"/>
+								<div className="buttonText">{trainName}</div>
+							</div>
+						</Button>))}
+			</div>
 		</div>
 	)
 }
