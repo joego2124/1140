@@ -15,7 +15,7 @@ exports.changeTrainLength = trainModel.changeTrainLength;
 exports.changePassengers = trainModel.changePassengers;
 // exports.trainConsoleTest = trainModel.trainConsoleTest;
 
-exports.waysideTick = wayside.runLogic;
+// exports.waysideTick = wayside.runLogic;
 exports.onBrakeFailure = trainControllerDriver.onBrakeFailure;
 exports.onEngineFailure = trainControllerDriver.onEngineFailure;
 exports.onSignalFailure = trainControllerDriver.onSignalFailure;

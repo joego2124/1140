@@ -109,15 +109,17 @@ function CTC() {
 
 	//update trains list
 	useEffect(() => {
-		// DatabaseGet(setTrainsList, "TrainList");
 		Firebase.database().ref('/TrainList').on('value', snapshot => {
-			setTrainsList(snapshot.val());
+			let list = snapshot.val();
+			list.databasePath = "/TrainList";
+			setTrainsList(list);
 		});
 		Firebase.database().ref('/GreenLine').on('value', snapshot => {
 			let blocks = [];
 			for (const [index, block] of Object.entries(snapshot.val())) {
 				blocks.push(block);
 			}
+			blocks.databasePath = "/GreenLine";
 			setGreenBlocks(blocks);
 		});
 		Firebase.database().ref('/RedLine').on('value', snapshot => {
@@ -125,6 +127,7 @@ function CTC() {
 			for (const [index, block] of Object.entries(snapshot.val())) {
 				blocks.push(block);
 			}
+			blocks.databasePath = "/RedLine";
 			setRedBlocks(blocks);
 		});
 	}, []);
@@ -132,6 +135,9 @@ function CTC() {
 	useEffect(() => {
 		setBlockLists({"red": redBlocks, "green": greenBlocks});
 	}, [redBlocks, greenBlocks]);
+
+	useEffect(() => console.log(`[CTC] new selectedBlock, ${selectedBlock.databasePath}`), [selectedBlock]);
+	useEffect(() => console.log(`[CTC] new selectedTrain, ${selectedTrain.databasePath}`), [selectedTrain]);
 
 	return (
 		<div>

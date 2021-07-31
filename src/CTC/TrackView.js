@@ -1,36 +1,54 @@
 import React, { useState, useEffect } from 'react'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Button, OverlayTrigger, Tooltip, Dropdown, DropdownButton } from 'react-bootstrap';
+import { BiTrain } from 'react-icons/bi';
+import { IoGitCompareSharp } from 'react-icons/io5';
 import Blocks from './assets/Blocks';
 import './styles.css';
 
 var trackLayout = require("./TrackLayout.json");
 
-const trackBlockCircle = (blockType, centerElement, fill, stroke, clickHandler) => <div>
+const trackBlockCircle = (centerElement, fill, stroke, clickHandler, currPos) => <div
+	style={{
+		position: "absolute",
+		zIndex: 1003,  
+		left: currPos.x + 60,
+		top: currPos.y + 60, 
+		transform: "translate(-50%, -50%)",
+		height: 100,
+		width: 100,
+		backgroundColor: "rgba(255, 255, 0, .25)",
+		overflow: "visible",
+	}}
+>
 	<div 
 		onClick={clickHandler}
 		style={{ 
 			position: "absolute", 
-			zIndex: 1002, 
-			top: blockType === "straight" ? "47.5%" : "5%", 
-			left: blockType === "straight" ? "50%" : "9%", 
+			zIndex: 1004, 
+			top: "50%", 
+			left: "50%", 
 			transform: "translate(-50%, -50%)",
 			fontWeight: 550,
-			color: stroke
+			height: 50,
+			width: 50,
+			color: stroke,
+			backgroundColor: "rgba(255, 125, 125, .25)",
 	}}>{centerElement}</div>
 	<svg 
 		width={75}
 		height={75}
-		viewBox={`0 0 ${100} ${100}`}
+		viewBox={`-15 -15 100 100`}
 		stroke={stroke}
 		fill={fill}
 		xmlns="http://www.w3.org/2000/svg" 
 		style={{
 			position: "absolute",
-			left: blockType === "straight" ? "61%" : "29.5%",
-			top: blockType === "straight" ? "61%" : "29.5%",
+			top: "50%", 
+			left: "50%", 
 			transform: "translate(-50%, -50%)",
 			zIndex: 1001,
+			backgroundColor: "rgba(255, 0, 255, .25)",
 		}} 
 		onClick={clickHandler}
 	>
@@ -48,14 +66,46 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 
 	const [lineFilter, setLineFilter] = useState("both");
 	const [filteredLineSVGs, setFilteredLineSVGs] = useState([]);
+	const [trainSVGs, setTrainSVGs] = useState([]);
+
+	useEffect(() => {
+		setTrainSVGs(Object.entries(trainsList).map(trainArr => {
+			let train = trainArr[1];
+			if (trainArr[0] != "databasePath") {
+				return trackBlockCircle(
+					<BiTrain style={{
+						position: "absolute",
+						top: "50%", 
+						left: "50%",
+						width: 35,
+						height: 35, 
+						transform: "translate(-50%, -50%)",
+					}}/>,
+					"white",
+					"rgb(101, 93, 110, 1)",
+					() => {},
+					trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"].find(block => block.blockId === train.CurrentBlock).position
+				);
+			}
+		}));
+	}, [trainsList]);
 
 	let updateSelectedBlock = (blockId, color) => {
-		let selectedBlock = blockLists[color].find(block => {
-			let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
-			return roundedBlockId === blockId;
+		let blockDatabaseIndex;
+		console.log(color);
+		let selectedBlock = blockLists[color].find((block, index) => {
+			if (index != "databasePath") {
+				let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
+				if (roundedBlockId === blockId) {
+					blockDatabaseIndex = index;
+					return true;
+				}
+			}
 		});
-		console.log(selectedBlock);
-		setSelectedBlock(selectedBlock);
+		if (selectedBlock != undefined) {
+			selectedBlock.databasePath = `${blockLists[color].databasePath}/${blockDatabaseIndex}`;
+			setSelectedBlock(selectedBlock);
+		}
 	}
 
 	let greenBlockSVGs = [];
@@ -78,10 +128,12 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	useEffect(() => updateFilter("both"), []); //render track view initially
 
 	//recursive function to generate a list of tracks for rendering
-	const traceTrack = (currBlock, currPos, trackLayoutList, blockLists) => {
+	const traceTrack = (currBlock, currPos, trackLayoutList) => {
 		
 		let blockSVGs = [];
 		
+		currBlock.position = currPos;
+
 		//add current block to list of visited blocks
 		visitedBlockIds.push(currBlock.blockId);
 
@@ -152,7 +204,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					top: currPos.y + dy + 10, 
 					height: size,
 					width: size,
-					// backgroundColor: "rgba(0, 255, 255, .25)",
+					backgroundColor: "rgba(0, 255, 255, .25)",
 					overflow: "visible",
 				}}
 			>
@@ -173,18 +225,31 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					onClick={clickHandler}
 				>
 					{Blocks[blockTypeName]}
-				</svg>	
-				<OverlayTrigger
-					placement="top"
-					overlay={<Tooltip>{currBlock.station}</Tooltip>}
-				>
-					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", color, clickHandler) : <></>}
-				</OverlayTrigger>
+				</svg>
 			</div>
 			blockSVGs.push(newSVG);
 		});
 
 		let newBlockSVGs = <div key={lineName + currBlock.blockId}>
+			<OverlayTrigger
+				placement="top"
+				overlay={<Tooltip>{currBlock.station}</Tooltip>}
+			>
+				{currBlock.station != undefined ? trackBlockCircle(
+					<IoGitCompareSharp style={{
+						position: "absolute",
+						top: "50%",
+						left: "50%",
+						transform: "translate(-50%, -50%)",
+						width: 30,
+						height: 30,
+					}}/>, 
+					"white", 
+					`rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`, 
+					() => updateSelectedBlock(currBlock.blockId, lineName === "greenLine" ? "green" : "red"),
+					currPos
+				) : <></>}
+			</OverlayTrigger>
 			<div
 				style={{
 					position: "absolute",
@@ -205,6 +270,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 		}
 	}
 
+	//iterate through lines to render track view
 	for (const [key, value] of Object.entries(trackLayout)) {
 		lineName = key;
 		visitedBlockIds = [];
@@ -239,6 +305,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					<div style={{width: `${maxLength}px`, height: `${maxLength}px`}}>
 						<div>
 							{filteredLineSVGs}
+							{trainSVGs}
 						</div>
 						<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
 							<defs>
