@@ -7,7 +7,12 @@ import { BsCircleFill } from 'react-icons/bs';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './styles.css';
 
-const WaysidePanel = ({ setTrackColor, greenWaysideList, redWaysideList, setSelectedWayside }) => {
+const WaysidePanel = ({
+  setTrackColor,
+  greenWaysideList,
+  redWaysideList,
+  setSelectedWayside,
+}) => {
   const [open, setOpen] = useState(true);
   const [waysideButtonList, setWaysideButtonList] = useState([]);
   const [selectedWaysideList, setSelectedWaysideList] = useState();
@@ -16,7 +21,9 @@ const WaysidePanel = ({ setTrackColor, greenWaysideList, redWaysideList, setSele
 
   useEffect(() => {
     var buttonList = [];
-    for (const [waysideName, waysideObj] of Object.entries(selectedWaysideList)) {
+    for (const [waysideName, waysideObj] of Object.entries(
+      selectedWaysideList
+    )) {
       buttonList.push(
         <Button variant='light' className='waysideButton' key={waysideName}>
           <div className='buttonDiv'>
@@ -34,9 +41,11 @@ const WaysidePanel = ({ setTrackColor, greenWaysideList, redWaysideList, setSele
     setWaysideButtonList(buttonList);
   }, [selectedWaysideList]);
 
-  setColorAndSelectedWayside(selColor) {
+  function setColorAndSelectedWayside(selColor) {
     setTrackColor(selColor);
-    setSelectedWaysideList(selColor == "GreenLine" ? greenWaysideList : redWaysideList);
+    setSelectedWaysideList(
+      selColor == 'GreenLine' ? greenWaysideList : redWaysideList
+    );
   }
 
   return (
@@ -63,13 +72,20 @@ const WaysidePanel = ({ setTrackColor, greenWaysideList, redWaysideList, setSele
         onRequestClose={() => setOpen(false)}
       >
         <Button
-          onClick={setColorAndSelectedWayside('GreenLine')}
+          onClick={() => {
+            setColorAndSelectedWayside('GreenLine');
+          }}
           className='greenLineButton'
         >
           Green Line
         </Button>
 
-        <Button onClick={setTrackColor('RedLine')} className='redLineButton'>
+        <Button
+          onClick={() => {
+            setColorAndSelectedWayside('RedLine');
+          }}
+          className='redLineButton'
+        >
           Red Line
         </Button>
         <div class='waysidePanelHolder'>{waysideButtonList}</div>
