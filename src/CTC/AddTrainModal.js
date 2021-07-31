@@ -51,11 +51,6 @@ const AddTrainModal = (props) => {
 	let lineLayout = trackLayout[lineColor + "Line"];
 	stationBlocks = lineLayout.filter(block => block.station != undefined);
 	stationBlocks.push(lineLayout.find(v => v.blockId === (lineColor === "red" ? -1 : -1.6)));
-	
-
-	useEffect(() => {
-		console.log(stationSelections);
-	}, [stationSelections]);
 
 	const [, updateState] = React.useState();
 	const forceUpdate = React.useCallback(() => updateState({}), []);
@@ -153,7 +148,7 @@ const AddTrainModal = (props) => {
 					newTrain.TrainId = trainId;
 					newTrain.Stations = stationSelections;
 					newTrain.DepartureTime = departureTime;
-					newTrain.Line = lineColor;
+					newTrain.Line = `${lineColor.toUpperCase()}Line`;
 					newTrain.Route = props.routeTrain(stationSelections, lineColor);
 					newTrain.CurrentBlock = newTrain.Route[1];
 					newTrain.PreviousBlock = newTrain.Route[0];

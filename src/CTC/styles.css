@@ -18,6 +18,13 @@
 	z-index: 1;
 }
 
+.filterLineButton {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+}
+
 .showControlPanelButton {
 	position: absolute;
 	bottom: 25px;
@@ -81,6 +88,7 @@
 .controlPanelSubSection {
 	margin-left: 10px;
 	margin-right: 10px;
+	flex-grow: 1;
 }
 
 .controlPanelDivider {
@@ -116,9 +124,9 @@
 	display: flex;
 	justify-content: space-between;
 	flex-direction: row;
-	border: 1px solid grey;
+	border: 1px solid darkgrey;
 	border-radius: 100px;
-	box-shadow: 0px 3px 7px rgba(0, 0, 0, .2);
+	box-shadow: inset 0px 0px 5px rgba(0, 0, 0, .2);
 	width: 150px;
 	padding: 3px;
 	padding-left: 10px;

@@ -2,13 +2,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 //import from individual files
-<<<<<<< HEAD
 const wayside = require('./WaysideFunctions');
 const trainModel = require('./TrainModelFunctions');
-=======
-const wayside = require('./TrainModelFunctions');
-const trainModel = require('./WaysideFunctions');
->>>>>>> main
 const trainControllerDriver = require('./TrainContollerFunctions');
 
 var trackLayout = require("./TrackLayout.json");
@@ -20,7 +15,7 @@ exports.changePassengers = trainModel.changePassengers;
 exports.trainAdded = trainModel.trainAdded;
 exports.trainRemoved = trainModel.trainRemoved;
 
-exports.waysideTick = wayside.runLogic;
+// exports.waysideTick = wayside.runLogic;
 exports.onBrakeFailure = trainControllerDriver.onBrakeFailure;
 exports.onEngineFailure = trainControllerDriver.onEngineFailure;
 exports.onSignalFailure = trainControllerDriver.onSignalFailure;
