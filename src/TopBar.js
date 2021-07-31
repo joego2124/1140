@@ -1,15 +1,19 @@
 import portrait from "./portrait.png"
-import { React, useContext } from 'react'
+import { React, useContext, useEffect, useState } from 'react'
 import { Image, Navbar, Dropdown, Form, Button, Nav, ButtonGroup } from 'react-bootstrap'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
-import { SpeedContext } from './SpeedProvider';
-// import firebaseApp from './base';
 import Firebase from "firebase";
+import physicsTick from './TrainModel/PhysicsSim';
+import updatePower from './TrainController/Power';
 import config from './config';
 
 function TopBar() {
 
-	const [speedState, setSpeedState] = useContext(SpeedContext);
+	const [speed, setSpeed] = useState(1);
+	const [paused, setPaused] = useState(true);
+	const [time, setTime] = useState(0);
+	const [timer, setTimer] = useState();
+	const [formattedTime, setFormattedTime] = useState("12:00");
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -17,13 +21,58 @@ function TopBar() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	function setSpeed(newSpeed) {
-		Firebase.database().ref('/speedSettings/speed').set(newSpeed);
+	//running clock
+	function clockTick() {
+		if(!paused) {
+			Firebase.database().ref('/SimulationClock/Time').transaction( time => {
+				return time + 1;
+			});
+
+			physicsTick();
+			updatePower();
+
+			if(!paused) {
+				setTimer(setTimeout(() => clockTick(), 1000 * (1/speed)));
+			}
+		}
 	}
 
-	function setPaused(newPaused) {
-		Firebase.database().ref('/speedSettings/paused').set(newPaused);
-	}
+	//link variable updates on startup and start clockTick
+	useEffect(() => {
+		Firebase.database().ref('/SimulationClock/speed').on('value', snapshot => {
+			setSpeed(snapshot.val());
+		});
+		Firebase.database().ref('/SimulationClock/paused').on('value', snapshot => {
+			setPaused(snapshot.val());
+		})
+		Firebase.database().ref('/SimulationClock/Time').on('value', snapshot => {
+			setTime(snapshot.val());
+		});
+		clockTick();
+	}, []);
+
+	//start or stop clock tick on unpause/pause
+	useEffect(() => {
+		if (!paused) {
+			clockTick();
+		} else {
+			clearTimeout(timer);
+		}
+	}, [paused]);
+
+	//temp work around to restart clock tick everytime speed changes
+	useEffect(() => {
+		clearTimeout(timer);
+		clockTick();
+	}, [speed]);
+	
+	//calculate formatted time when tick time changes
+	useEffect(() => {
+		let totalMinutes = time % 1440;
+		let hours = Math.floor(totalMinutes / 60);
+		let minutes = totalMinutes % 60;
+		setFormattedTime(`${hours > 9 ? hours : "0" + hours}:${minutes > 9 ? minutes : "0" + minutes}`);
+	}, [time]);
 
 	return (
 		<Navbar style={styles.bar} expand="lg">
@@ -41,29 +90,25 @@ function TopBar() {
 				<Form inline>
 
 					{/* Time Display */}
-					<Navbar.Text style={styles.timeDisplay}>12:00:00</Navbar.Text>
+					<Navbar.Text style={styles.timeDisplay}>{formattedTime}</Navbar.Text>
 
 					{/* Play/Pause Button */}
 					<Button style={styles.pausePlay} onClick={() => {
-						var newPaused = !speedState.paused;
-						setPaused(newPaused);
-						setSpeedState({
-							...speedState, 
-							paused: newPaused,
-						});
+						Firebase.database().ref('/SimulationClock/paused').set(!paused);
 					}}>
-						{ speedState.paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
+						{ paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
 					</Button>
 
 					{/* Speed Dropdown */}
-					<Dropdown as={ButtonGroup} onSelect={ selected => {
-						setSpeed(Number(selected));
-						setSpeedState({
-							...speedState, 
-							speed: Number(selected)
-						 });
-					}} alignRight>
-						<Button style={styles.speedButton}>{ `x${speedState.speed}` }</Button>
+					<Dropdown 
+						as={ButtonGroup} 
+						alignRight
+						onSelect={selected => {
+							Firebase.database().ref('/SimulationClock/speed').set(Number(selected));
+						}} 
+					>
+						<Button style={styles.speedButton}>{ `x${speed}` }</Button>
+						{/* <Button style={styles.speedButton}>{ `x${speedState.speed}` }</Button> */}
 
 						<Dropdown.Toggle split style={styles.speedDropdown} id="dropdown-split-basic" />
 

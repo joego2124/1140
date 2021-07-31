@@ -8,14 +8,34 @@ import DatabaseGet from '../Database'
 import config from '../config';
 import Firebase from "firebase";
 import WSMDisplay from './WSMVarDisplay';
+import VarDisplay from '../components/VarDisplayMulti';
 
-function PropertiesPanel(parentName) {
+// const [blockList, setBlockList] = useState([]);
+
+// function getBlockListData() {
+//     let tempList = [];
+//     let ref = Firebase.database().ref('/RedLine');
+//     ref.on('value', (snapshot) => {
+//       for (const [key, value] of Object.entries(snapshot.val())) {
+//         for (const [i, v] of Object.entries(value)) {
+//           console.log(i, v);
+//           tempList.push(v);
+//         }
+//       }
+//       setBlockList(tempList);
+//       console.log(tempList);
+//       console.log(blockList);
+//     });
+//   }
+
+function PropertiesPanel({selectedBlock}) {
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
 	}else {
 		Firebase.app(); // if already initialized, use that one
 	}
+	// console.log(`PropertiesPanel selected block: ${selectedBlock}`)
 
 	return (
 		// Properties title
@@ -24,21 +44,24 @@ function PropertiesPanel(parentName) {
 			background: "#c4c4c4",
 			width: "30%",
 		}}>
-			<h1>PROPERTIES</h1>
 			<div style={{
-				textAlign: "left",
-				paddingLeft: 100,
+				textAlign: "center",
+				paddingLeft: 50,
 				paddingRight: 50,
 				paddingBottom: 10
 			}}>
-				<WSMDisplay parentName={parentName} varName='BlockSize' message='Block Size [m]'/>
-				<WSMDisplay parentName={parentName} varName='DirectionsOfTravel' message='Directions of Travel'/>
-				<WSMDisplay parentName={parentName} varName='Elevation' message='Elevation [ft]'/>
-				<WSMDisplay parentName={parentName} varName='DesiredTrackTemperature' message='Desired Track Temperature [°F]'/>
-				<WSMDisplay parentName={parentName} varName='Grade' message='Grade [°]'/>
-				<WSMDisplay parentName={parentName} varName='RailwayCrossing' message='Railway Crossing'/>
-				<WSMDisplay parentName={parentName} varName='SpeedLimit' message='Speed Limit [m/h]'/>
-				<p style={{textColor: "grey"}}>__</p>
+				<h3>PROPERTIES</h3>
+				<VarDisplay message='Block Length [m]' path={`/GreenLine/${selectedBlock}/BlockLength`} />
+				<VarDisplay message='Directions of Travel' path={`/GreenLine/${selectedBlock}/DirectionOfTravel`} />
+				<VarDisplay message='Elevation [m]' path={`/GreenLine/${selectedBlock}/Elevation`} />
+				<VarDisplay message='Desired Track Temperature [°F]' path={`/GreenLine/${selectedBlock}/DesiredTrackTemperature`} />
+				<VarDisplay message='Railway Crossing' path={`/GreenLine/${selectedBlock}/isLevelCrossingBlock`} />
+				<VarDisplay message='Speed Limit [mph]' path={`/GreenLine/${selectedBlock}/SpeedLimit`} />
+
+				<Button variant="primary" size="sm" >
+					Set Desired Temp
+				</Button>
+				{/* <p style={{textColor: "grey"}}>__</p> */}
 			</div>
 		</div>
 

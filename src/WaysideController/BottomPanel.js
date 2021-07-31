@@ -5,80 +5,112 @@ import { Button } from 'react-bootstrap';
 
 import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './styles.css';
+import { DatabaseGet, DatabaseSet } from '../Database';
 
 import PLCFileUpload from './PLCFileUpload';
+import VarDisplay from '../components/VarDisplay';
 
-const BottomPanel = () => {
+const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
+  console.log(selectedBlockFromTrack);
   const [open, setOpen] = useState(true);
-  const [blockList, setBlockList] = useState([]);
-  const [crossingLights, setCrossingLights] = useState('string');
-  const [length, setLength] = useState('string');
-  const [levelCrossing, setLevelCrossing] = useState('string');
-  const [occupancy, setOccupancy] = useState('string');
-  const [speedLimit, setSpeedLimit] = useState('string');
-  const [status, setStatus] = useState('string');
-  const [plcUploaded, setPlcUploaded] = useState(false);
-  const [switchCommand, setSwitchCommand] = useState(false);
-  const [selectedBlock, setSelectedBlock] = useState('Block 1');
+  const [plcUploaded, setPlcUploaded] = useState(0);
+  const [selectedBlock, setSelectedBlock] = useState(selectedBlockFromTrack);
 
-  Firebase.app();
+  useEffect(() => handleBlocks('trackSelectedBlock'), [selectedBlockFromTrack]);
 
-  //when updates happen this is called and then it calls appropriate functions to update the page element
-  const handleUpdate = () => {
-    console.log(switchCommand == false ? true : false);
-    setSwitchCommandData(switchCommand == false ? true : false);
-  };
-
-  function getSwitchCommandData() {
-    let ref = Firebase.database().ref('/WSC/SwitchCommand');
-    ref.on('value', (snapshot) => {
-      setSwitchCommand(snapshot.val());
-    });
-  }
-
-  function setSwitchCommandData(newState) {
-    Firebase.database().ref('/WSC/SwitchCommand').set(newState);
-  }
-
-  useEffect(() => getSwitchCommandData(), []);
-
-  function getWaysideListData() {
-    console.log(selectedBlock);
-    let ref = Firebase.database().ref('/WSC/WS-1/Block1');
-    if (selectedBlock == 'Block 1') {
-      ref = Firebase.database().ref('/WSC/WS-1/Block1');
-    } else if (selectedBlock == 'Block 2') {
-      ref = Firebase.database().ref('/WSC/WS-1/Block2');
-    } else if (selectedBlock == 'Block 3') {
-      ref = Firebase.database().ref('/WSC/WS-1/Block3');
+  function handleBlocks(event) {
+    if (event == 'trackSelectedBlock') {
+      setSelectedBlock(selectedBlockFromTrack);
+    } else if (event != undefined) {
+      setSelectedBlock(
+        selectedWayside?.find((v) => v.BlockNumber == event.target.value)
+      );
+    } else {
+      setSelectedBlock(selectedWayside[0]);
     }
+  }
+
+  function getUploadStatusWS0Data() {
+    let link = 'WSC/WSC0/UploadStatus';
+    let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
-      setBlockList(['Block 1', 'Block 2', 'Block 3']);
-      setCrossingLights(snapshot.val().CrossingLights);
-      setLength(snapshot.val().Length);
-      setLevelCrossing(snapshot.val().LevelCrossing);
-      setOccupancy(snapshot.val().Occupancy);
-      setSpeedLimit(snapshot.val().SpeedLimit);
-      setStatus(snapshot.val().Status);
+      let newState = snapshot.val();
+      setPlcUploaded(newState);
     });
   }
 
-  useEffect(() => getWaysideListData(), []);
+  useEffect(() => getUploadStatusWS0Data(), [selectedWayside]);
 
-  function handleBlocks($event) {
-    setSelectedBlock($event.target.value);
-    getWaysideListData();
+  function getUploadStatusWS1Data() {
+    let link = 'WSC/WSC1/UploadStatus';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      let newState = snapshot.val();
+      setPlcUploaded(newState);
+    });
   }
+
+  useEffect(() => getUploadStatusWS1Data(), [selectedWayside]);
+
+  function setUploadStatusData() {
+    let newState = plcUploaded;
+    let link = 'WSC/WSC1/UploadStatus';
+    Firebase.database().ref(link).set(newState);
+  }
+
+  useEffect(() => setUploadStatusData(), [plcUploaded]);
+
+  function setSwitchStateData() {
+    if (selectedBlock.isSwitchBlock == 1) {
+      let newState = selectedBlock?.SwitchState == 0 ? 1 : 0;
+      let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+      Firebase.database().ref(link).set(newState);
+    }
+  }
+
+  function getSwitchStateData() {
+    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      selectedBlock.SwitchState = snapshot.val();
+    });
+  }
+
+  useEffect(() => getSwitchStateData(), [selectedBlock.SwitchState]);
+
+  function getOccupancyData() {
+    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/Occupancy';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      selectedBlock.Occupancy = snapshot.val();
+    });
+  }
+
+  useEffect(() => getOccupancyData(), [selectedBlock.Occupancy]);
+
+  function getAuthorityData() {
+    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/Authority';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      selectedBlock.Authority = snapshot.val();
+    });
+  }
+
+  useEffect(() => getAuthorityData(), [selectedBlock.Authority]);
+
+  useEffect(() => handleBlocks(), [selectedWayside]);
 
   function WaysideBlocks() {
-    const listItems = blockList.map((blockIndex) => (
-      <option value={blockIndex}>{blockIndex}</option>
+    const listItems = selectedWayside?.map((block) => (
+      <option value={block.BlockNumber}>
+        {block.BlockNumber == -1 ? 'Yard' : 'Block ' + block.BlockNumber}
+      </option>
     ));
     return (
       <div className='dataSection'>
         <select
           onChange={handleBlocks}
-          value={selectedBlock}
+          value={selectedBlock?.BlockNumber}
           className='blockSelect'
         >
           {listItems}
@@ -87,37 +119,53 @@ const BottomPanel = () => {
           <div className='dataLeft'>
             <div className='dataName'>
               Status:
-              <div className='dataValue'>{status}</div>
+              <div className='dataValue'>{selectedBlock?.BlockStatus}</div>
+            </div>
+            <div className='dataName'>
+              Authority:
+              <div className='dataValue'>{selectedBlock?.Authority}</div>
             </div>
             <div className='dataName'>
               Occupancy:
-              <div className='dataValue'>{occupancy}</div>
+              <div className='dataValue'>{selectedBlock?.Occupancy}</div>
             </div>
             <div className='dataName'>
               Level Crossing:
-              {levelCrossing == true ? (
-                <div className='dataValue'>Lowered</div>
+              {selectedBlock?.isLevelCrossingBlock == true ? (
+                selectedBlock?.LevelCrossingState == true ? (
+                  <div className='dataValue'>Lowered</div>
+                ) : (
+                  <div className='dataValue'>Raised</div>
+                )
               ) : (
-                <div className='dataValue'>Raised</div>
+                <div className='dataValue'>None</div>
               )}
             </div>
           </div>
           <div className='dataRight'>
             <div className='dataName'>
               Crossing Lights:
-              {crossingLights == true ? (
-                <div className='dataValue'>On</div>
+              {selectedBlock?.isLevelCrossingBlock == true ? (
+                selectedBlock?.CrossingLights == true ? (
+                  <div className='dataValue'>On</div>
+                ) : (
+                  <div className='dataValue'>Off</div>
+                )
               ) : (
-                <div className='dataValue'>Off</div>
+                <div className='dataValue'>None</div>
               )}
             </div>
             <div className='dataName'>
               Speed Limit:
-              <div className='dataValue'>{speedLimit} mph</div>
+              <div className='dataValue'>
+                {selectedBlock?.SpeedLimit * 0.621371} mph
+              </div>
             </div>
             <div className='dataName'>
               Length:
-              <div className='dataValue'>{length} feet</div>
+              <div className='dataValue'>
+                {selectedBlock?.BlockLength * 3.28084} feet
+              </div>
             </div>
           </div>
         </div>
@@ -161,12 +209,16 @@ const BottomPanel = () => {
             Move Switch
             <div className='dataName'>
               Current State:
-              <div className='dataValue'>{switchCommand.toString()}</div>
+              <div className='dataValue'>
+                {selectedBlock?.isSwitchBlock == true
+                  ? selectedBlock?.SwitchState
+                  : 'None'}
+              </div>
             </div>
             <Button
               variant='light'
               className='moveSwitchButton'
-              onClick={handleUpdate}
+              onClick={setSwitchStateData}
             >
               <div className='buttonDiv'>
                 <div className='buttonText'>Click to Move Switch</div>
