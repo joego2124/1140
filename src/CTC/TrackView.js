@@ -69,6 +69,29 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	const [filteredLineSVGs, setFilteredLineSVGs] = useState([]);
 	const [trainSVGs, setTrainSVGs] = useState([]);
 
+	let updateSelectedBlock = (blockId, color) => {
+		let blockDatabaseIndex;
+		console.log(color, blockLists);
+		let selectedBlock = blockLists[color].find((block, index) => {
+			if (index != "databasePath") {
+				let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
+				if (roundedBlockId === blockId) {
+					blockDatabaseIndex = index;
+					return true;
+				}
+			}
+		});
+		if (selectedBlock != undefined) {
+			selectedBlock.databasePath = `${blockLists[color].databasePath}/${blockDatabaseIndex}`;
+			setSelectedBlock(selectedBlock);
+		}
+	}
+
+	let greenBlockSVGs = [];
+	let redBlockSVGs = [];
+	let visitedBlockIds = [];
+	let lineName;
+
 	useEffect(() => {
 		setTrainSVGs(Object.entries(trainsList).map(trainArr => {
 			let train = trainArr[1];
@@ -90,29 +113,6 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			}
 		}));
 	}, [trainsList]);
-
-	let updateSelectedBlock = (blockId, color) => {
-		let blockDatabaseIndex;
-		console.log(color);
-		let selectedBlock = blockLists[color].find((block, index) => {
-			if (index != "databasePath") {
-				let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
-				if (roundedBlockId === blockId) {
-					blockDatabaseIndex = index;
-					return true;
-				}
-			}
-		});
-		if (selectedBlock != undefined) {
-			selectedBlock.databasePath = `${blockLists[color].databasePath}/${blockDatabaseIndex}`;
-			setSelectedBlock(selectedBlock);
-		}
-	}
-
-	let greenBlockSVGs = [];
-	let redBlockSVGs = [];
-	let visitedBlockIds = [];
-	let lineName;
 
 	function updateFilter(e) {
 		setLineFilter(e);
@@ -244,21 +244,16 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					case 3: dy = dist; break;
 				}
 				beacons.push(
-					// <OverlayTrigger
-					// 	placement="top"
-					// 	overlay={<Tooltip>{"BEACON"}</Tooltip>}
-					// >
-						<BsFillSquareFill size="50px" style={{
-							position: "absolute", 
-							left: currPos.x + dx + 50,
-							top: currPos.y + dy + 50, 
-							height: "20px",
-							width: "20px",
-							color: `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`,
-							overflow: "visible",
-							zIndex: 3000,
-						}}/>
-					// </OverlayTrigger>
+					<BsFillSquareFill size="50px" style={{
+						position: "absolute", 
+						left: currPos.x + dx + 50,
+						top: currPos.y + dy + 50, 
+						height: "20px",
+						width: "20px",
+						color: `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`,
+						overflow: "visible",
+						zIndex: 1,
+					}}/>
 				);
 			});
 		}
@@ -294,6 +289,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 				}}
 			>{`${currBlock.section}${currBlock.blockId}`}</div>
 			{blockSVGs}
+			{beacons}
 		</div>
 
 		if (lineName === "greenLine") {

@@ -39,7 +39,11 @@ function makeTrainSim(newTrainId) {
     //     console.log('simulating', this.trainId);
     // } );
     train.simulateTrain = function () {
+<<<<<<< HEAD
             // console.log('simulating', this.trainId, Math.abs(this.velocity));
+=======
+            console.log('simulating', this.trainId, this.power);
+>>>>>>> CTC
 
             if(this.ebrake == true) {
                 //e brakes
@@ -64,6 +68,8 @@ function makeTrainSim(newTrainId) {
                     }
                 } else {
                     //no brakes
+                    console.log( 
+                        ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : 1) )) - (32.2 * Math.sin(this.grade)) );
                     Firebase.database().ref(`/TrainList/${this.trainId}/Acceleration`).set( 
                         ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : 1) )) - (32.2 * Math.sin(this.grade)) );
                 }
@@ -120,7 +126,7 @@ function makeTrainSim(newTrainId) {
                 Firebase.database().ref(`/TrainList/${this.trainId}/CurrentBlock`).set(newblock);
                 Firebase.database().ref(`/TrainList/${this.trainId}/PreviousBlock`).set(temp);
 
-                Firebase.database().ref(`/${this.line}/${newblock}/Occupancy`).set(1);
+                Firebase.database().ref(`/${this.line}/${newblock < 0 ? Math.ceil(newblock) : Math.floor(newblock)}/Occupancy`).set(1);
                 Firebase.database().ref(`/${this.line}/${temp}/Occupancy`).set(0);
 
                 //set new block values

@@ -148,7 +148,7 @@ const AddTrainModal = (props) => {
 					newTrain.TrainId = trainId;
 					newTrain.Stations = stationSelections;
 					newTrain.DepartureTime = departureTime;
-					newTrain.Line = `${lineColor.toUpperCase()}Line`;
+					newTrain.Line = `${lineColor === "red" ? "Red" : "Green"}Line`;
 					newTrain.Route = props.routeTrain(stationSelections, lineColor);
 					newTrain.CurrentBlock = newTrain.Route[1];
 					newTrain.PreviousBlock = newTrain.Route[0];
@@ -220,11 +220,11 @@ const trainTemplate = {
 	EDoorStatus: false,
 	EngineFailure: false,
 	ExternalLightState: false,
-	ExternalTemperature: 0,
+	ExternalTemperature: 70,
 	Grade : 0,
 	Height: 12,
 	InternalLightState: false,
-	InternalTemperature: 0,
+	InternalTemperature: 70,
 	LeftDoorStatus: false,
 	Length: 300,
 	LightState : false,
@@ -232,7 +232,7 @@ const trainTemplate = {
 	ManualMode: false,
 	Mass: 277817,
 	Passengers: 0,
-	Position : 12.761693798548809,
+	Position : 0,
 	Power: 0,
 	RightDoorStatus: false,
 	SBrakeStatus: false,

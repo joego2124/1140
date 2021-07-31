@@ -53,7 +53,7 @@ exports.onCTCTrainCurrentBlockChange = functions.database.ref('/TrainList/{train
       }
       
       //convert authorized blocks to lineLayout format
-      let lineLayout = trackLayout[train.Line + "Line"].map(block => {
+      let lineLayout = trackLayout[`${train.Line.toLowerCase().includes("red") ? "red" : "green"}Line`].map(block => {
         return {
           blockId: block.blockId,
           authority: (authorizedBlocks.find(v => v == block.blockId) != undefined ? 1 : 0),
@@ -61,7 +61,7 @@ exports.onCTCTrainCurrentBlockChange = functions.database.ref('/TrainList/{train
       });
   
       console.log(lineLayout);
-      database.ref(`/CTC/SuggestedAuthority`).set(lineLayout);
+      database.ref(`/CTC/SuggestedAuthority/${train.Line}`).set(lineLayout);
     });
   });
 });
