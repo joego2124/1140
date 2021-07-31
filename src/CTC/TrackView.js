@@ -230,6 +230,38 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			blockSVGs.push(newSVG);
 		});
 
+		let beacons = [];
+		if (currBlock.station != undefined) {
+			currBlock.connectors[0].forEach((id, i) => {
+				if (id === null) return;
+				let dx = 0, dy = 0;
+				let dist = 41;
+				switch(i) {
+					case 0: dx = -dist; break;
+					case 1: dy = -dist; break;
+					case 2: dx = dist; break;
+					case 3: dy = dist; break;
+				}
+				beacons.push(
+					// <OverlayTrigger
+					// 	placement="top"
+					// 	overlay={<Tooltip>{"BEACON"}</Tooltip>}
+					// >
+						<BsFillSquareFill size="50px" style={{
+							position: "absolute", 
+							left: currPos.x + dx + 50,
+							top: currPos.y + dy + 50, 
+							height: "20px",
+							width: "20px",
+							color: `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`,
+							overflow: "visible",
+							zIndex: 3000,
+						}}/>
+					// </OverlayTrigger>
+				);
+			});
+		}
+
 		let newBlockSVGs = <div key={lineName + currBlock.blockId}>
 			<OverlayTrigger
 				placement="top"
