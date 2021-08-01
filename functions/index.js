@@ -2,8 +2,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 //import from individual files
-const wayside = require('./TrainModelFunctions');
-const trainModel = require('./WaysideFunctions');
+const wayside = require('./WaysideFunctions');
+const trainModel = require('./TrainModelFunctions');
 const trainControllerDriver = require('./TrainContollerFunctions');
 
 var trackLayout = require("./TrackLayout.json");
@@ -15,7 +15,7 @@ exports.changePassengers = trainModel.changePassengers;
 exports.trainAdded = trainModel.trainAdded;
 exports.trainRemoved = trainModel.trainRemoved;
 
-exports.waysideTick = wayside.runLogic;
+// exports.waysideTick = wayside.runLogic;
 exports.onBrakeFailure = trainControllerDriver.onBrakeFailure;
 exports.onEngineFailure = trainControllerDriver.onEngineFailure;
 exports.onSignalFailure = trainControllerDriver.onSignalFailure;
@@ -53,7 +53,7 @@ exports.onCTCTrainCurrentBlockChange = functions.database.ref('/TrainList/{train
       }
       
       //convert authorized blocks to lineLayout format
-      let lineLayout = trackLayout[train.Line + "Line"].map(block => {
+      let lineLayout = trackLayout[`${train.Line.toLowerCase().includes("red") ? "red" : "green"}Line`].map(block => {
         return {
           blockId: block.blockId,
           authority: (authorizedBlocks.find(v => v == block.blockId) != undefined ? 1 : 0),
@@ -61,7 +61,7 @@ exports.onCTCTrainCurrentBlockChange = functions.database.ref('/TrainList/{train
       });
   
       console.log(lineLayout);
-      database.ref(`/CTC/SuggestedAuthority`).set(lineLayout);
+      database.ref(`/CTC/SuggestedAuthority/${train.Line}`).set(lineLayout);
     });
   });
 });

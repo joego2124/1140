@@ -5,22 +5,14 @@ import makeTrainSim from './TrainSim';
 var simList;
 
 Firebase.database().ref('/TrainIds').on('value', snapshot => {
-    const state = snapshot.val();
-    console.log('read train ids')
     simList = [];
-    state.forEach(element => {
-        console.log(element);
-        // const newtrain = Object.assign({}, train);
-        // // newtrain.trainId = element;
-        // newtrain.setTrainId(element);
-        // simList.push(newtrain);
-
-        simList.push(makeTrainSim(element));
+    Object.entries(snapshot.val()).forEach(arr => { 
+        simList.push(makeTrainSim(arr[1]));
     });
 });
 
 function physicsTick() {
-    console.log("physics tick");
+    // console.log("physics tick");
 
     // if(trainIds == undefined)
     //     Firebase.database().ref('/TrainIds').on('value', snapshot => {
@@ -30,10 +22,12 @@ function physicsTick() {
 	// 	});
 
     // console.log(simList);
-    simList.forEach( train => {
-        train.simulateTrain();
-        // console.log(train.trainId);
-    })
+		if (simList != undefined) {
+			simList.forEach( train => {
+					train.simulateTrain();
+					// console.log(train.trainId);
+			});
+		}
 }
 
 export default physicsTick;

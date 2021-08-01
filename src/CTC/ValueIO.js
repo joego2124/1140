@@ -4,7 +4,8 @@ import React from 'react'
 const ValueIO = ({
 	valueType,
 	valueLabel,
-	valueData
+	valueData,
+	valueDatabasePath
 }) => {
 	return (
 		<div className="controlPanelValueContainer">
@@ -13,7 +14,11 @@ const ValueIO = ({
 			}}>{valueLabel}</div>
 			{
 				valueType === "input" ? (
-					<Dropdown>
+					<Dropdown
+						onSelect={e => {
+							console.log(`event key: ${e}, valueDatabasePath: ${valueDatabasePath}`);
+						}}
+					>
 						<Dropdown.Toggle 
 							variant="outline-dark" 
 							id="dropdown-basic" 
@@ -21,7 +26,8 @@ const ValueIO = ({
 								width: "150px",
 								height: "35px",
 								borderRadius: "100px",
-						}}>
+							}}
+						>
 							{valueData.value}
 						</Dropdown.Toggle>
 
