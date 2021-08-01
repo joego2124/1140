@@ -1,0 +1,32 @@
+WSC2
+
+blocks: 23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,150,149,148,147,146,145,144,143,142,141,140,139,138,137,136,135,134,133,132,131,130
+listener: 29,18,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12
+
+branch-1: 150,149,148
+branch-2: 147,146,145
+branch-3: 144,143,142
+
+branch-4: 140,139,138
+
+branch-5: 131,130
+
+branch-6: 28,29,30
+branch-7: 32,33,34,35
+branch-8: 36,37,38
+
+IF: occupancy{listener} SET authority{branch-1} TO 0
+
+IF: occupancy{branch-1} SET authority{branch-2} TO 0
+IF: occupancy{branch-2} SET authority{branch-3} TO 0
+IF: occupancy{branch-3} SET authority{blocks-141} TO 0
+IF: occupancy{blocks-141} SET authority{branch-4} TO 0
+IF: occupancy{blocks-132} SET authority{branch-5} TO 0
+
+IF: occupancy{blocks-31} SET authority{branch-6} TO 0
+
+IF: occupancy{branch-8} SET authority{branch-7} TO 0
+IF: occupancy{branch-7} SET authority{blocks-31} TO 0
+
+SET switch TO 1
+IF: occupancy{listener} SET switch TO 0
