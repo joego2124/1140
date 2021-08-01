@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import config from '../config';
 import Firebase from "firebase";
 import VarDisplayMulti from '../components/VarDisplayMulti';
-import SetTempModal from './SetDesiredTempModal';
+import SetTempModal from './SetTempModal';
 import { DatabaseGetMulti } from '../components/DatabaseMulti';
 
 function PropertiesPanel({selectedBlock,}) {
