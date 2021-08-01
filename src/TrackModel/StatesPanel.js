@@ -15,7 +15,14 @@ import { DatabaseSetMulti } from '../components/DatabaseMulti';
 import SplitButton from 'react-bootstrap/SplitButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
-// I think I'm doing way too many fetches....see the console
+function getRandomInt( max ) {
+	return Math.floor(Math.random() * max);
+}
+
+function generateTicketSales( max ) {
+	return Math.floor(Math.random() * max);
+}
+
 function StatesPanel({selectedBlock}){
 
 	if (!Firebase.apps.length) {
@@ -23,6 +30,8 @@ function StatesPanel({selectedBlock}){
 	}else {
 		Firebase.app(); // if already initialized, use that one
 	}
+
+	console.log("tickets: ", getRandomInt(3));
 
 	const [actualTemp, setTemp] = useState(0);
 	// const [desiredTemp, setDesTemp] = useState(0);
@@ -36,6 +45,9 @@ function StatesPanel({selectedBlock}){
 	useEffect(() => {setTimeout(() => DatabaseGetMulti(setTrackOccup, `/GreenLine/${selectedBlock}/Occupancy`), 500);}, [selectedBlock]);
 	// Failure modes
 	useEffect(() => {setTimeout(() => DatabaseGetMulti(setFailBrokenRail, `/GreenLine/${selectedBlock}/FailureBrokenRail`), 500);}, [selectedBlock]);
+
+	// Checking if track heater needs to be turned on
+	// useEffect(() => {setTimeout(() =>  DatabaseGetMulti(setTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
 	// useEffect(() => {setTimeout(() => DatabaseGet(setTemp, 'Temperature', parentName), 500);}, [parentName]);
 	// useEffect(() => {setTimeout(() => DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName),500);}, [parentName]);
 	// useEffect(() => {setTimeout(() => DatabaseGet(setTrackOccup, 'TrackOccupancy', parentName), 500);}, [parentName]);
@@ -119,14 +131,16 @@ function StatesPanel({selectedBlock}){
 								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/TrackHeater`} />
 								{' '}Track Heater
 								<br />
-								<VarDisplayMulti message='Current Temperature [°F]' path={`/GreenLine/${selectedBlock}/Temperature`} />
+								<VarDisplayMulti message='Current Temperature [°F]' path={`/GreenLine/CurrentTemperature`} />
 							</div>
 						</Col>
 						<Col>
 							<h4>PASSENGERS</h4>
-							<p>
+							<p textAlign="left">
 								<VarDisplayMulti message='Passengers boarding' path={`/GreenLine/${selectedBlock}/Station/PassengersBoarding`} />
+								<br />
 								<VarDisplayMulti message='Passengers departing' path={`/GreenLine/${selectedBlock}/Station/PassengersDeparting`} />
+								<br />
 							</p>
 							<h4>FAILURE MODES</h4>
 								<ButtonGroup size="sm">

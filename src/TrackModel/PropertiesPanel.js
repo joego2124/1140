@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import config from '../config';
 import Firebase from "firebase";
 import VarDisplayMulti from '../components/VarDisplayMulti';
-import SetDesiredTempModal from './SetDesiredTempModal';
+import SetTempModal from './SetDesiredTempModal';
 import { DatabaseGetMulti } from '../components/DatabaseMulti';
 
 function PropertiesPanel({selectedBlock,}) {
@@ -27,31 +27,43 @@ function PropertiesPanel({selectedBlock,}) {
 			background: "#c4c4c4",
 			width: "30%",
 		}}>
+			<h3>PROPERTIES</h3>
 			<div style={{
-				textAlign: "center",
-				paddingLeft: 50,
-				paddingRight: 50,
+				textAlign: "left",
+				paddingLeft: 100,
+				paddingRight: 10,
 				paddingBottom: 10
 			}}>
-				<h3>PROPERTIES</h3>
 				<VarDisplayMulti message='Block Length [ft]' path={`/GreenLine/${selectedBlock}/BlockLength`} />
+				<br />
 				<VarDisplayMulti message='Directions of Travel' path={`/GreenLine/${selectedBlock}/DirectionOfTravel`} />
+				<br />
 				<VarDisplayMulti message='Elevation [ft]' path={`/GreenLine/${selectedBlock}/Elevation`} />
+				<br />
 				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`/GreenLine/DesiredTrackTemperature`} />
+				<br />
 				<VarDisplayMulti message='Railway Crossing' path={`/GreenLine/${selectedBlock}/isLevelCrossingBlock`} />
+				<br />
 				<VarDisplayMulti message='Speed Limit [mph]' path={`/GreenLine/${selectedBlock}/SpeedLimit`} />
-
+				<br />
+			</div>
+			<div style={{
+				textAlign: "right",
+				paddingLeft: 100,
+				paddingRight: 10,
+				paddingBottom: 10
+			}}>
 				<Button
-					variant="primary"
-					size="sm"
-					onClick={() => setTempModalShow(true)}
-				>
-					Set Desired Temp
+						variant="primary"
+						size="sm"
+						onClick={() => setTempModalShow(true)}
+					>
+						Set Temperatures
 				</Button>
-				<SetDesiredTempModal
-					show={tempModalShow}
-					lineName={"GreenLine"}
-					onHide={() => {setTempModalShow(false)}}
+				<SetTempModal
+						show={tempModalShow}
+						lineName={"GreenLine"}
+						onHide={() => {setTempModalShow(false)}}
 				/>
 			</div>
 		</div>
