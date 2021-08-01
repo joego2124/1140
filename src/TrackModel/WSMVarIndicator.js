@@ -1,18 +1,27 @@
 import React, { useEffect, useState, useContext } from 'react';
-import {DatabaseGet} from '../Database';
 import { BsCircleFill } from "react-icons/bs";
+import Firebase from "firebase";
+import { DatabaseGetMulti } from '../components/DatabaseMulti';
 
-function WSMIndicator({varName, message, parentName}) {
+function WSMIndicator({ selectedBlock, path }) {
 	
-	const [vari, setVari] = useState(false);
+	const [vari, setVari] = useState();
 
-	useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [parentName]);
-	useEffect(() => console.log(vari), [vari])
+	useEffect(() => {
+		setTimeout(() => {
+		if (!path) {
+			console.warn(`PATH NOT FOUND`);
+		} else {
+			Firebase.database().ref(path).on('value', snapshot => {
+				const state = snapshot.val();
+				setVari(state);
+			});
+		}
+		}, 500);
+	  }, [selectedBlock, path]);
+	
 	return (
-		<div>
-			<BsCircleFill size="1.0em" color={vari ? "#C44242" : 'green'}/>{' '}
-			{message}
-		</div>
+		<BsCircleFill size="0.8em" color={vari == 0 ? "#C44242" : 'green'}/>
 	)
 }
 

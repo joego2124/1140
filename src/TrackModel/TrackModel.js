@@ -7,6 +7,7 @@ import StatesPanel from './StatesPanel';
 import TrackView from './TrackView';
 import UploadLayoutButton from './UploadLayoutButton';
 import { left } from '@popperjs/core';
+// import ScheduleModal from '../CTC/ScheduleModal';
 
 import { DatabaseGet, DatabaseSet }  from "../Database";
 
@@ -20,7 +21,6 @@ function TrackModel() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	// const [parentName, setParentName] = useState('Block1');
 	const [trainsList, setTrainsList] = useState({});
 	const [jsonTree, setJsonTree] = useState([]);
 	const [blockList, setBlockList] = useState([]);
@@ -83,6 +83,7 @@ function TrackModel() {
 				<PropertiesPanel selectedBlock={selectedBlock} />
 				<StatesPanel selectedBlock={selectedBlock} />
 			</div>
+			
 		</>
 	)
 }
