@@ -97,7 +97,6 @@ function DatabaseSet(value, varName, parentName){
     
     var path = findPath(varName, parentName);
     console.log('DB Setter Path: ', path)
-    console.log('Value: ', value)
 
     if (!path) {
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
@@ -119,7 +118,11 @@ function DatabaseSetTrainListVal(value, varName, parentName){
 
 function DatabaseGet(setter, varName, parentName){
     
-    var path = findPath(varName, parentName);
+    console.log('Setter: ', setter)
+    console.log('varName: ', varName)
+    console.log('parentName: ', parentName)
+    var path = '/TrainList/' + parentName + '/' + varName;
+    console.log('path: ', path)
     if (!path) {
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
     } else {
@@ -159,7 +162,7 @@ function DatabaseList(setter, varName, parentName){
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
     } else {
         let ref = Firebase.database().ref(path);
-        ref.once('value')
+        ref.on('value')
         .then(function(snapshot) {
           const state = snapshot.val();
           var p, result = [];
