@@ -11,7 +11,6 @@ import TrainsPanel from '../CTC/TrainsPanel.js';
 import { DatabaseGet, DatabaseSet }  from "../Database";
 import Firebase from 'firebase';
 
-
 function TrainContollerDriver() {
 
 	const [parentName, setParentName] = useState('TRN1');
@@ -24,20 +23,15 @@ function TrainContollerDriver() {
 	}, []);
 
 	function getParentNameData() {
-		console.log(selectedTrain);
-		console.log(selectedTrain.TrainId);
     let link = 'TrainList/' + selectedTrain.TrainId + '/TrainId';
-		console.log(link);
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       let newState = snapshot.val();
-			console.log(newState);
       setParentName(newState);
     });
   }
 
   useEffect(() => getParentNameData(), [selectedTrain]);
-
 
 	return (
 		<div>
