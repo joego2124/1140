@@ -28,8 +28,8 @@ const PLCFileUpload = ({ setter }) => {
   }, []);
 
   function setScriptData(script) {
-    let link = '/WSC/WSC1/Script';
-    Firebase.database().ref(link).set(script);
+    let link = '/WSC/' + script.Name + '/Script';
+    Firebase.database().ref(link).set(script.script);
   }
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });

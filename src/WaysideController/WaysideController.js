@@ -22,7 +22,9 @@ const WaysideController = () => {
   const [greenBlockList, setGreenBlockList] = useState([]);
   const [redBlockList, setRedBlockList] = useState([]);
   const [trainsList, setTrainsList] = useState({});
-  const [trackColor, setTrackColor] = useState('');
+  const [trackColor, setTrackColor] = useState('GreenLine');
+
+  // TODO: CHANGE ALL ON CLICKS TO INCLUDE ARROW FUNCTION
 
   // get json tree and find block list and wayside list for green line
   useEffect(() => {
@@ -30,28 +32,26 @@ const WaysideController = () => {
   }, []);
 
   function getGreenBlockListData() {
-    let tempList = [];
+    let greenList = [];
     for (const [key, value] of Object.entries(greenJsonTree)) {
-      tempList.push(value);
+      greenList.push(value);
     }
-    setGreenBlockList(tempList);
+    setGreenBlockList(greenList);
   }
 
   useEffect(() => getGreenBlockListData(), [greenJsonTree]);
 
   function getGreenWaysideListData() {
     let tempIndividualWaysideBlockList = [];
-    let waysides = [];
+    let greenWaysides = [];
     for (const [index, lineData] of Object.entries(waysideGrouping.GreenLine)) {
       tempIndividualWaysideBlockList = [];
       lineData.blocks.forEach((blockId) => {
         tempIndividualWaysideBlockList.push(greenBlockList[blockId]);
       });
-      console.log(tempIndividualWaysideBlockList);
-      waysides.push(tempIndividualWaysideBlockList);
+      greenWaysides.push(tempIndividualWaysideBlockList);
     }
-    console.log(waysides);
-    setGreenWaysideList(waysides);
+    setGreenWaysideList(greenWaysides);
   }
 
   useEffect(() => getGreenWaysideListData(), [greenBlockList]);
@@ -62,28 +62,26 @@ const WaysideController = () => {
   }, []);
 
   function getRedBlockListData() {
-    let tempList = [];
+    let redList = [];
     for (const [key, value] of Object.entries(redJsonTree)) {
-      tempList.push(value);
+      redList.push(value);
     }
-    setRedBlockList(tempList);
+    setRedBlockList(redList);
   }
 
   useEffect(() => getRedBlockListData(), [redJsonTree]);
 
   function getRedWaysideListData() {
     let tempIndividualWaysideBlockList = [];
-    let waysides = [];
-    for (const [index, lineData] of Object.entries(waysideGrouping.GreenLine)) {
+    let redWaysides = [];
+    for (const [index, lineData] of Object.entries(waysideGrouping.RedLine)) {
       tempIndividualWaysideBlockList = [];
       lineData.blocks.forEach((blockId) => {
         tempIndividualWaysideBlockList.push(redBlockList[blockId]);
       });
-      console.log(tempIndividualWaysideBlockList);
-      waysides.push(tempIndividualWaysideBlockList);
+      redWaysides.push(tempIndividualWaysideBlockList);
     }
-    console.log(waysides);
-    setRedWaysideList(waysides);
+    setRedWaysideList(redWaysides);
   }
 
   useEffect(() => getRedWaysideListData(), [redBlockList]);
@@ -104,6 +102,7 @@ const WaysideController = () => {
         />
         {selectedWayside.length > 0 ? (
           <TrackView
+            trackColor={trackColor}
             setSelectedBlock={setSelectedBlock}
             selectedWayside={selectedWayside}
             trainsList={trainsList}

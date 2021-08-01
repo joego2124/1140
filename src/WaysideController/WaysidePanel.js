@@ -15,9 +15,9 @@ const WaysidePanel = ({
 }) => {
   const [open, setOpen] = useState(true);
   const [waysideButtonList, setWaysideButtonList] = useState([]);
-  const [selectedWaysideList, setSelectedWaysideList] = useState();
-
-  // Firebase.app();
+  const [selectedWaysideList, setSelectedWaysideList] =
+    useState(greenWaysideList);
+  const [localColor, setLocalColor] = useState();
 
   useEffect(() => {
     var buttonList = [];
@@ -27,10 +27,17 @@ const WaysidePanel = ({
       buttonList.push(
         <Button variant='light' className='waysideButton' key={waysideName}>
           <div className='buttonDiv'>
-            <BsCircleFill size='1.5em' color='#C44242' />
+            <BsCircleFill
+              size='1.5em'
+              color={
+                localColor == 'RedLine' ? '#C44242' : 'rgba(49,135,133, 1)'
+              }
+            />
             <div
               className='buttonText'
-              onClick={() => setSelectedWayside(waysideObj)}
+              onClick={() => {
+                setSelectedWayside(waysideObj);
+              }}
             >
               WSC{`${waysideName}`}
             </div>
@@ -43,6 +50,7 @@ const WaysidePanel = ({
 
   function setColorAndSelectedWayside(selColor) {
     setTrackColor(selColor);
+    setLocalColor(selColor);
     setSelectedWaysideList(
       selColor == 'GreenLine' ? greenWaysideList : redWaysideList
     );
@@ -71,22 +79,30 @@ const WaysidePanel = ({
         style={{ paddingTop: '10rem' }}
         onRequestClose={() => setOpen(false)}
       >
-        <Button
-          onClick={() => {
-            setColorAndSelectedWayside('GreenLine');
-          }}
-          className='greenLineButton'
-        >
-          Green Line
+        <Button variant='light' className='greenLineButton'>
+          <div className='buttonDiv'>
+            <div
+              className='buttonText'
+              onClick={() => {
+                setColorAndSelectedWayside('GreenLine');
+              }}
+            >
+              Green Line
+            </div>
+          </div>
         </Button>
 
-        <Button
-          onClick={() => {
-            setColorAndSelectedWayside('RedLine');
-          }}
-          className='redLineButton'
-        >
-          Red Line
+        <Button variant='light' className='redLineButton'>
+          <div className='buttonDiv'>
+            <div
+              className='buttonText'
+              onClick={() => {
+                setColorAndSelectedWayside('RedLine');
+              }}
+            >
+              Red Line
+            </div>
+          </div>
         </Button>
         <div class='waysidePanelHolder'>{waysideButtonList}</div>
       </SlidingPane>

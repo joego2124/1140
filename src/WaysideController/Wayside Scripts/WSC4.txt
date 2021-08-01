@@ -1,0 +1,13 @@
+WSC4: Green Line
+
+blocks: 60,61,62,63,64,65,0
+
+switch: 62
+
+SET: switch TO 1
+IF: occupancy{blocks-0,62} SET switch TO 0
+
+IF: occupancy{blocks-65} SET authority{blocks-64,63} TO 0
+IF: occupancy{blocks-64,63} SET authority{blocks-62,61} TO 0
+
+IF: occupancy{blocks-63,62} SET authority{yard} TO 0

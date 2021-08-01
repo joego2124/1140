@@ -48,6 +48,23 @@
   padding: 24px 32px;
 }
 
+.greenLineButton {
+  width: 50%;
+  border-radius: 15px !important;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
+  margin-bottom: 25px;
+  background-color: rgba(49, 135, 133, 1);
+  color: rgba(49, 135, 133, 1);
+}
+
+.redLineButton {
+  width: 50%;
+  border-radius: 15px !important;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
+  margin-bottom: 25px;
+  background-color: #c44242;
+}
+
 /* Bottom Panel Styles */
 .bottomPanel {
   /* margin-left: 14em; */
@@ -132,34 +149,6 @@
   position: absolute;
   bottom: 17.5em;
   left: 54%;
-  z-index: 1;
-}
-
-.blockButton1 {
-  position: absolute;
-  bottom: 25em;
-  left: 50%;
-  z-index: 1;
-}
-
-.blockButton2 {
-  position: absolute;
-  bottom: 30em;
-  left: 60%;
-  z-index: 1;
-}
-
-.blockButton3 {
-  position: absolute;
-  bottom: 20em;
-  left: 60%;
-  z-index: 1;
-}
-
-.blockButton4 {
-  position: absolute;
-  bottom: 20em;
-  left: 70%;
   z-index: 1;
 }
 
