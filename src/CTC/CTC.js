@@ -133,6 +133,7 @@ function CTC() {
 	}, []);
 
 	useEffect(() => {
+		console.log("[CTC] red or green database line blocks changed");
 		setBlockLists({"red": redBlocks, "green": greenBlocks});
 	}, [redBlocks, greenBlocks]);
 

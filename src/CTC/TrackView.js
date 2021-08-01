@@ -18,7 +18,7 @@ const trackBlockCircle = (centerElement, fill, stroke, clickHandler, currPos) =>
 		transform: "translate(-50%, -50%)",
 		height: 100,
 		width: 100,
-		backgroundColor: "rgba(255, 255, 0, .25)",
+		backgroundColor: "rgba(255, 255, 0, 0)",
 		overflow: "visible",
 	}}
 >
@@ -34,7 +34,7 @@ const trackBlockCircle = (centerElement, fill, stroke, clickHandler, currPos) =>
 			height: 50,
 			width: 50,
 			color: stroke,
-			backgroundColor: "rgba(255, 125, 125, .25)",
+			backgroundColor: "rgba(255, 125, 125, 0)",
 	}}>{centerElement}</div>
 	<svg 
 		width={75}
@@ -49,7 +49,7 @@ const trackBlockCircle = (centerElement, fill, stroke, clickHandler, currPos) =>
 			left: "50%", 
 			transform: "translate(-50%, -50%)",
 			zIndex: 1001,
-			backgroundColor: "rgba(255, 0, 255, .25)",
+			backgroundColor: "rgba(255, 0, 255, 0)",
 		}} 
 		onClick={clickHandler}
 	>
@@ -72,9 +72,6 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	const updateSelectedBlock = useCallback((blockId, color) => {
 		let blockDatabaseIndex;
 		console.log(blockId, color);
-		if (blockLists[color] == undefined) {
-			console.warn("BLOCKLISTS NOT POPULATED");
-		};
 		let selectedBlock = blockLists[color].find((block, index) => {
 			if (index != "databasePath") {
 				let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
@@ -132,8 +129,6 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 		setFilteredLineSVGs(filteredSVGs);
 	}
 
-	useEffect(() => updateFilter("both"), []); //render track view initially
-
 	//recursive function to generate a list of tracks for rendering
 	const traceTrack = (currBlock, currPos, trackLayoutList) => {
 		
@@ -187,17 +182,29 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${blockSVGs.length > 0 ? .25 : 1})`;
 			let lineColor = lineName === "greenLine" ? "green" : "red";
 
+			color = currBlock.section === "YARD" ? "grey" : color; //yard blocks are grey
+
 			//show occupancy
-			Object.entries(trainsList).forEach(trainArr => {
-				let targBlockId = Math.floor(trainArr[1].CurrentBlock);
-				let compBlockId = Math.floor(currBlock.blockId);
-				if (targBlockId == compBlockId) {
+			// Object.entries(trainsList).forEach(trainArr => {
+			// 	let targBlockId = Math.floor(trainArr[1].CurrentBlock);
+			// 	let compBlockId = Math.floor(currBlock.blockId);
+			// 	if (targBlockId == compBlockId) {
+			// 		color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
+			// 	}
+			// });
+			
+			if (blockLists[lineColor] != undefined) {
+				let block = blockLists[lineColor].find(block => {
+					let blockId = block.BlockNumber > 0 ? Math.floor(block.BlockNumber) : Math.ceil(block.BlockNumber);
+					let currBlockId = currBlock.blockId > 0 ? Math.floor(currBlock.blockId) : Math.ceil(currBlock.blockId);
+					return blockId == currBlockId;
+				})
+				if (block?.Occupancy == 1) {
+					console.log("OCCUPIED", block.BlockNumber);
 					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
 				}
-			});
+			} else console.warn("[CTC/TrackView] blockList empty");
 
-			color = currBlock.section === "YARD" ? "grey" : color; //yard blocks are grey
-			
 			//create new svg and push to track block SVGs
 			let newSVG = <div 
 				key={blockSVGs.length}
@@ -207,7 +214,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					top: currPos.y + dy + 10, 
 					height: size,
 					width: size,
-					backgroundColor: "rgba(0, 255, 255, .25)",
+					backgroundColor: "rgba(0, 255, 255, 0)",
 					overflow: "visible",
 				}}
 			>
@@ -319,6 +326,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			);
 		}
 	}, [blockLists, lineFilter]);
+
+	useEffect(() => updateFilter("both"), []); //render track view initially
 
 	return (
 		<div style={styles.track}>
