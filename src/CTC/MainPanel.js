@@ -80,7 +80,7 @@ const MainPanel = ({
 								valueType="output"
 								valueLabel="Commanded Speed"
 								valueData={{
-									value: selectedTrain.CommandedSpeed,
+									value: selectedTrain.SpeedLimit,
 									units: "mi/hr"
 								}}
 							/>
@@ -98,7 +98,7 @@ const MainPanel = ({
 							<ValueIO 
 								valueType="input"
 								valueLabel="Signal State"
-								valueDatabasePath={selectedTrain.databasePath}
+								valueDatabasePath={`${selectedTrain.databasePath}/SignalState`}
 								valueData={{
 									value: selectedTrain.SignalState,
 									dropdownList: [
@@ -109,7 +109,7 @@ const MainPanel = ({
 							<ValueIO 
 								valueType="input"
 								valueLabel="Switch State"
-								valueDatabasePath={selectedBlock.databasePath}
+								valueDatabasePath={`${selectedBlock.databasePath}/SwitchState`}
 								valueData={{
 									value: selectedBlock.SwitchState === 1 ? "TRUE" : "FALSE",
 									dropdownList: [
@@ -121,7 +121,7 @@ const MainPanel = ({
 							<ValueIO 
 								valueType="input"
 								valueLabel="Maintenance Status"
-								valueDatabasePath={selectedBlock.databasePath}
+								valueDatabasePath={`${selectedBlock.databasePath}/ManualMode`}
 								valueData={{
 									value: (new Boolean(selectedTrain.ManualMode)).toString().toUpperCase(),
 									dropdownList: [
@@ -138,7 +138,7 @@ const MainPanel = ({
 							<ValueIO 
 								valueType="input"
 								valueLabel="Railway State"
-								valueDatabasePath={selectedBlock.databasePath}
+								valueDatabasePath={`${selectedBlock.databasePath}/CrossingLights`}
 								valueData={{
 									value: selectedBlock.CrossingLights === 0 ? "FALSE" : "TRUE",
 									dropdownList: [
