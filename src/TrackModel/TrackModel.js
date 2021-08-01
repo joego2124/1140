@@ -7,6 +7,7 @@ import StatesPanel from './StatesPanel';
 import TrackView from './TrackView';
 import UploadLayoutButton from './UploadLayoutButton';
 import { left } from '@popperjs/core';
+// import ScheduleModal from '../CTC/ScheduleModal';
 
 import { DatabaseGet, DatabaseSet }  from "../Database";
 
@@ -83,6 +84,7 @@ function TrackModel() {
 				<PropertiesPanel selectedBlock={selectedBlock} />
 				<StatesPanel selectedBlock={selectedBlock} />
 			</div>
+			
 		</>
 	)
 }
