@@ -1,8 +1,6 @@
 import React from 'react';
-import { Button, Container, Col, Row  } from 'react-bootstrap';
-import VarDisplay from '../components/VarDisplay';
-import VarIndicator from '../components/VarIndicator';
-import ButtonIndicator from '../components/ButtonIndicator';
+import { Container, Col } from 'react-bootstrap';
+import ButtonIndicator from './components/ButtonIndicator';
 
 function DoorOptions({parentName, selectedTrain}) {
     return (

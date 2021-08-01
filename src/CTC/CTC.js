@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Firebase from "firebase";
 
 import TrackView from './TrackView';
 import TrainsPanel from './TrainsPanel';
@@ -32,7 +33,7 @@ function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
 			let currentBlock = currBranches[k].current;
 			let prevBlock = currBranches[k].previous;
 
-			// console.log(`currentBlock: ${currentBlock.blockId}, prevBlock: ${prevBlock.blockId}`);
+			console.log(`currentBlock: ${currentBlock.blockId}, prevBlock: ${prevBlock.blockId}`);
 
 			//if the current leaf block is the destination
 			if (currentBlock.blockId == endBlockId) {
@@ -102,12 +103,42 @@ function CTC() {
 	const [selectedTrain, setSelectedTrain] = useState({});
 	const [selectedBlock, setSelectedBlock] = useState({});
 	const [trainsList, setTrainsList] = useState({});
-	
+	const [redBlocks, setRedBlocks] = useState([]);
+	const [greenBlocks, setGreenBlocks] = useState([]);
+	const [blockLists, setBlockLists] = useState({});
+
 	//update trains list
 	useEffect(() => {
-		DatabaseGet(setTrainsList, "TrainList");
+		Firebase.database().ref('/TrainList').on('value', snapshot => {
+			let list = snapshot.val();
+			list.databasePath = "/TrainList";
+			setTrainsList(list);
+		});
+		Firebase.database().ref('/GreenLine').on('value', snapshot => {
+			let blocks = [];
+			for (const [index, block] of Object.entries(snapshot.val())) {
+				blocks.push(block);
+			}
+			blocks.databasePath = "/GreenLine";
+			setGreenBlocks(blocks);
+		});
+		Firebase.database().ref('/RedLine').on('value', snapshot => {
+			let blocks = [];
+			for (const [index, block] of Object.entries(snapshot.val())) {
+				blocks.push(block);
+			}
+			blocks.databasePath = "/RedLine";
+			setRedBlocks(blocks);
+		});
 	}, []);
-	
+
+	useEffect(() => {
+		setBlockLists({"red": redBlocks, "green": greenBlocks});
+	}, [redBlocks, greenBlocks]);
+
+	useEffect(() => console.log(`[CTC] new selectedBlock, ${selectedBlock.databasePath}`), [selectedBlock]);
+	useEffect(() => console.log(`[CTC] new selectedTrain, ${selectedTrain.databasePath}`), [selectedTrain]);
+
 	return (
 		<div>
 			<header className="App-header">
@@ -125,6 +156,7 @@ function CTC() {
 					selectedTrain={selectedTrain}
 					trainsList={trainsList}
 					setSelectedBlock={setSelectedBlock}
+					blockLists={blockLists}
 				/>
 			</header>
 			<ScheduleModal
