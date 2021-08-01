@@ -6,7 +6,7 @@ import VarDisplayMulti from '../components/VarDisplayMulti';
 import SetDesiredTempModal from './SetDesiredTempModal';
 import { DatabaseGetMulti } from '../components/DatabaseMulti';
 
-function PropertiesPanel({selectedBlock}) {
+function PropertiesPanel({selectedBlock,}) {
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -37,7 +37,7 @@ function PropertiesPanel({selectedBlock}) {
 				<VarDisplayMulti message='Block Length [ft]' path={`/GreenLine/${selectedBlock}/BlockLength`} />
 				<VarDisplayMulti message='Directions of Travel' path={`/GreenLine/${selectedBlock}/DirectionOfTravel`} />
 				<VarDisplayMulti message='Elevation [ft]' path={`/GreenLine/${selectedBlock}/Elevation`} />
-				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`/GreenLine/${selectedBlock}/DesiredTrackTemperature`} />
+				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`/GreenLine/DesiredTrackTemperature`} />
 				<VarDisplayMulti message='Railway Crossing' path={`/GreenLine/${selectedBlock}/isLevelCrossingBlock`} />
 				<VarDisplayMulti message='Speed Limit [mph]' path={`/GreenLine/${selectedBlock}/SpeedLimit`} />
 
@@ -49,9 +49,10 @@ function PropertiesPanel({selectedBlock}) {
 					Set Desired Temp
 				</Button>
 				<SetDesiredTempModal
-				show={tempModalShow}
-				onHide={() => {setTempModalShow(false)}}
-			/>
+					show={tempModalShow}
+					lineName={"GreenLine"}
+					onHide={() => {setTempModalShow(false)}}
+				/>
 			</div>
 		</div>
 
