@@ -21,7 +21,6 @@ function TrackModel() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	// const [parentName, setParentName] = useState('Block1');
 	const [trainsList, setTrainsList] = useState({});
 	const [jsonTree, setJsonTree] = useState([]);
 	const [blockList, setBlockList] = useState([]);
