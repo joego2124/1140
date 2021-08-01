@@ -31,8 +31,6 @@ function StatesPanel({selectedBlock}){
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	console.log("tickets: ", getRandomInt(3));
-
 	const [actualTemp, setTemp] = useState(0);
 	// const [desiredTemp, setDesTemp] = useState(0);
 	const [trackOccup, setTrackOccup] = useState(0);
@@ -141,6 +139,7 @@ function StatesPanel({selectedBlock}){
 								<br />
 								<VarDisplayMulti message='Passengers departing' path={`/GreenLine/${selectedBlock}/Station/PassengersDeparting`} />
 								<br />
+								<VarDisplayMulti message='Ticket sales' path={`/GreenLine/${selectedBlock}/Station/Tickets`} />
 							</p>
 							<h4>FAILURE MODES</h4>
 								<ButtonGroup size="sm">
