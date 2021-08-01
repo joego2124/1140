@@ -11,7 +11,8 @@ const SetTempModal = (props) => {
 		<Modal
       {...props}
       aria-labelledby="contained-modal-title-vcenter"
-      centered
+      centered 
+      size="lg"
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
