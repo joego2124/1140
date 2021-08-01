@@ -107,7 +107,7 @@ function CTC() {
 	const [greenBlocks, setGreenBlocks] = useState([]);
 	const [blockLists, setBlockLists] = useState({});
 
-	//update trains list
+	//update trains and blocks list
 	useEffect(() => {
 		Firebase.database().ref('/TrainList').on('value', snapshot => {
 			let list = snapshot.val();
@@ -138,6 +138,8 @@ function CTC() {
 
 	useEffect(() => console.log(`[CTC] new selectedBlock, ${selectedBlock.databasePath}`), [selectedBlock]);
 	useEffect(() => console.log(`[CTC] new selectedTrain, ${selectedTrain.databasePath}`), [selectedTrain]);
+
+	console.log(blockLists);
 
 	return (
 		<div>

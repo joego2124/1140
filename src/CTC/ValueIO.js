@@ -1,6 +1,8 @@
 import { Button, Dropdown } from 'react-bootstrap';
 import React from 'react'
 
+import Firebase from "firebase";
+
 const ValueIO = ({
 	valueType,
 	valueLabel,
@@ -16,7 +18,8 @@ const ValueIO = ({
 				valueType === "input" ? (
 					<Dropdown
 						onSelect={e => {
-							console.log(`event key: ${e}, valueDatabasePath: ${valueDatabasePath}`);
+							Firebase.database().ref(valueDatabasePath).set((e == 0 || e == 1) ? Number(e) : e);
+							console.log(`[CTC/ManiPanel/ValueIO]cevent key: ${e}, valueDatabasePath: ${valueDatabasePath}`);
 						}}
 					>
 						<Dropdown.Toggle 

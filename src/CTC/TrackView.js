@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Button, OverlayTrigger, Tooltip, Dropdown, DropdownButton } from 'react-bootstrap';
 import { BiTrain } from 'react-icons/bi';
@@ -69,9 +69,12 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	const [filteredLineSVGs, setFilteredLineSVGs] = useState([]);
 	const [trainSVGs, setTrainSVGs] = useState([]);
 
-	let updateSelectedBlock = (blockId, color) => {
+	const updateSelectedBlock = useCallback((blockId, color) => {
 		let blockDatabaseIndex;
-		console.log(color, blockLists);
+		console.log(blockId, color);
+		if (blockLists[color] == undefined) {
+			console.warn("BLOCKLISTS NOT POPULATED");
+		};
 		let selectedBlock = blockLists[color].find((block, index) => {
 			if (index != "databasePath") {
 				let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
@@ -85,7 +88,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			selectedBlock.databasePath = `${blockLists[color].databasePath}/${blockDatabaseIndex}`;
 			setSelectedBlock(selectedBlock);
 		}
-	}
+	}, [blockLists]);
 
 	let greenBlockSVGs = [];
 	let redBlockSVGs = [];
@@ -97,14 +100,17 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			let train = trainArr[1];
 			if (trainArr[0] != "databasePath") {
 				return trackBlockCircle(
-					<BiTrain style={{
-						position: "absolute",
-						top: "50%", 
-						left: "50%",
-						width: 35,
-						height: 35, 
-						transform: "translate(-50%, -50%)",
-					}}/>,
+					<BiTrain 
+						key={train.TrainId}
+						style={{
+							position: "absolute",
+							top: "50%", 
+							left: "50%",
+							width: 35,
+							height: 35, 
+							transform: "translate(-50%, -50%)",
+						}}
+					/>,
 					"white",
 					"rgb(101, 93, 110, 1)",
 					() => {},
@@ -191,10 +197,6 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			});
 
 			color = currBlock.section === "YARD" ? "grey" : color; //yard blocks are grey
-
-			const clickHandler = () => {
-				updateSelectedBlock(currBlock.blockId, lineColor);
-			}
 			
 			//create new svg and push to track block SVGs
 			let newSVG = <div 
@@ -223,7 +225,9 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 						transform: "translate(-50%, -50%)",
 						zIndex: 1000,
 					}} 
-					onClick={clickHandler}
+					onClick={() => {
+						updateSelectedBlock(currBlock.blockId, lineColor)
+					}}
 				>
 					{Blocks[blockTypeName]}
 				</svg>
@@ -258,6 +262,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			});
 		}
 
+		let lineColor = lineName === "greenLine" ? "green" : "red";
 		let newBlockSVGs = <div key={lineName + currBlock.blockId}>
 			<OverlayTrigger
 				placement="top"
@@ -274,7 +279,9 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					}}/>, 
 					"white", 
 					`rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`, 
-					() => updateSelectedBlock(currBlock.blockId, lineName === "greenLine" ? "green" : "red"),
+					() => {
+						console.log(lineColor);
+						updateSelectedBlock(currBlock.blockId, lineColor)},
 					currPos
 				) : <></>}
 			</OverlayTrigger>
@@ -299,16 +306,19 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 		}
 	}
 
-	//iterate through lines to render track view
-	for (const [key, value] of Object.entries(trackLayout)) {
-		lineName = key;
-		visitedBlockIds = [];
-		traceTrack(
-			value[0], 
-			{x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize}, 
-			value
-		);
-	}
+	//iterate through lines to render track view when blockLists or lineFilter changes
+	useEffect(() => {
+		console.log("[CTC/TrackView] Rendering track view");
+		for (const [key, value] of Object.entries(trackLayout)) {
+			lineName = key;
+			visitedBlockIds = [];
+			traceTrack(
+				value[0], 
+				{x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize}, 
+				value
+			);
+		}
+	}, [blockLists, lineFilter]);
 
 	return (
 		<div style={styles.track}>
