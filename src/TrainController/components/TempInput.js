@@ -1,16 +1,21 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Form, Button, Container, Row } from 'react-bootstrap';
-import { DatabaseGetTrainListVal, DatabaseSet } from '../Database';
+import {DatabaseGet, DatabaseSet} from '../../Database';
+import "../../components/componentStyles.css";
 
-function VarInput({ varName, message, parentName }) {
-  const [vari, setVari] = useState(false);
+function TempInput({ varName, parentName, selectedTrain }) {
+
+  const [vari, setVari] = useState(0);
 
   useEffect(() => {
-    setTimeout(() => DatabaseGetTrainListVal(setVari, varName, parentName), 500);
+    setTimeout(() => DatabaseGet(setVari, varName, parentName), 500);
   }, [parentName]);
   
   const setValue = (val) => {
-    DatabaseSet(val, varName, parentName);
+    if (val <= 72 && val >= 68) {
+      let num = parseInt(val)
+      DatabaseSet(num, varName, parentName);
+    }
   }
 
   const setValueEvent = useCallback(
@@ -18,15 +23,14 @@ function VarInput({ varName, message, parentName }) {
         event.preventDefault();
         const {formInput} = event.target.elements;
         setValue(formInput.value);
-    }, []
-);
+    }, [varName, parentName, selectedTrain]);
+
 
   return (
     <div>
         <Container>
             <Form onSubmit={setValueEvent}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Update {message}</Form.Label>
                     <Form.Control name="formInput" placeholder={vari} />
                 </Form.Group>
                 <Button variant="primary" type="submit">
@@ -38,4 +42,4 @@ function VarInput({ varName, message, parentName }) {
   );
 }
 
-export default VarInput;
+export default TempInput;

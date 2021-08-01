@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import { BsCircleFill } from "react-icons/bs";
-import { Button, Container, Row  } from 'react-bootstrap';
 import {DatabaseGet, DatabaseSet} from '../../Database';
 import "../../components/componentStyles.css";
 
