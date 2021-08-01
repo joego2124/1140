@@ -4,8 +4,8 @@ import Firebase from 'firebase';
 
 const SetTempModal = (props) => {
 
-    const [desiredTemp, setDesiredTemp] = useState(95);
-    const [environmentTemp, setEnvironmentTemp] = useState(70);
+    const [desiredTemp, setDesiredTemp] = useState();
+    const [environmentTemp, setEnvironmentTemp] = useState();
 
 	return (
 		<Modal
@@ -46,9 +46,11 @@ const SetTempModal = (props) => {
             // console.log(`/${props.lineName}/DesiredTrackTemperature`);
             Firebase.database().ref(`/${props.lineName}/DesiredTrackTemperature`).set(Number(desiredTemp));
         }}>Set Desired Track Temperature</Button>
+
         <Button onClick={() => {
             Firebase.database().ref(`/${props.lineName}/CurrentTemperature`).set(Number(environmentTemp));
         }}>Set Environmental Temperature</Button>
+
         <Button onClick={props.onHide}>Cancel</Button>
       </Modal.Footer>
     </Modal>
