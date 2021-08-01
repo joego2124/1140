@@ -70,21 +70,25 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	const [trainSVGs, setTrainSVGs] = useState([]);
 
 	const updateSelectedBlock = useCallback((blockId, color) => {
-		let blockDatabaseIndex;
-		console.log(blockId, color);
-		let selectedBlock = blockLists[color].find((block, index) => {
-			if (index != "databasePath") {
-				let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
-				if (roundedBlockId === blockId) {
-					blockDatabaseIndex = index;
-					return true;
-				}
-			}
-		});
-		if (selectedBlock != undefined) {
-			selectedBlock.databasePath = `${blockLists[color].databasePath}/${blockDatabaseIndex}`;
-			setSelectedBlock(selectedBlock);
-		}
+		// let blockDatabaseIndex;
+		// console.log(blockId, color, blockLists[color]);
+		// if (blockLists[color] == undefined) {
+		// 	console.log(lineFilter);
+		// }
+		// let selectedBlock = blockLists[color]?.find((block, index) => {
+		// 	if (index != "databasePath") {
+		// 		let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
+		// 		if (roundedBlockId === blockId) {
+		// 			blockDatabaseIndex = index;
+		// 			return true;
+		// 		}
+		// 	}
+		// });
+		// if (selectedBlock != undefined) {
+		// 	selectedBlock.databasePath = `${blockLists[color].databasePath}/${blockDatabaseIndex}`;
+		// 	setSelectedBlock(selectedBlock);
+		// }
+		console.log(blockLists);
 	}, [blockLists]);
 
 	let greenBlockSVGs = [];
@@ -184,26 +188,16 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 
 			color = currBlock.section === "YARD" ? "grey" : color; //yard blocks are grey
 
-			//show occupancy
-			// Object.entries(trainsList).forEach(trainArr => {
-			// 	let targBlockId = Math.floor(trainArr[1].CurrentBlock);
-			// 	let compBlockId = Math.floor(currBlock.blockId);
-			// 	if (targBlockId == compBlockId) {
-			// 		color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
-			// 	}
-			// });
-			
-			if (blockLists[lineColor] != undefined) {
-				let block = blockLists[lineColor].find(block => {
-					let blockId = block.BlockNumber > 0 ? Math.floor(block.BlockNumber) : Math.ceil(block.BlockNumber);
-					let currBlockId = currBlock.blockId > 0 ? Math.floor(currBlock.blockId) : Math.ceil(currBlock.blockId);
-					return blockId == currBlockId;
-				})
-				if (block?.Occupancy == 1) {
-					console.log("OCCUPIED", block.BlockNumber);
-					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
-				}
-			} else console.warn("[CTC/TrackView] blockList empty");
+			//show occupancy based on blocks
+			let currBlockId = currBlock.blockId > 0 ? Math.floor(currBlock.blockId) : Math.ceil(currBlock.blockId);
+			let block = blockLists[lineColor][currBlockId];
+			if (currBlock.blockId == 15 && lineColor == "red") {
+				console.log(block?.Occupancy);
+			}
+			if (block?.Occupancy == 1) {
+				console.log(currBlockId);
+				color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
+			}
 
 			//create new svg and push to track block SVGs
 			let newSVG = <div 
@@ -270,7 +264,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 		}
 
 		let lineColor = lineName === "greenLine" ? "green" : "red";
-		let newBlockSVGs = <div key={lineName + currBlock.blockId}>
+		let newBlockSVGs = <div key={lineColor + currBlock.blockId}>
 			<OverlayTrigger
 				placement="top"
 				overlay={<Tooltip>{currBlock.station}</Tooltip>}
@@ -287,7 +281,6 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					"white", 
 					`rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`, 
 					() => {
-						console.log(lineColor);
 						updateSelectedBlock(currBlock.blockId, lineColor)},
 					currPos
 				) : <></>}
@@ -314,8 +307,29 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	}
 
 	//iterate through lines to render track view when blockLists or lineFilter changes
+	// useEffect(() => {
+	// 	console.log("[CTC/TrackView] Rendering track view", blockLists);
+	// 	for (const [key, value] of Object.entries(trackLayout)) {
+	// 		lineName = key;
+	// 		visitedBlockIds = [];
+	// 		traceTrack(
+	// 			value[0], 
+	// 			{x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize}, 
+	// 			value
+	// 		);
+			
+	// 		let filteredSVGs = [];
+	// 		greenBlockSVGs.forEach(svg => filteredSVGs.push(svg));
+	// 		redBlockSVGs.forEach(svg => filteredSVGs.push(svg));
+	// 		setFilteredLineSVGs(filteredSVGs);
+	// 	}
+	// }, [blockLists, lineFilter]);
+
 	useEffect(() => {
+		if (Object.keys(blockLists).length == 0) return;
 		console.log("[CTC/TrackView] Rendering track view");
+		greenBlockSVGs = [];
+		redBlockSVGs = [];
 		for (const [key, value] of Object.entries(trackLayout)) {
 			lineName = key;
 			visitedBlockIds = [];
@@ -325,9 +339,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 				value
 			);
 		}
-	}, [blockLists, lineFilter]);
-
-	useEffect(() => updateFilter("both"), []); //render track view initially
+		setFilteredLineSVGs(greenBlockSVGs.concat(redBlockSVGs));
+	}, [blockLists]);
 
 	return (
 		<div style={styles.track}>
