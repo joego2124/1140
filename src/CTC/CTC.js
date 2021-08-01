@@ -140,8 +140,6 @@ function CTC() {
 	useEffect(() => console.log(`[CTC] new selectedBlock, ${selectedBlock.databasePath}`), [selectedBlock]);
 	useEffect(() => console.log(`[CTC] new selectedTrain, ${selectedTrain.databasePath}`), [selectedTrain]);
 
-	console.log(blockLists);
-
 	return (
 		<div>
 			<header className="App-header">
