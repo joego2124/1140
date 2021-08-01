@@ -16,10 +16,10 @@ function InitializeJsonTree(){
 	}
     
     let ref = Firebase.database().ref('/');
-    ref.once('value', snapshot => {
+    ref.on('value', snapshot => {
         const state = snapshot.val();
         jsonTree = state;
-        console.table(jsonTree);
+        //console.table(jsonTree);
     });
 }
 
@@ -96,6 +96,19 @@ function findById(o, id, path) {
 function DatabaseSet(value, varName, parentName){
     
     var path = findPath(varName, parentName);
+    console.log('DB Setter Path: ', path)
+    console.log('Value: ', value)
+
+    if (!path) {
+        console.warn(`${varName} NOT FOUND IN RTDB TREE`);
+    } else {
+        Firebase.database().ref(path).set(value);
+    }
+}
+
+function DatabaseSetTrainListVal(value, varName, parentName){
+    
+    var path = '/TrainList/' + parentName + '/' + varName;
 
     if (!path) {
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
@@ -107,6 +120,20 @@ function DatabaseSet(value, varName, parentName){
 function DatabaseGet(setter, varName, parentName){
     
     var path = findPath(varName, parentName);
+    if (!path) {
+        console.warn(`${varName} NOT FOUND IN RTDB TREE`);
+    } else {
+        let ref = Firebase.database().ref(path);
+        ref.on('value', snapshot => {
+            const state = snapshot.val();
+            setter(state);
+        });
+    }
+}
+
+function DatabaseGetTrainListVal(setter, varName, parentName){
+
+    var path = '/TrainList/' + parentName + '/' + varName;
 
     if (!path) {
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
@@ -163,7 +190,9 @@ function DatabaseList(setter, varName, parentName){
 export {
     InitializeJsonTree,
     DatabaseSet,
+    DatabaseSetTrainListVal,
     DatabaseGet,
+    DatabaseGetTrainListVal,
     DatabaseAdd,
     DatabaseList,
 }
