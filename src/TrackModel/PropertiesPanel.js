@@ -1,32 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import SlidingPane from "react-sliding-pane";
 import { Button } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import DatabaseGet from '../Database'
 import config from '../config';
 import Firebase from "firebase";
-import WSMDisplay from './WSMVarDisplay';
 import VarDisplayMulti from '../components/VarDisplayMulti';
-
-// const [blockList, setBlockList] = useState([]);
-
-// function getBlockListData() {
-//     let tempList = [];
-//     let ref = Firebase.database().ref('/RedLine');
-//     ref.on('value', (snapshot) => {
-//       for (const [key, value] of Object.entries(snapshot.val())) {
-//         for (const [i, v] of Object.entries(value)) {
-//           console.log(i, v);
-//           tempList.push(v);
-//         }
-//       }
-//       setBlockList(tempList);
-//       console.log(tempList);
-//       console.log(blockList);
-//     });
-//   }
+import SetDesiredTempModal from './SetDesiredTempModal';
+import { DatabaseGetMulti } from '../components/DatabaseMulti';
 
 function PropertiesPanel({selectedBlock}) {
 
@@ -36,6 +14,11 @@ function PropertiesPanel({selectedBlock}) {
 		Firebase.app(); // if already initialized, use that one
 	}
 	// console.log(`PropertiesPanel selected block: ${selectedBlock}`)
+
+	const [tempModalShow, setTempModalShow] = useState(false);
+	const [actualTemp, setActualTemp] = useState(95);
+	
+	useEffect(() => {setTimeout(() => DatabaseGetMulti(setActualTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
 
 	return (
 		// Properties title
@@ -58,10 +41,17 @@ function PropertiesPanel({selectedBlock}) {
 				<VarDisplayMulti message='Railway Crossing' path={`/GreenLine/${selectedBlock}/isLevelCrossingBlock`} />
 				<VarDisplayMulti message='Speed Limit [mph]' path={`/GreenLine/${selectedBlock}/SpeedLimit`} />
 
-				<Button variant="primary" size="sm" >
+				<Button
+					variant="primary"
+					size="sm"
+					onClick={() => setTempModalShow(true)}
+				>
 					Set Desired Temp
 				</Button>
-				{/* <p style={{textColor: "grey"}}>__</p> */}
+				<SetDesiredTempModal
+				show={tempModalShow}
+				onHide={() => {setTempModalShow(false)}}
+			/>
 			</div>
 		</div>
 
