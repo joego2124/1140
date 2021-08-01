@@ -136,15 +136,10 @@ const MainPanel = ({
 						
 						<div className="controlPanelSubSection">
 							<ValueIO 
-								valueType="input"
-								valueLabel="Railway State"
-								valueDatabasePath={`${selectedBlock.databasePath}/CrossingLights`}
+								valueType="output"
+								valueLabel="Selected Block"
 								valueData={{
-									value: selectedBlock.CrossingLights === 0 ? "FALSE" : "TRUE",
-									dropdownList: [
-										<Dropdown.Item eventKey={1}>TRUE</Dropdown.Item>,
-										<Dropdown.Item eventKey={0}>FALSE</Dropdown.Item>,
-									],
+									value: `${selectedBlock.Line}${selectedBlock.BlockNumber}`,
 								}}
 							/>
 							<ValueIO 

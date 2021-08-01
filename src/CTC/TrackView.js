@@ -70,36 +70,33 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	const [trainSVGs, setTrainSVGs] = useState([]);
 
 	const updateSelectedBlock = useCallback((blockId, color) => {
-		// let blockDatabaseIndex;
-		// console.log(blockId, color, blockLists[color]);
-		// if (blockLists[color] == undefined) {
-		// 	console.log(lineFilter);
-		// }
-		// let selectedBlock = blockLists[color]?.find((block, index) => {
-		// 	if (index != "databasePath") {
-		// 		let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
-		// 		if (roundedBlockId === blockId) {
-		// 			blockDatabaseIndex = index;
-		// 			return true;
-		// 		}
-		// 	}
-		// });
-		// if (selectedBlock != undefined) {
-		// 	selectedBlock.databasePath = `${blockLists[color].databasePath}/${blockDatabaseIndex}`;
-		// 	setSelectedBlock(selectedBlock);
-		// }
-		console.log(blockLists);
+		let blockDatabaseIndex;
+		let selectedBlock = blockLists[color]?.find((block, index) => {
+			if (index != "databasePath") {
+				let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
+				if (roundedBlockId === blockId) {
+					blockDatabaseIndex = index;
+					return true;
+				}
+			}
+		});
+		if (selectedBlock != undefined) {
+			selectedBlock.databasePath = `${blockLists[color].databasePath}/${blockDatabaseIndex}`;
+			setSelectedBlock(selectedBlock);
+		}
 	}, [blockLists]);
 
 	let greenBlockSVGs = [];
 	let redBlockSVGs = [];
 	let visitedBlockIds = [];
-	let lineName;
 
+	//render train icons on track
 	useEffect(() => {
 		setTrainSVGs(Object.entries(trainsList).map(trainArr => {
 			let train = trainArr[1];
 			if (trainArr[0] != "databasePath") {
+				let layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"]
+				.find(block => Math.trunc(block.blockId) === Math.trunc(train.CurrentBlock));
 				return trackBlockCircle(
 					<BiTrain 
 						key={train.TrainId}
@@ -115,28 +112,17 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					"white",
 					"rgb(101, 93, 110, 1)",
 					() => {},
-					trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"].find(block => block.blockId === train.CurrentBlock).position
+					layoutBlock?.position
 				);
 			}
 		}));
 	}, [trainsList]);
 
-	function updateFilter(e) {
-		setLineFilter(e);
-		let filteredSVGs = [];
-		if (e === "green" || e === "both") {
-			greenBlockSVGs.forEach(svg => filteredSVGs.push(svg));
-		}
-		if (e === "red" || e === "both") {
-			redBlockSVGs.forEach(svg => filteredSVGs.push(svg));
-		}
-		setFilteredLineSVGs(filteredSVGs);
-	}
-
 	//recursive function to generate a list of tracks for rendering
-	const traceTrack = (currBlock, currPos, trackLayoutList) => {
+	const traceTrack = (currBlock, currPos, trackLayoutList, lineName) => {
 		
 		let blockSVGs = [];
+		let lineColor = lineName === "greenLine" ? "green" : "red";
 		
 		currBlock.position = currPos;
 
@@ -166,7 +152,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 							default: break;
 						}
 						const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
-						traceTrack(nextBlock, nextPos, trackLayoutList);
+						traceTrack(nextBlock, nextPos, trackLayoutList, lineName);
 					}
 				}
 				blockTypeName += (nextBlockId === null ? "0" : "1"); //inc blockTypeName
@@ -184,18 +170,12 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			let blockType = (blockTypeName === "0101" || blockTypeName === "1010") ? "straight" : "curved";
 			let size = blockType === "straight" ? 100 : 55;
 			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${blockSVGs.length > 0 ? .25 : 1})`;
-			let lineColor = lineName === "greenLine" ? "green" : "red";
-
+			
 			color = currBlock.section === "YARD" ? "grey" : color; //yard blocks are grey
 
 			//show occupancy based on blocks
-			let currBlockId = currBlock.blockId > 0 ? Math.floor(currBlock.blockId) : Math.ceil(currBlock.blockId);
-			let block = blockLists[lineColor][currBlockId];
-			if (currBlock.blockId == 15 && lineColor == "red") {
-				console.log(block?.Occupancy);
-			}
+			let block = blockLists[lineColor][Math.trunc(currBlock.blockId)];
 			if (block?.Occupancy == 1) {
-				console.log(currBlockId);
 				color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
 			}
 
@@ -263,7 +243,6 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			});
 		}
 
-		let lineColor = lineName === "greenLine" ? "green" : "red";
 		let newBlockSVGs = <div key={lineColor + currBlock.blockId}>
 			<OverlayTrigger
 				placement="top"
@@ -306,37 +285,18 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 		}
 	}
 
-	//iterate through lines to render track view when blockLists or lineFilter changes
-	// useEffect(() => {
-	// 	console.log("[CTC/TrackView] Rendering track view", blockLists);
-	// 	for (const [key, value] of Object.entries(trackLayout)) {
-	// 		lineName = key;
-	// 		visitedBlockIds = [];
-	// 		traceTrack(
-	// 			value[0], 
-	// 			{x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize}, 
-	// 			value
-	// 		);
-			
-	// 		let filteredSVGs = [];
-	// 		greenBlockSVGs.forEach(svg => filteredSVGs.push(svg));
-	// 		redBlockSVGs.forEach(svg => filteredSVGs.push(svg));
-	// 		setFilteredLineSVGs(filteredSVGs);
-	// 	}
-	// }, [blockLists, lineFilter]);
-
 	useEffect(() => {
 		if (Object.keys(blockLists).length == 0) return;
 		console.log("[CTC/TrackView] Rendering track view");
 		greenBlockSVGs = [];
 		redBlockSVGs = [];
 		for (const [key, value] of Object.entries(trackLayout)) {
-			lineName = key;
 			visitedBlockIds = [];
 			traceTrack(
 				value[0], 
 				{x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize}, 
-				value
+				value,
+				key
 			);
 		}
 		setFilteredLineSVGs(greenBlockSVGs.concat(redBlockSVGs));
@@ -344,7 +304,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 
 	return (
 		<div style={styles.track}>
-			<DropdownButton 
+			{/* <DropdownButton 
 				className="filterLineButton"
 				id="dropdown-basic-button" 
 				title={`Line: ${lineFilter}`} 
@@ -353,7 +313,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 				<Dropdown.Item eventKey="red">Red</Dropdown.Item>
 				<Dropdown.Item eventKey="green">Green</Dropdown.Item>
 				<Dropdown.Item eventKey="both">Both</Dropdown.Item>
-			</DropdownButton>
+			</DropdownButton> */}
 			<TransformWrapper 
 				limitToBounds={false} 
 				minScale={.01} 

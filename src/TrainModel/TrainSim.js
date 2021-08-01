@@ -64,8 +64,6 @@ function makeTrainSim(newTrainId) {
                     }
                 } else {
                     //no brakes
-                    console.log( 
-                        ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : 1) )) - (32.2 * Math.sin(this.grade)) );
                     Firebase.database().ref(`/TrainList/${this.trainId}/Acceleration`).set( 
                         ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : 1) )) - (32.2 * Math.sin(this.grade)) );
                 }
@@ -87,8 +85,8 @@ function makeTrainSim(newTrainId) {
 
                 //get signal state
                 // var switchstate = 0;
-                // console.log(this.blocknumber);
-                Firebase.database().ref(`/${this.line}/${this.blocknumber}/SwitchState`).once('value', snapshot => {
+                console.log(this.blocknumber);
+                Firebase.database().ref(`/${this.line}/${Math.trunc(this.blocknumber)}/SwitchState`).once('value', snapshot => {
                     this.switchstate = snapshot.val();
                     // console.log(this.blocknumber,'state', snapshot.val(), this.switchstate, 'db');
                 });
@@ -113,6 +111,7 @@ function makeTrainSim(newTrainId) {
                 }
                 var newblock = connectors.find( x => x != null && (x > 0 ? x : 0) != this.previousblocknumber);
                 if (newblock < 0) newblock = 0;
+                newblock = Math.trunc(newblock);
                 
                 if(newblock == undefined ) {
                     console.warn("RAN OFF EDGE OF TRACK: valid connection not found");
@@ -122,7 +121,7 @@ function makeTrainSim(newTrainId) {
                 Firebase.database().ref(`/TrainList/${this.trainId}/CurrentBlock`).set(newblock);
                 Firebase.database().ref(`/TrainList/${this.trainId}/PreviousBlock`).set(temp);
 
-                Firebase.database().ref(`/${this.line}/${newblock < 0 ? Math.ceil(newblock) : Math.floor(newblock)}/Occupancy`).set(1);
+                Firebase.database().ref(`/${this.line}/${newblock}/Occupancy`).set(1);
                 Firebase.database().ref(`/${this.line}/${temp}/Occupancy`).set(0);
 
                 //set new block values
