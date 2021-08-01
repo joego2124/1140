@@ -15,14 +15,6 @@ import { DatabaseSetMulti } from '../components/DatabaseMulti';
 import SplitButton from 'react-bootstrap/SplitButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
-function getRandomInt( max ) {
-	return Math.floor(Math.random() * max);
-}
-
-function generateTicketSales( max ) {
-	return Math.floor(Math.random() * max);
-}
-
 function StatesPanel({selectedBlock}){
 
 	if (!Firebase.apps.length) {
@@ -46,6 +38,10 @@ function StatesPanel({selectedBlock}){
 
 	// Checking if track heater needs to be turned on
 	// useEffect(() => {setTimeout(() =>  DatabaseGetMulti(setTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
+
+	///////////////////////////////////////////////////////////////
+	//                          OLD CODE                         //
+	///////////////////////////////////////////////////////////////
 	// useEffect(() => {setTimeout(() => DatabaseGet(setTemp, 'Temperature', parentName), 500);}, [parentName]);
 	// useEffect(() => {setTimeout(() => DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName),500);}, [parentName]);
 	// useEffect(() => {setTimeout(() => DatabaseGet(setTrackOccup, 'TrackOccupancy', parentName), 500);}, [parentName]);

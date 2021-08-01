@@ -26,12 +26,20 @@ function TrackModel() {
 	const [blockList, setBlockList] = useState([]);
 	const [selectedBlock, setSelectedBlock] = useState(`1`);
 
+	// Update trains list
 	useEffect(() => {
 		DatabaseGet(setTrainsList, "TrainList");
 	}, []);
-	useEffect(() => {
-		DatabaseGet(setJsonTree, "GreenLine");
-	}, []);
+
+	// for (const [key,value] of Object.entries(trainsList)) {
+	// 	// if the currentBlock is a station, generate ticket sales
+	// }
+	// useEffect(() => {
+	// 	DatabaseGet(setTrainsList, "TrainList");
+	// }, []);
+	// useEffect(() => {
+	// 	DatabaseGet(setJsonTree, "GreenLine");
+	// }, []);
 
 	function getBlockListData() {
 		let tempList = [];
