@@ -290,10 +290,10 @@ exports.parseFile = (plc) => {
       "var blockRef = firebase.database().ref('{0}/');\n" +
       "blockRef.get().then((snapshot) => {\n" +
       "\tconst data = snapshot.val();\n" +
-      "\tvar ctcRef = firebase.database().ref('CTC/SuggestedAuthority/{1}/{2}');\n" +
+      "\tvar ctcRef = firebase.database().ref('CTC/SuggestedAuthority/{1}/');\n" +
       "\tctcRef.get().then((snapshot) => {\n" + 
       "\tconst suggestedAuthority = snapshot.val();\n" +
-      "\t\tupdateAuth(data);\n" +
+      "\t\tupdateAuth(ctcRef);\n" +
       "\t\tupdateOccupancy(data);\n" +
       "\t\tupdateSwitchState(data);\n" +
       "\t\tlogic();\n" +
@@ -401,7 +401,7 @@ exports.parseFile = (plc) => {
           javascript += "var occupancy = [];\n";
           javascript += "var authority = [];\n\n";
   
-          javascript += String.format(listener, lineColor);
+          javascript += String.format(listener, lineColor, lineColor);
   
           for (j = 0; j < tokens[i].data.length; j++) {
             blocks.push(tokens[i].data[j]);
