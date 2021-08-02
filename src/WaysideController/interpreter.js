@@ -259,19 +259,8 @@ exports.parseFile = (plc) => {
   // -------- WRITER HELPER -----------
   function jsWriter(tokens) {
     var header =
-      "var firebase = require('firebase');\n\n" +
-      'var firebaseConfig = {\n' +
-      'apiKey: "AIzaSyCBn3bdnd0mHVJ_jZndJL-PzFdInaUxT9U",\n' +
-      'authDomain: "ece1140.firebaseapp.com",\n' +
-      'databaseURL: "https://ece1140-default-rtdb.firebaseio.com",\n' +
-      'projectId: "ece1140",\n' +
-      'storageBucket: "ece1140.appspot.com",\n' +
-      'messagingSenderId: "605378678892",\n' +
-      'appId: "1:605378678892:web:645efe33cf0597b2f40849",\n' +
-      'measurementId: "G-54DVYCZDPZ"\n' +
-      '};\n\n' +
-      'firebase.initializeApp(firebaseConfig);\n\n' +
-      'var database = firebase.database();\n\n';
+      "var firebase = require('firebase-admin');\n\n" +
+      'var database = admin.database();\n\n';
 
     // TODO:
     // -VARIABLE LINE
