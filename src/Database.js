@@ -105,7 +105,7 @@ function DatabaseSet(value, varName, parentName){
     }
 }
 
-function DatabaseSetTrainListVal(value, varName, parentName){
+function DatabaseSet2(value, varName, parentName){
     
     var path = '/TrainList/' + parentName + '/' + varName;
 
@@ -118,12 +118,15 @@ function DatabaseSetTrainListVal(value, varName, parentName){
 
 function DatabaseGet(setter, varName, parentName){
     
-    console.log('Setter: ', setter)
-    console.log('varName: ', varName)
-    console.log('parentName: ', parentName)
-    var path = '/TrainList/' + parentName + '/' + varName;
-    console.log('path: ', path)
+    //console.log('varName: ', varName)
+    //console.log('parentName: ', parentName)
+    // var path = '/TrainList/' + parentName + '/' + varName;
+    var path = findPath(varName, parentName);
+    //console.log('path: ', path)
+
     if (!path) {
+        console.log(path);
+        console.log("hello");
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
     } else {
         let ref = Firebase.database().ref(path);
@@ -134,7 +137,7 @@ function DatabaseGet(setter, varName, parentName){
     }
 }
 
-function DatabaseGetTrainListVal(setter, varName, parentName){
+function DatabaseGet2(setter, varName, parentName){
 
     var path = '/TrainList/' + parentName + '/' + varName;
 
@@ -193,9 +196,9 @@ function DatabaseList(setter, varName, parentName){
 export {
     InitializeJsonTree,
     DatabaseSet,
-    DatabaseSetTrainListVal,
+    DatabaseSet2,
     DatabaseGet,
-    DatabaseGetTrainListVal,
+    DatabaseGet2,
     DatabaseAdd,
     DatabaseList,
 }

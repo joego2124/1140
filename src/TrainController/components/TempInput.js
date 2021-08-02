@@ -1,45 +1,39 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Form, Button, Container, Row } from 'react-bootstrap';
-import {DatabaseGet, DatabaseSet} from '../../Database';
+import { Form, Button } from 'react-bootstrap';
 import "../../components/componentStyles.css";
+import Firebase from 'firebase';
 
 function TempInput({ varName, parentName, selectedTrain }) {
 
-  const [vari, setVari] = useState(0);
+  const [desiredTemp, setDesiredTemp] = useState();
 
-  useEffect(() => {
-    setTimeout(() => DatabaseGet(setVari, varName, parentName), 500);
-  }, [parentName]);
-  
-  const setValue = (val) => {
-    if (val <= 72 && val >= 68) {
-      let num = parseInt(val)
-      DatabaseSet(num, varName, parentName);
-    }
+  function helloworld(){
+    console.log('hello world')
   }
-
-  const setValueEvent = useCallback(
-    async event => {
-        event.preventDefault();
-        const {formInput} = event.target.elements;
-        setValue(formInput.value);
-    }, [varName, parentName, selectedTrain]);
-
 
   return (
     <div>
-        <Container>
-            <Form onSubmit={setValueEvent}>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Control name="formInput" placeholder={vari} />
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-            </Form>
-        </Container>
+        <Form>
+          <Form.Group
+            onChange={e => setDesiredTemp(e.target.value)}
+            className="mb-3"
+            controlId="formDesiredTemp">
+            <Form.Control
+              type="number" 
+              name = "desiredTemp"
+              min = "68"
+              max = "72"
+              placeholder={desiredTemp}>
+            </Form.Control>
+          </Form.Group>
+        </Form>
+        <Button onClick={() => {
+            Firebase.database().ref(`/TrainList/${parentName}/InternalTemperature`).set(Number(desiredTemp));
+        }}>Update</Button>
     </div>
   );
 }
 
 export default TempInput;
+
+
