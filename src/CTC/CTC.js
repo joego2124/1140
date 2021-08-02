@@ -13,7 +13,7 @@ var trackLayout = require("./TrackLayout.json");
 
 //parallel breadth first search on bidirectional line respecting unidirectional train travel
 function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
-	console.warn("STARTING PATHFIND");
+	console.log(`[CTC] STARTING PATHFIND, startBlockId: ${startBlockId} endBlockId: ${endBlockId}`);
 
 	//define initial blocks
 	let startBlock = lineLayout.find(v => v.blockId === startBlockId);
@@ -22,8 +22,11 @@ function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
 	//define stack with starting block
 	let stack = [[{current: startBlock, previous: _prevBlock}]]; 
 
-	while (stack.length > 0) {
+	let count = 0;
 
+	while (stack.length > 0) {
+		count++;
+		if (count > 300) break; // hard limit
 		//get the current branch from stack
 		let currBranches = stack[stack.length - 1], newBranches = [];
 		// console.log(stack[stack.length - 1]);
@@ -33,8 +36,8 @@ function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
 			let currentBlock = currBranches[k].current;
 			let prevBlock = currBranches[k].previous;
 
-			console.log(`currentBlock: ${currentBlock.blockId}, prevBlock: ${prevBlock.blockId}`);
-
+			// console.log(`currentBlock: ${currentBlock.blockId}, prevBlock: ${prevBlock.blockId}`);
+			
 			//if the current leaf block is the destination
 			if (currentBlock.blockId == endBlockId) {
 				console.log("found solution");
@@ -56,6 +59,9 @@ function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
 			for (let i = 0; i < currentBlock.connectors.length; i++) {
 				for (let j = 0; j < currentBlock.connectors[i].length; j++) {
 					let neighborBlockId = currentBlock.connectors[i][j]; //neighboring block
+					// if (currentBlock.blockId === 29 && neighborBlockId != null) {
+					// 	console.log(neighborBlockId, neighborBlockId != prevBlock.blockId, currentBlock.connectors[i].find(id => id === prevBlock.blockId));
+					// }
 					//make sure block exists and isn't the previous block
 					if (neighborBlockId != null && neighborBlockId != prevBlock.blockId) { 
 						//make sure the move to neighboring block is valid
