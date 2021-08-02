@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { DatabaseGetTrainListVal } from '../../Database';
+import { DatabaseGet2 } from '../../Database';
 import { BsCircleFill } from 'react-icons/bs';
 
 function VarIndicator({ varName, message, parentName }) {
   const [vari, setVari] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => DatabaseGetTrainListVal(setVari, varName, parentName), 500);
+    setTimeout(() => DatabaseGet2(setVari, varName, parentName), 500);
   }, [parentName]);
 
 	return (

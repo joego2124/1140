@@ -8,12 +8,12 @@ import LightOptions from './LightOptions';
 import TemperatureOptions from './TemperatureOptions';
 import FailureStatus from './FailureStatus';
 import TrainsPanel from '../CTC/TrainsPanel.js';
-import { DatabaseGet, DatabaseSet }  from "../Database";
+import { DatabaseGet, DatabaseSet }  from "../Database.js";
 import Firebase from 'firebase';
 
 function TrainContollerDriver() {
 
-	const [parentName, setParentName] = useState('TRN1');
+	const [parentName, setParentName] = useState();
 	const [addTrainModal, setAddTrainModal] = useState(false);
 	const [selectedTrain, setSelectedTrain] = useState({});
 	const [trainsList, setTrainsList] = useState({});
@@ -35,6 +35,7 @@ function TrainContollerDriver() {
 
 	return (
 		<div>
+			<p text-align='center'>{selectedTrain.TrainId}</p>
 			<header className="App-header">
 				<Container>
 					<Col>

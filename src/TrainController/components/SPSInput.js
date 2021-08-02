@@ -1,45 +1,46 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { Form, Button, Container, Row } from 'react-bootstrap';
-import {DatabaseGet, DatabaseSet} from '../../Database';
+import React, { useEffect, useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
 import "../../components/componentStyles.css";
+import Firebase from 'firebase';
 
-function SPSInput({ varName, parentName, selectedTrain }) {
-  const [vari, setVari] = useState(false);
+function SPSInput({ parentName }) {
 
-  useEffect(() => {
-    setTimeout(() => DatabaseGet(setVari, varName, parentName), 500);
-  }, [parentName]);
+  const [desiredSPS, setDesiredSPS] = useState();
+  
+  const [speedLimit, setSpeedLimit] = useState();
 
-  const setValue = (val) => {
-    console.log(selectedTrain.SpeedLimit);
-    if(val <= selectedTrain.SpeedLimit && selectedTrain.ManualMode == true){
-      let num = parseInt(val);
-      DatabaseSet(num, varName, parentName);
-    }
+  function getData() {
+    let ref = Firebase.database().ref(`/TrainList/${parentName}/SpeedLimit`);
+    ref.on('value', snapshot => {
+      setSpeedLimit(snapshot.val());
+    });
   }
 
-  const setValueEvent = useCallback(
-    async event => {
-        event.preventDefault();
-        const {formInput} = event.target.elements;
-        setValue(formInput.value);
-    }, [selectedTrain]
-);
+  useEffect(getData, [parentName]);
 
   return (
     <div>
-        <Container>
-            <Form onSubmit={setValueEvent}>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Control name="formInput" placeholder={vari} />
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-            </Form>
-        </Container>
+        <Form>
+          <Form.Group
+            onChange={e => setDesiredSPS(e.target.value)}
+            className="mb-3"
+            controlId="formDesiredSPS">
+            <Form.Control
+              type="number" 
+              name = "desiredSPS"
+              min = "0"
+              max = {speedLimit}
+              placeholder={desiredSPS}>
+            </Form.Control>
+          </Form.Group>
+        </Form>
+        <Button onClick={() => {
+            Firebase.database().ref(`/TrainList/${parentName}/SetpointSpeed`).set(Number(desiredSPS));
+        }}>Update</Button>
     </div>
   );
 }
 
 export default SPSInput;
+
+
