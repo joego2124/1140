@@ -27,12 +27,20 @@ const WaysideController = () => {
   // TODO: CHANGE ALL ON CLICKS TO INCLUDE ARROW FUNCTION
 
   // get json tree and find block list and wayside list for green line
-  useEffect(() => {
-    DatabaseGet(setGreenJsonTree, 'GreenLine');
-  }, []);
+  function getGreenJsonTreeData() {
+    let link = 'GreenLine';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      let newState = snapshot.val();
+      setGreenJsonTree(newState);
+    });
+  }
+
+  useEffect(() => getGreenJsonTreeData(), []);
 
   function getGreenBlockListData() {
     let greenList = [];
+    console.log(greenJsonTree);
     for (const [key, value] of Object.entries(greenJsonTree)) {
       greenList.push(value);
     }
@@ -57,9 +65,16 @@ const WaysideController = () => {
   useEffect(() => getGreenWaysideListData(), [greenBlockList]);
 
   // get json tree and find block list and wayside list for red line
-  useEffect(() => {
-    DatabaseGet(setRedJsonTree, 'RedLine');
-  }, []);
+  function getRedJsonTreeData() {
+    let link = 'RedLine';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      let newState = snapshot.val();
+      setRedJsonTree(newState);
+    });
+  }
+
+  useEffect(() => getRedJsonTreeData(), []);
 
   function getRedBlockListData() {
     let redList = [];
@@ -90,6 +105,17 @@ const WaysideController = () => {
   useEffect(() => {
     DatabaseGet(setTrainsList, 'TrainList');
   }, []);
+
+  function getTrainListData() {
+    let link = 'GreenLine';
+    let ref = Firebase.database().ref(link);
+    ref.on('value', (snapshot) => {
+      let newState = snapshot.val();
+      setGreenJsonTree(newState);
+    });
+  }
+
+  useEffect(() => getTrainListData(), []);
 
   return (
     <div>

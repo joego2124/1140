@@ -39,7 +39,7 @@ const WaysidePanel = ({
                 setSelectedWayside(waysideObj);
               }}
             >
-              WSC{`${waysideName}`}
+              WSC {parseInt(waysideName) + 1}
             </div>
           </div>
         </Button>
