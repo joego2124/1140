@@ -277,6 +277,7 @@ exports.parseFile = (plc) => {
     // -VARIABLE LINE
     var listener =
       "var blockRef = firebase.database().ref('{0}/');\n" +
+<<<<<<< HEAD
       'blockRef.get().then((snapshot) => {\n' +
       '\tconst data = snapshot.val();\n' +
       "\tvar ctcRef = firebase.database().ref('CTC/SuggestedAuthority/{1}/{2}');\n" +
@@ -291,6 +292,22 @@ exports.parseFile = (plc) => {
       '});\n\n';
 
     var updateBlocks = 'function updateOccupancy(data){\n';
+=======
+      "blockRef.get().then((snapshot) => {\n" +
+      "\tconst data = snapshot.val();\n" +
+      "\tvar ctcRef = firebase.database().ref('CTC/SuggestedAuthority/{1}/');\n" +
+      "\tctcRef.get().then((snapshot) => {\n" + 
+      "\tconst suggestedAuthority = snapshot.val();\n" +
+      "\t\tupdateAuth(ctcRef);\n" +
+      "\t\tupdateOccupancy(data);\n" +
+      "\t\tupdateSwitchState(data);\n" +
+      "\t\tlogic();\n" +
+      "\t\tupdate(authority, switchState);\n" +
+      "});\n" +
+      "});\n\n";
+  
+    var updateBlocks = "function updateOccupancy(data){\n";
+>>>>>>> 14f21b840f112852b8b2f7b135a4e4ab0ab4a51f
     var updateBlockInner = "occupancy[{0}] = data['{1}'].Occupancy\n";
 
     var updateAuth = 'function updateAuth(data){\n';
@@ -393,12 +410,21 @@ exports.parseFile = (plc) => {
             }
             continue;
           }
+<<<<<<< HEAD
           javascript += 'var occupancy = [];\n';
           javascript += 'var authority = [];\n\n';
 
           javascript += String.format(listener, lineColor);
 
           for (let j = 0; j < tokens[i].data.length; j++) {
+=======
+          javascript += "var occupancy = [];\n";
+          javascript += "var authority = [];\n\n";
+  
+          javascript += String.format(listener, lineColor, lineColor);
+  
+          for (j = 0; j < tokens[i].data.length; j++) {
+>>>>>>> 14f21b840f112852b8b2f7b135a4e4ab0ab4a51f
             blocks.push(tokens[i].data[j]);
             update += String.format(updateInner, tokens[i].data[j], j);
             updateAuth += String.format(updateAuthInner, j, tokens[i].data[j]);
