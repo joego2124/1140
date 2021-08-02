@@ -32,7 +32,7 @@ function TopBar() {
 			});
 
 			physicsTick();
-			updatePower();
+			// updatePower();
 
 			// These functions run every hour
 			if (time % 60 == 0) {

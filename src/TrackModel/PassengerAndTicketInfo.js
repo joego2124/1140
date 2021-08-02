@@ -1,12 +1,14 @@
 import Firebase from "firebase";
 
+var totalTickets = 0;
+
 // Description: Returns a random number between 0 and max.
 function getRandomInt( max ) {
     return Math.floor(Math.random() * max);
 }
 
 // Description: Sets ticket sales for each station along the route for each train
-function generateTicketSales() {
+function generateTicketSales( ) {
     var stationLists = {
         GreenLine: [],
         RedLine: [],
@@ -26,12 +28,23 @@ function generateTicketSales() {
         });
         Object.entries(stationLists).forEach(arr => { 
             let lineName = arr[0];
+            let totalTickets = 0;
             console.log(`${lineName}: ${arr[1]}`);
             arr[1].forEach(stationId => {
-                Firebase.database().ref(`/${lineName}/${stationId}/Station/Tickets`).set(Number(getRandomInt( 50 )));
+                let tempTickets = getRandomInt( 50 );
+                // totalTickets += tempTickets;
+
+                // Set ticket value for stations
+                Firebase.database().ref(`/${lineName}/${stationId}/Station/Tickets`).set( Number(tempTickets) );
+                // Set throughput value
+                // Firebase.database().ref(`/${lineName}/${stationId}/Station/Tickets`).set( Number(tempTickets) );
             });
         });
     });
+
+    return(
+        totalTickets
+    )
 }
 
 export default generateTicketSales;
