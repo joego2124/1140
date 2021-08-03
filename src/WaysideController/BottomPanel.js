@@ -10,10 +10,15 @@ import { DatabaseGet, DatabaseSet } from '../Database';
 import PLCFileUpload from './PLCFileUpload';
 import VarDisplay from '../components/VarDisplay';
 
-const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
+const BottomPanel = ({
+  selectedWayside,
+  selectedBlockFromTrack,
+  selectedWaysideName,
+}) => {
   console.log(selectedBlockFromTrack);
   const [open, setOpen] = useState(true);
-  const [plcUploaded, setPlcUploaded] = useState(0);
+  const [plcUploadDate, setPlcUploadDate] = useState();
+  const [plcWaysideNumber, setPlcWaysideNumber] = useState();
   const [selectedBlock, setSelectedBlock] = useState(selectedBlockFromTrack);
 
   useEffect(() => handleBlocks('trackSelectedBlock'), [selectedBlockFromTrack]);
@@ -30,35 +35,26 @@ const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
     }
   }
 
-  function getUploadStatusWS0Data() {
-    let link = 'WSC/WSC0/UploadStatus';
+  function getPlcUploadDateData() {
+    let link = 'WSC/' + selectedWaysideName + '/UploadStatus';
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       let newState = snapshot.val();
-      setPlcUploaded(newState);
+      setPlcUploadDate(newState);
     });
   }
 
-  useEffect(() => getUploadStatusWS0Data(), [selectedWayside]);
-
-  function getUploadStatusWS1Data() {
-    let link = 'WSC/WSC1/UploadStatus';
-    let ref = Firebase.database().ref(link);
-    ref.on('value', (snapshot) => {
-      let newState = snapshot.val();
-      setPlcUploaded(newState);
-    });
-  }
-
-  useEffect(() => getUploadStatusWS1Data(), [selectedWayside]);
+  useEffect(() => getPlcUploadDateData(), [selectedWayside]);
 
   function setUploadStatusData() {
-    let newState = plcUploaded;
-    let link = 'WSC/WSC1/UploadStatus';
-    Firebase.database().ref(link).set(newState);
+    if (plcUploadDate != undefined) {
+      let newState = plcUploadDate;
+      let link = 'WSC/' + selectedWaysideName + '/UploadStatus';
+      Firebase.database().ref(link).set(newState);
+    }
   }
 
-  useEffect(() => setUploadStatusData(), [plcUploaded]);
+  useEffect(() => setUploadStatusData(), [plcUploadDate]);
 
   function setSwitchStateData() {
     if (selectedBlock.isSwitchBlock == 1) {
@@ -194,12 +190,13 @@ const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
           <div className='uploadPLCSection'>
             Upload PLC
             <div className='dataName'>
-              Upload Status:
-              <div className='dataValue'>
-                {plcUploaded ? ' Uploaded' : ' Not Uploaded'}
-              </div>
+              Last Uploaded:
+              <div className='dataValue'>{plcUploadDate}</div>
             </div>
-            <PLCFileUpload setter={setPlcUploaded} />
+            <PLCFileUpload
+              setPlcUploadDate={setPlcUploadDate}
+              setPlcWaysideNumber={setPlcWaysideNumber}
+            />
           </div>
           <div className='moveSwitchSection'>
             Move Switch

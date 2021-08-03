@@ -12,6 +12,7 @@ const WaysidePanel = ({
   greenWaysideList,
   redWaysideList,
   setSelectedWayside,
+  setSelectedWaysideName,
 }) => {
   const [open, setOpen] = useState(true);
   const [waysideButtonList, setWaysideButtonList] = useState([]);
@@ -36,7 +37,10 @@ const WaysidePanel = ({
             <div
               className='buttonText'
               onClick={() => {
-                setSelectedWayside(waysideObj);
+                setSelectedWaysideAndName(
+                  waysideObj,
+                  parseInt(waysideName) + 1
+                );
               }}
             >
               WSC {parseInt(waysideName) + 1}
@@ -47,6 +51,11 @@ const WaysidePanel = ({
     }
     setWaysideButtonList(buttonList);
   }, [selectedWaysideList]);
+
+  function setSelectedWaysideAndName(obj, name) {
+    setSelectedWayside(obj);
+    setSelectedWaysideName('WSC' + name);
+  }
 
   function setColorAndSelectedWayside(selColor) {
     setTrackColor(selColor);
@@ -104,7 +113,7 @@ const WaysidePanel = ({
             </div>
           </div>
         </Button>
-        <div style={{ scrollBehavior: 'smooth' }}>
+        <div style={{ overflow: 'scroll', height: '30em' }}>
           <div class='waysidePanelHolder'>{waysideButtonList}</div>
         </div>
       </SlidingPane>

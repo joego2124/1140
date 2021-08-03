@@ -7,7 +7,7 @@ import './styles.css';
 
 const parser = require('./interpreter.js');
 
-const PLCFileUpload = ({ setter }) => {
+const PLCFileUpload = ({ setPlcUploadDate, setPlcWaysideNumber }) => {
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       var reader = new FileReader();
@@ -23,12 +23,13 @@ const PLCFileUpload = ({ setter }) => {
     // parser.parseFile(plc);
     // reader.readAsText(acceptedFiles);
     if (acceptedFiles.length > 0) {
-      setter(1);
+      setPlcUploadDate(Date().toLocaleString());
     }
   }, []);
 
   function setScriptData(script) {
-    let link = '/WSC/' + script.Name + '/Script';
+    setPlcWaysideNumber(script.name);
+    let link = '/WSC/' + script.name + '/Script';
     Firebase.database().ref(link).set(script.script);
   }
 
