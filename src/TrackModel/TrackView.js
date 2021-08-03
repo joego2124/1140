@@ -45,7 +45,7 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({setSelectedBlock, trainsList, blockList}) => {
+const TrackView = ({setSelectedBlock, setLineColor, trainsList, blockList}) => {
 
 	document.body.style.overflow='hidden';
 

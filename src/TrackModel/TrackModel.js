@@ -5,10 +5,7 @@ import Firebase from "firebase";
 import PropertiesPanel from './PropertiesPanel';
 import StatesPanel from './StatesPanel';
 import TrackView from './TrackView';
-import UploadLayoutButton from './UploadLayoutButton';
-import { left } from '@popperjs/core';
-// import ScheduleModal from '../CTC/ScheduleModal';
-
+import { DatabaseGetMulti } from '../components/DatabaseMulti';
 import { DatabaseGet, DatabaseSet }  from "../Database";
 
 function TrackModel() {
@@ -25,21 +22,12 @@ function TrackModel() {
 	const [jsonTree, setJsonTree] = useState([]);
 	const [blockList, setBlockList] = useState([]);
 	const [selectedBlock, setSelectedBlock] = useState(`1`);
+	const [lineColor, setLineColor] = useState("RedLine");
 
 	// Update trains list
 	useEffect(() => {
 		DatabaseGet(setTrainsList, "TrainList");
 	}, []);
-
-	// for (const [key,value] of Object.entries(trainsList)) {
-	// 	// if the currentBlock is a station, generate ticket sales
-	// }
-	// useEffect(() => {
-	// 	DatabaseGet(setTrainsList, "TrainList");
-	// }, []);
-	// useEffect(() => {
-	// 	DatabaseGet(setJsonTree, "GreenLine");
-	// }, []);
 
 	function getBlockListData() {
 		let tempList = [];
@@ -49,27 +37,20 @@ function TrackModel() {
 		setBlockList(tempList);
 	}
 
-	useEffect(() => console.log(`IN TRACKMODEL: ${selectedBlock}`), [selectedBlock]);
+	// Get the line name
+	// useEffect(() => 
+	// 	if( )
+	// 	console.log(`IN TRACKMODEL: ${lineColor}`),
+	// 	[selectedBlock]
+	// 	);
+	// useEffect(() => console.log(`IN TRACKMODEL: ${selectedBlock}`), [selectedBlock]);
+	// useEffect(() => console.log(`IN TRACKMODEL: ${lineColor}`), [lineColor]);
 	useEffect(() => getBlockListData(), [jsonTree]);
 
 	return (
 		<>
-			{/* <div style={{
-				paddingTop: 20,
-				textAlign: "left",
-				paddingLeft: 100
-			}}>
-				<UploadLayoutButton />
-			</div> */}
-			{/* <div style={{
-				paddingTop: 50,
-				textAlign: "right",
-				paddingRight: 340
-			}}>
-				<h2>Test of Interactive Track Layout</h2>
-			</div> */}
 			<div>
-				<TrackView setSelectedBlock={setSelectedBlock} trainsList={trainsList} blockList={blockList} />
+				<TrackView setSelectedBlock={setSelectedBlock} setLineColor={setLineColor} trainsList={trainsList} blockList={blockList} />
 			</div>
 			<div style={{
 				position: "absolute",
