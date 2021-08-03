@@ -86,7 +86,8 @@ function makeTrainSim(newTrainId) {
                 //get signal state
                 // var switchstate = 0;
                 console.log(this.blocknumber);
-                Firebase.database().ref(`/${this.line}/${Math.trunc(this.blocknumber)}/SwitchState`).once('value', snapshot => {
+                this.blocknumber = Math.trunc(this.blocknumber);
+                Firebase.database().ref(`/${this.line}/${this.blocknumber}/SwitchState`).once('value', snapshot => {
                     this.switchstate = snapshot.val();
                     // console.log(this.blocknumber,'state', snapshot.val(), this.switchstate, 'db');
                 });

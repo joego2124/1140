@@ -154,6 +154,7 @@ const AddTrainModal = (props) => {
 					newTrain.PreviousBlock = newTrain.Route[0];
 					newTrain.RouteIndex = 1;
 					Firebase.database().ref(`/TrainList/${trainId}`).set(newTrain);
+
 					console.log(newTrain);
 					props.onHide();
 				}}>Add Train</Button>

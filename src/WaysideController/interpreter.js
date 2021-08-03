@@ -283,7 +283,7 @@ exports.parseFile = (plc) => {
     var updateBlockInner = "occupancy[{0}] = data['{1}'].Occupancy\n";
 
     var updateAuth = 'function updateAuth(data){\n';
-    var updateAuthInner = "authority[{0}] = data['{1}'].Authority\n";
+    var updateAuthInner = "authority[{0}] = data['{1}'].authority\n";
 
     var updateSwitchState =
       'function updateSwitchState(data){\n' +
