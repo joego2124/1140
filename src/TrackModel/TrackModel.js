@@ -37,12 +37,6 @@ function TrackModel() {
 		setBlockList(tempList);
 	}
 
-	// Get the line name
-	// useEffect(() => 
-	// 	if( )
-	// 	console.log(`IN TRACKMODEL: ${lineColor}`),
-	// 	[selectedBlock]
-	// 	);
 	useEffect(() => console.log(`IN TRACKMODEL: ${selectedBlock}`), [selectedBlock]);
 	useEffect(() => console.log(`linename: `, lineName), [lineName]);
 
@@ -70,8 +64,8 @@ function TrackModel() {
 				width: "100%",
 				position: "absolute",
 			}}>
-				<PropertiesPanel selectedBlock={selectedBlock} />
-				<StatesPanel selectedBlock={selectedBlock} />
+				<PropertiesPanel selectedBlock={selectedBlock} lineName={lineName} />
+				<StatesPanel selectedBlock={selectedBlock} lineName={lineName} />
 			</div>
 			
 		</>

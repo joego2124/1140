@@ -118,7 +118,7 @@ const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 			const clickHandler = () => {
 				// console.log(`svg clicked: ${currBlock.blockId}`);
 				setSelectedBlock( `${currBlock.blockId}` );
-				console.log("curr: ", currBlock.color);
+				// console.log("curr: ", currBlock.color);
 				setLineName( `${currBlock.color}` );
 			}
 			
