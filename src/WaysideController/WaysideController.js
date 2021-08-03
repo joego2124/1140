@@ -23,6 +23,7 @@ const WaysideController = () => {
   const [redBlockList, setRedBlockList] = useState([]);
   const [trainsList, setTrainsList] = useState({});
   const [trackColor, setTrackColor] = useState('GreenLine');
+  const [selectedWaysideName, setSelectedWaysideName] = useState();
 
   // TODO: CHANGE ALL ON CLICKS TO INCLUDE ARROW FUNCTION
 
@@ -125,6 +126,7 @@ const WaysideController = () => {
           setSelectedWayside={setSelectedWayside}
           greenWaysideList={greenWaysideList}
           redWaysideList={redWaysideList}
+          setSelectedWaysideName={setSelectedWaysideName}
         />
         {selectedWayside.length > 0 ? (
           <TrackView
@@ -140,6 +142,7 @@ const WaysideController = () => {
           <BottomPanel
             selectedBlockFromTrack={selectedBlock}
             selectedWayside={selectedWayside}
+            selectedWaysideName={selectedWaysideName}
           />
         ) : (
           <div></div>
