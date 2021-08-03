@@ -6,33 +6,64 @@ import { BsCircleFill } from 'react-icons/bs';
 
 import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './styles.css';
-import waysideControllers from './WaysideControllers.json';
 
-const WaysidePanel = ({ waysideColor, waysideList, setSelectedWayside }) => {
+const WaysidePanel = ({
+  setTrackColor,
+  greenWaysideList,
+  redWaysideList,
+  setSelectedWayside,
+  setSelectedWaysideName,
+}) => {
   const [open, setOpen] = useState(true);
   const [waysideButtonList, setWaysideButtonList] = useState([]);
-
-  // Firebase.app();
+  const [selectedWaysideList, setSelectedWaysideList] =
+    useState(greenWaysideList);
+  const [localColor, setLocalColor] = useState();
 
   useEffect(() => {
     var buttonList = [];
-    for (const [waysideName, waysideObj] of Object.entries(waysideList)) {
+    for (const [waysideName, waysideObj] of Object.entries(
+      selectedWaysideList
+    )) {
       buttonList.push(
         <Button variant='light' className='waysideButton' key={waysideName}>
           <div className='buttonDiv'>
-            <BsCircleFill size='1.5em' color='#C44242' />
+            <BsCircleFill
+              size='1.5em'
+              color={
+                localColor == 'RedLine' ? '#C44242' : 'rgba(49,135,133, 1)'
+              }
+            />
             <div
               className='buttonText'
-              onClick={() => setSelectedWayside(waysideObj)}
+              onClick={() => {
+                setSelectedWaysideAndName(
+                  waysideObj,
+                  parseInt(waysideName) + 1
+                );
+              }}
             >
-              WSC{`${waysideName}`}
+              WSC {parseInt(waysideName) + 1}
             </div>
           </div>
         </Button>
       );
     }
     setWaysideButtonList(buttonList);
-  }, [waysideList]);
+  }, [selectedWaysideList]);
+
+  function setSelectedWaysideAndName(obj, name) {
+    setSelectedWayside(obj);
+    setSelectedWaysideName('WSC' + name);
+  }
+
+  function setColorAndSelectedWayside(selColor) {
+    setTrackColor(selColor);
+    setLocalColor(selColor);
+    setSelectedWaysideList(
+      selColor == 'GreenLine' ? greenWaysideList : redWaysideList
+    );
+  }
 
   return (
     <div>
@@ -49,6 +80,7 @@ const WaysidePanel = ({ waysideColor, waysideList, setSelectedWayside }) => {
         Show Wayside <br />
         Controllers
       </Button>
+
       <SlidingPane
         isOpen={open}
         from='left'
@@ -56,7 +88,34 @@ const WaysidePanel = ({ waysideColor, waysideList, setSelectedWayside }) => {
         style={{ paddingTop: '10rem' }}
         onRequestClose={() => setOpen(false)}
       >
-        <div class='waysidePanelHolder'>{waysideButtonList}</div>
+        <Button variant='light' className='greenLineButton'>
+          <div className='buttonDiv'>
+            <div
+              className='buttonText'
+              onClick={() => {
+                setColorAndSelectedWayside('GreenLine');
+              }}
+            >
+              Green Line
+            </div>
+          </div>
+        </Button>
+
+        <Button variant='light' className='redLineButton'>
+          <div className='buttonDiv'>
+            <div
+              className='buttonText'
+              onClick={() => {
+                setColorAndSelectedWayside('RedLine');
+              }}
+            >
+              Red Line
+            </div>
+          </div>
+        </Button>
+        <div style={{ overflow: 'scroll', height: '30em' }}>
+          <div class='waysidePanelHolder'>{waysideButtonList}</div>
+        </div>
       </SlidingPane>
     </div>
   );
