@@ -28,17 +28,18 @@ function TopBar() {
 	function clockTick() {
 		if(!paused) {
 			Firebase.database().ref('/SimulationClock/Time').transaction( time => {
+				physicsTick();
+				// updatePower();
+
+				// These functions run every hour
+				console.log(time % 10);
+				if (time % 10 == 0) {
+					generateTicketSales();
+				}
+				
 				return time + 1;
 			});
 
-			physicsTick();
-			// updatePower();
-
-			// These functions run every hour
-			if (time % 60 == 0) {
-				generateTicketSales();
-			}
-			
 			if(!paused) {
 				setTimer(setTimeout(() => clockTick(), 1000 * (1/speed)));
 			}

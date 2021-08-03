@@ -14,6 +14,8 @@ function generateTicketSales( ) {
         RedLine: [],
     };
 
+    console.log("tickets running");
+
     // Get train list and create list of stations.
     Firebase.database().ref('/TrainList').once('value', snapshot => {
         Object.entries(snapshot.val()).forEach(trainArr => { 
