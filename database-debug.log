@@ -1,22 +1,2 @@
-<<<<<<< HEAD
-WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by io.netty.util.internal.ReflectionUtil (file:/C:/Users/joego/.cache/firebase/emulators/firebase-database-emulator-v4.7.2.jar) to field sun.nio.ch.SelectorImpl.selectedKeys
-WARNING: Please consider reporting this to the maintainers of io.netty.util.internal.ReflectionUtil
-WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-WARNING: All illegal access operations will be denied in a future release
-00:44:57.101 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-00:44:57.268 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
-=======
-<<<<<<< HEAD
-12:02:01.949 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-12:02:02.144 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
-=======
-<<<<<<< HEAD
-13:43:14.669 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-13:43:15.467 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
-=======
-20:35:14.034 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-20:35:14.278 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
->>>>>>> CTC
->>>>>>> 55e3881e5106529d1a6864e01ee5531f6f004dce
->>>>>>> main
+15:27:34.203 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+15:27:34.547 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000

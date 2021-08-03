@@ -1,12 +1,15 @@
 import Firebase from "firebase";
 import { useState } from 'react'
+import TrainsPanel from "../CTC/TrainsPanel";
 var trackLayout = require("../CTC/TrackLayout.json");
 
 function makeTrainSim(newTrainId) {
+    
     var train = {};
     train.trainId = newTrainId;
     train.velocity = 0;
     train.setpointspeed = 0;
+    train.speedlimit = 0;
     train.sbrakestatus = false;
     train.ebrakestatus = false;
     train.brakefailure = false;
@@ -20,16 +23,17 @@ function makeTrainSim(newTrainId) {
     train.ukm1 = 0;
     train.manualmode = false;
     train.power = 0;
-    train.authority = 0;
+    train.authority = false;
 
     Firebase.database().ref(`/TrainList/${newTrainId}/Velocity`).on('value', snapshot => { train.velocity = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/SetpointSpeed`).on('value', snapshot => { train.setpointspeed = snapshot.val(); });
+    Firebase.database().ref(`/TrainList/${newTrainId}/SpeedLimit`).on('value', snapshot => { train.speedlimit = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/SBrakeStatus`).on('value', snapshot => { train.sbrakestatus = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/EBrakeStatus`).on('value', snapshot => { train.ebrakestatus = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/BrakeFailure`).on('value', snapshot => { train.brakefailure = snapshot.val(); });    
     Firebase.database().ref(`/TrainList/${newTrainId}/EngineFailure`).on('value', snapshot => { train.enginefailure = snapshot.val(); });    
     Firebase.database().ref(`/TrainList/${newTrainId}/SignalFailure`).on('value', snapshot => { train.signalfailure = snapshot.val(); });        
-    Firebase.database().ref(`/TrainList/${newTrainId}/Authority`).on('value', snapshot => { train.authority = snapshot.val(); });
+    Firebase.database().ref(`/TrainList/${newTrainId}/BlockAuthority`).on('value', snapshot => { train.blockauthority = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Kp`).on('value', snapshot => { train.kp = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Ki`).on('value', snapshot => { train.ki = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/ek`).on('value', snapshot => { train.ek = snapshot.val(); });
@@ -39,46 +43,57 @@ function makeTrainSim(newTrainId) {
     Firebase.database().ref(`/TrainList/${newTrainId}/ManualMode`).on('value', snapshot => { train.manualmode = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Power`).on('value', snapshot => { train.power = snapshot.val(); });
 
+    console.log('Preconversion velocity: ', train.velocity, train.trainId);
     train.velocity = train.velocity / 2.237;
+    console.log('Postconversion velocity: ', train.velocity, train.trainId);
     train.setpointspeed = train.setpointspeed = 2.237;
 
     train.calculatePower = function () {
 
+        console.log(`--- CALCULATING POWER: ${train.trainId} ---`)
         let powermax = 120;
-
-        if(train.authority == 0){
+        let anyfailure = !train.blockauthority || train.sbrakestatus || train.ebrakestatus || train.brakefailure || train.enginefailure || train.signalfailure;
+        if(anyfailure){
             train.power = 0;
+            console.log('Power set low (0)')
         }
-        else if(train.sbrakestatus || train.ebrakestatus){
-            train.power = 0;
-        }
-        else if(train.brakefailure || train.enginefailure || train.signalfailure){
-            train.power = 0;
-        }
-        else if(train.manualmode == true){
+        else{
+            console.log('- ek: ', train.ek);
+            console.log('- ekm1: ', train.ekm1);
+            console.log('- uk: ', train.uk);
+            console.log('- ukm1: ', train.ukm1);
+            console.log('- velocity:', train.velocity);
+            if(train.manualmode){
+                train.ek = train.setpointspeed - train.velocity
+            }
+            else{
+                train.ek = train.speedlimit - train.velocity
+            }
             if(train.power < powermax){
                 train.ukm1 = train.uk;
                 train.uk = train.ukm1 + 0.5 * (train.ek + train.ekm1)
             }
-            else if(train.power >= powermax){
+            else{
                 train.ukm1 = train.uk;
                 train.uk = train.ukm1;
             }
-            train.power = (train.Kp * train.ek) + (train.Ki * train.uk);
-            Firebase.database().ref(`/TrainList/${this.trainId}/Power`).set(train.power);
-        }
-        else if(train.manualmode == false){
-            if(train.power < powermax){
-                train.ukm1 = train.uk;
-                train.uk = train.ukm1 + 0.5 * (train.ek + train.ekm1)
+            train.ekm1 = train.ek;
+            train.power = (train.kp * train.ek) + (train.ki * train.uk);
+            if(train.power > powermax){
+                train.power = powermax;
             }
-            else if(train.power >= powermax){
-                train.ukm1 = train.uk;
-                train.uk = train.ukm1;
-            }
-            train.power = (train.Kp * train.ek) + (train.Ki * train.uk); 
-            Firebase.database().ref(`/TrainList/${this.trainId}/Power`).set(train.power);
+            console.log('+ ek: ', train.ek);
+            console.log('+ ekm1: ', train.ekm1);
+            console.log('+ uk: ', train.uk);
+            console.log('+ ukm1: ', train.ukm1);
+            console.log('+ velocity:', train.velocity);
+            console.log('Power Calculation: ', train.power)
+            Firebase.database().ref(`/TrainList/${train.trainId}/ek`).set(train.ek);
+            Firebase.database().ref(`/TrainList/${train.trainId}/ekm1`).set(train.ekm1);
+            Firebase.database().ref(`/TrainList/${train.trainId}/uk`).set(train.uk);
+            Firebase.database().ref(`/TrainList/${train.trainId}/ukm1`).set(train.ukm1);
         }
+        Firebase.database().ref(`/TrainList/${train.trainId}/Power`).set(train.power);
     }
 
     return train;

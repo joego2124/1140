@@ -210,6 +210,7 @@ const trainTemplate = {
 
 	Acceleration: 0,
 	AccelerationLimit: 5,
+	AnyFailures: false,
 	BlockAuthority : 0,
 	BlockLength : 50,
 	BrakeFailure: false,
@@ -218,6 +219,7 @@ const trainTemplate = {
 	DoorStatus: false,
 	EBrakeStatus: false,
 	EDoorStatus: false,
+	EnableHardware: false,
 	EngineFailure: false,
 	ExternalLightState: false,
 	ExternalTemperature: 70,

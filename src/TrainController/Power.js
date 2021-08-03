@@ -12,7 +12,6 @@ Firebase.database().ref('/TrainIds').on('value', snapshot => {
 });
 
 function updatePower() {
-    console.log("Update Power");
     simList.forEach( train => {
         train.calculatePower();
     })

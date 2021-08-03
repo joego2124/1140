@@ -3,33 +3,33 @@ import { Form, Button } from 'react-bootstrap';
 import "../../components/componentStyles.css";
 import Firebase from 'firebase';
 
-function TempInput({ varName, parentName, selectedTrain }) {
+function KiInput({ varName, parentName, selectedTrain }) {
 
-  const [desiredTemp, setDesiredTemp] = useState();
+  const [ki, setKi] = useState();
 
   return (
     <div>
         <Form>
           <Form.Group
-            onChange={e => setDesiredTemp(e.target.value)}
+            onChange={e => setKi(e.target.value)}
             className="mb-3"
-            controlId="formDesiredTemp">
+            controlId="formKi">
             <Form.Control
               type="number" 
-              name = "desiredTemp"
+              name = "ki"
               min = "68"
               max = "72"
-              placeholder={desiredTemp}>
+              placeholder={ki}>
             </Form.Control>
           </Form.Group>
         </Form>
         <Button onClick={() => {
-            Firebase.database().ref(`/TrainList/${parentName}/InternalTemperature`).set(Number(desiredTemp));
+            Firebase.database().ref(`/TrainList/${parentName}/Ki`).set(Number(ki));
         }}>Update</Button>
     </div>
   );
 }
 
-export default TempInput;
+export default KiInput;
 
 
