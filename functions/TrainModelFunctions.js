@@ -52,12 +52,14 @@ exports.trainAdded = functions.database.ref(`/TrainList/{trainId}`).onCreate( (s
     const trainId = context.params.trainId;
     console.log('Train Added', trainId);
 
-    return admin.database().ref(`/TrainIds/${trainId}`).set(trainId);
+    // return admin.database().ref(`/TrainIds`).push(trainId);
+    return admin.database().ref(`/TrainIds/-${trainId}`).set(trainId);
 })
 
 exports.trainRemoved = functions.database.ref(`/TrainList/{trainId}`).onDelete( (snapshot, context) => {
     const trainId = context.params.trainId;
     console.log('Train Removed', trainId);
     
-    return admin.database().ref(`/TrainIds/${trainId}`).remove();
+    // return admin.database().ref(`/TrainIds`).remove(trainId);
+    return admin.database().ref(`/TrainIds/-${trainId}`).remove();
 })

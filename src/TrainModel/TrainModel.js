@@ -11,6 +11,8 @@ function TrainModel() {
 
 	const [parentName, setParentName] = useState('TRN1');
 
+	useEffect( () => {console.log('train changed to:',parentName)}, [parentName]);
+
 	return (
 		<div>
 		<header className="App-header">
