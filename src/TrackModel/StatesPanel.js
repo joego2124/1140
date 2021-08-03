@@ -23,18 +23,25 @@ function StatesPanel({ selectedBlock, lineName }){
 		Firebase.app(); // if already initialized, use that one
 	}
 
+	var trackHeater;
 	const [actualTemp, setTemp] = useState(0);
 	// const [desiredTemp, setDesTemp] = useState(0);
 	const [trackOccup, setTrackOccup] = useState(0);
+	// const [trackHeater, setTrackHeater] = useState(0);
 	const [failBrokenRail, setFailBrokenRail] = useState();
 	// const [failTrackCirc, setFailTrackCirc] = useState(0);
 	// const [failBeacon, setFailBeacon] = useState(0);
 
-	// console.log( `INSIDE STATES PANEL: ${selectedBlock}` );
-	useEffect(() => {setTimeout(() => DatabaseGetMulti(setTemp, `/${lineName}/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
-	useEffect(() => {setTimeout(() => DatabaseGetMulti(setTrackOccup, `/${lineName}/${selectedBlock}/Occupancy`), 500);}, [selectedBlock]);
+	useEffect(() => {
+		setTimeout(() => DatabaseGetMulti(setTemp, `/${lineName}/${selectedBlock}/Temperature`), 500);
+	}, [selectedBlock]);
+	useEffect(() => {
+		setTimeout(() => DatabaseGetMulti(setTrackOccup, `/${lineName}/${selectedBlock}/Occupancy`), 500);
+	}, [selectedBlock]);
 	// Failure modes
-	useEffect(() => {setTimeout(() => DatabaseGetMulti(setFailBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`), 500);}, [selectedBlock]);
+	useEffect(() => {
+		setTimeout(() => DatabaseGetMulti(setFailBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`), 500);
+	}, [selectedBlock]);
 
 	// Checking if track heater needs to be turned on
 	// useEffect(() => {setTimeout(() =>  DatabaseGetMulti(setTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
@@ -122,10 +129,21 @@ function StatesPanel({ selectedBlock, lineName }){
 								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/LevelCrossingState`} />
 								{' '}Railway Crossing
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/TrackHeater`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/TrackHeater`} />
 								{' '}Track Heater
 								<br />
 								<VarDisplayMulti message='Current Temperature [°F]' path={`/${lineName}/CurrentTemperature`} />
+								<br />
+								<Button size="sm" 
+									onClick={()=>
+										{
+											Firebase.database().ref(`/${lineName}/TrackHeater`).once( 'value', snapshot => {
+												trackHeater = snapshot.val();
+											});
+											Firebase.database().ref(`/${lineName}/TrackHeater`).set( !trackHeater );;
+										}}>
+									Toggle Heater
+								</Button>
 							</div>
 						</Col>
 						<Col>
@@ -142,8 +160,8 @@ function StatesPanel({ selectedBlock, lineName }){
 									<Button variant="outline-dark"
 										size="sm"
 										onClick={()=>{
-											DatabaseGetMulti(setFailBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
-											DatabaseSetMulti(!failBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
+											// DatabaseGetMulti(setFailBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
+											// DatabaseSetMulti(!failBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
 										}}>
 									Broken Rail
 									</Button>
