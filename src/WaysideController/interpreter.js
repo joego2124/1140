@@ -410,12 +410,12 @@ exports.parseFile = (plc) => {
 
           javascript += String.format('var branch{0} = [', name[1]);
 
-          var array = new Array(blocksData.length);
+          var array = new Array(blocks.length);
           array.fill('0', 0, array.lenth);
 
           //foreach branch
           tokens[i].data.forEach((element) => {
-            array[blocksData.findIndex((el) => el == element)] = '1';
+            array[blocks.findIndex((el) => el == element)] = '1';
           });
 
           //console.log(array);
