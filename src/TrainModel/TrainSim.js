@@ -85,7 +85,8 @@ function makeTrainSim(newTrainId) {
 
                 //get signal state
                 // var switchstate = 0;
-                // console.log(this.blocknumber);
+                console.log(this.blocknumber);
+                this.blocknumber = Math.trunc(this.blocknumber);
                 Firebase.database().ref(`/${this.line}/${this.blocknumber}/SwitchState`).once('value', snapshot => {
                     this.switchstate = snapshot.val();
                     // console.log(this.blocknumber,'state', snapshot.val(), this.switchstate, 'db');
@@ -111,6 +112,7 @@ function makeTrainSim(newTrainId) {
                 }
                 var newblock = connectors.find( x => x != null && (x > 0 ? x : 0) != this.previousblocknumber);
                 if (newblock < 0) newblock = 0;
+                newblock = Math.trunc(newblock);
                 
                 if(newblock == undefined ) {
                     console.warn("RAN OFF EDGE OF TRACK: valid connection not found");

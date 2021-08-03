@@ -44,28 +44,24 @@ const MainPanel = ({
 					<div className = "controlPanelSection">
 						<div className="controlPanelSubSection">
 							<ValueIO 
-								valueType="input"
-								valueLabel="Route Destination"
+								valueType="output"
+								valueLabel="Next Destination"
 								valueData={{
-									value: selectedTrain.CurrentStation,
-									dropdownList: [
-										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
-									],
+									value: selectedTrain.NextStation,
 								}}
 							/>
 							<ValueIO 
 								valueType="output"
-								valueLabel="Authority"
+								valueLabel="Current Block ID"
 								valueData={{
-									value: selectedTrain.Authority,
-									units: "blocks",
+									value: `${selectedTrain.Line === "GreenLine" ? "GRN" : "RD"}${selectedTrain.CurrentBlock}`,
 								}}
 							/>
 							<ValueIO 
 								valueType="output"
 								valueLabel="Departure Time"
 								valueData={{
-									value: "12:00:00",
+									value: selectedTrain.DepartureTime,
 								}}
 							/>
 						</div>
@@ -75,16 +71,16 @@ const MainPanel = ({
 						<div className="controlPanelSubSection">
 							<ValueIO 
 								valueType="output"
-								valueLabel="Next Stop"
+								valueLabel="Next Block"
 								valueData={{
-									value: selectedTrain.NextStation,
+									value: selectedTrain.NextBlock,
 								}}
 							/>
 							<ValueIO 
 								valueType="output"
 								valueLabel="Commanded Speed"
 								valueData={{
-									value: selectedTrain.CommandedSpeed,
+									value: selectedTrain.SpeedLimit,
 									units: "mi/hr"
 								}}
 							/>
@@ -102,6 +98,7 @@ const MainPanel = ({
 							<ValueIO 
 								valueType="input"
 								valueLabel="Signal State"
+								valueDatabasePath={`${selectedTrain.databasePath}/SignalState`}
 								valueData={{
 									value: selectedTrain.SignalState,
 									dropdownList: [
@@ -112,8 +109,9 @@ const MainPanel = ({
 							<ValueIO 
 								valueType="input"
 								valueLabel="Switch State"
+								valueDatabasePath={`${selectedBlock.databasePath}/SwitchState`}
 								valueData={{
-									value: selectedBlock.SwitchState == 1 ? "TRUE" : "FALSE",
+									value: selectedBlock.SwitchState === 1 ? "TRUE" : "FALSE",
 									dropdownList: [
 										<Dropdown.Item eventKey={0}>FALSE</Dropdown.Item>,
 										<Dropdown.Item eventKey={1}>TRUE</Dropdown.Item>,
@@ -123,10 +121,12 @@ const MainPanel = ({
 							<ValueIO 
 								valueType="input"
 								valueLabel="Maintenance Status"
+								valueDatabasePath={`${selectedBlock.databasePath}/ManualMode`}
 								valueData={{
-									value: "Option 1",
+									value: (new Boolean(selectedTrain.ManualMode)).toString().toUpperCase(),
 									dropdownList: [
-										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
+										<Dropdown.Item eventKey={true}>TRUE</Dropdown.Item>,
+										<Dropdown.Item eventKey={false}>FALSE</Dropdown.Item>,
 									],
 								}}
 							/>
@@ -136,27 +136,24 @@ const MainPanel = ({
 						
 						<div className="controlPanelSubSection">
 							<ValueIO 
-								valueType="input"
-								valueLabel="Railway State"
+								valueType="output"
+								valueLabel="Selected Block"
 								valueData={{
-									value: "Option 1",
-									dropdownList: [
-										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
-									],
+									value: `${selectedBlock.Line}${selectedBlock.BlockNumber}`,
 								}}
 							/>
 							<ValueIO 
 								valueType="output"
 								valueLabel="Track Occupancy"
 								valueData={{
-									value: "TRUE",
+									value: selectedBlock.Occupancy === 0 ? "FALSE" : "TRUE",
 								}}
 							/>
 							<ValueIO 
 								valueType="output"
 								valueLabel="Tickets"
 								valueData={{
-									value: 105,
+									value: "RENGIVEME",
 									units: "units/hr"
 								}}
 							/>

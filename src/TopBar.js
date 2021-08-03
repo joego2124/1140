@@ -9,46 +9,11 @@ import config from './config';
 
 function TopBar() {
 
-	//REMOVED SPEEDSTATE CONTEXT SINCE IT WAS CASUSING PAIN AND SUFFERING
-	// const [speed, setSpeed] = useState(1);
-	// const [pause, setPause] = useState(true);
+	const [speed, setSpeed] = useState(1);
+	const [paused, setPaused] = useState(true);
 	const [time, setTime] = useState(0);
-	var redundantspeed = 1;
-	var redundantpause = true;
-
-	function setredundantSpeed(newSpeed){
-		redundantspeed = newSpeed;
-	}
-
-	function setredundantPause(newPause){
-		redundantpause = newPause;
-	}
-
-	//TODO FIX THIS DATABASE PULL SO IT LOADS FROM RTDB CORRECTLY
-
-	// useEffect(() => {
-	// 	Firebase.database().ref('/SimulationClock/speed').on('value', snapshot => {
-	// 		const state = snapshot.val();
-	// 		setSpeed(state);
-	// 		console.log('set speed database:',state, redundantspeed);
-	// 	})
-	// }, []);
-
-	// useEffect(() => {
-	// 	Firebase.database().ref('/SimulationClock/paused').on('value', snapshot => {
-	// 		const state = snapshot.val();
-	// 		setPause(state);
-	// 		console.log('set pause database:',state, redundantpause);
-	// 	})
-	// }, []);
-
-	useEffect(() => {
-		Firebase.database().ref('/SimulationClock/Time').on('value', snapshot => {
-			const state = snapshot.val();
-			setTime(state);
-		})
-	}, []);
-
+	const [timer, setTimer] = useState();
+	const [formattedTime, setFormattedTime] = useState("12:00");
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -56,28 +21,9 @@ function TopBar() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	function setDatabaseSpeed(newSpeed) {
-		Firebase.database().ref('/SimulationClock/speed').set(newSpeed);
-		// setSpeed(newSpeed);
-		// speed=newSpeed;
-			setredundantSpeed(newSpeed);
-		// console.log(speed);
-	}
-
-	function setDatabasePaused(newPaused) {
-		Firebase.database().ref('/SimulationClock/paused').set(newPaused);
-		console.log('setting paused');
-		// setPause(newPaused);
-		// pause=newPaused;
-			setredundantPause(newPaused);
-		// console.log(pause);
-	}
-
+	//running clock
 	function clockTick() {
-		console.log('tick: paused', redundantpause, 'speed', redundantspeed);
-		// setPause(!pause);
-		if(redundantpause == false) {
-		// if(!speedState.paused) {
+		if(!paused) {
 			Firebase.database().ref('/SimulationClock/Time').transaction( time => {
 				return time + 1;
 			});
@@ -85,11 +31,48 @@ function TopBar() {
 			physicsTick();
 			updatePower();
 
-			if(redundantpause == false)
-				setTimeout(() => clockTick(), 1000 * (1/redundantspeed));
-			// setTimeout(() => clockTick(), 1000 * (1/speedState.speed));
+			if(!paused) {
+				setTimer(setTimeout(() => clockTick(), 1000 * (1/speed)));
+			}
 		}
 	}
+
+	//link variable updates on startup and start clockTick
+	useEffect(() => {
+		Firebase.database().ref('/SimulationClock/speed').on('value', snapshot => {
+			setSpeed(snapshot.val());
+		});
+		Firebase.database().ref('/SimulationClock/paused').on('value', snapshot => {
+			setPaused(snapshot.val());
+		})
+		Firebase.database().ref('/SimulationClock/Time').on('value', snapshot => {
+			setTime(snapshot.val());
+		});
+		clockTick();
+	}, []);
+
+	//start or stop clock tick on unpause/pause
+	useEffect(() => {
+		if (!paused) {
+			clockTick();
+		} else {
+			clearTimeout(timer);
+		}
+	}, [paused]);
+
+	//temp work around to restart clock tick everytime speed changes
+	useEffect(() => {
+		clearTimeout(timer);
+		clockTick();
+	}, [speed]);
+	
+	//calculate formatted time when tick time changes
+	useEffect(() => {
+		let totalMinutes = time % 1440;
+		let hours = Math.floor(totalMinutes / 60);
+		let minutes = totalMinutes % 60;
+		setFormattedTime(`${hours > 9 ? hours : "0" + hours}:${minutes > 9 ? minutes : "0" + minutes}`);
+	}, [time]);
 
 	return (
 		<Navbar style={styles.bar} expand="lg">
@@ -107,26 +90,24 @@ function TopBar() {
 				<Form inline>
 
 					{/* Time Display */}
-					<Navbar.Text style={styles.timeDisplay}>{time}</Navbar.Text>
+					<Navbar.Text style={styles.timeDisplay}>{formattedTime}</Navbar.Text>
 
 					{/* Play/Pause Button */}
 					<Button style={styles.pausePlay} onClick={() => {
-						var newPaused = !redundantpause;
-						// var newPaused = !speedState.paused;
-						console.log('change', redundantpause, 'to ', newPaused);
-						redundantpause = newPaused;
-						// setDatabasePaused(newPaused);
-						clockTick();
+						Firebase.database().ref('/SimulationClock/paused').set(!paused);
 					}}>
-						{ redundantpause ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
-						{/* { speedState.paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> } */}
+						{ paused ? <BsPlayFill color="#7E7E7E" size="2em"/> : <BsPauseFill color="#7E7E7E" size="2em"/> }
 					</Button>
 
 					{/* Speed Dropdown */}
-					<Dropdown as={ButtonGroup} onSelect={ selected => {
-						setDatabaseSpeed(Number(selected));
-					}} alignRight>
-						<Button style={styles.speedButton}>{ `x${redundantspeed}` }</Button>
+					<Dropdown 
+						as={ButtonGroup} 
+						alignRight
+						onSelect={selected => {
+							Firebase.database().ref('/SimulationClock/speed').set(Number(selected));
+						}} 
+					>
+						<Button style={styles.speedButton}>{ `x${speed}` }</Button>
 						{/* <Button style={styles.speedButton}>{ `x${speedState.speed}` }</Button> */}
 
 						<Dropdown.Toggle split style={styles.speedDropdown} id="dropdown-split-basic" />

@@ -12,7 +12,7 @@ Firebase.database().ref('/TrainIds').on('value', snapshot => {
 });
 
 function physicsTick() {
-    console.log("physics tick");
+    // console.log("physics tick");
 
     // if(trainIds == undefined)
     //     Firebase.database().ref('/TrainIds').on('value', snapshot => {
@@ -22,10 +22,12 @@ function physicsTick() {
 	// 	});
 
     // console.log(simList);
-    simList.forEach( train => {
-        train.simulateTrain();
-        // console.log(train.trainId);
-    })
+		if (simList != undefined) {
+			simList.forEach( train => {
+					train.simulateTrain();
+					// console.log(train.trainId);
+			});
+		}
 }
 
 export default physicsTick;
