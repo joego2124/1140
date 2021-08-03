@@ -21,13 +21,13 @@ function makeTrainSim(newTrainId) {
     train.grade = 0;
     train.switchstate = 0;
     train.StationSide = '';
-    train.CurrentStation = '';
+    train.CurrentStation = 'Yard';
     train.NextStation = '';
     train.Station = 0;
     train.HasStoppedAtSation = false;
     train.passengers = 0;
 
-    Firebase.database().ref(`/TrainList/${newTrainId}/Power`).on('value', snapshot => { train.power = clamp(snapshot.val(), -120, 120); });
+    Firebase.database().ref(`/TrainList/${newTrainId}/Power`).on('value', snapshot => { train.power = clamp(snapshot.val(), 0, 120); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Acceleration`).on('value', snapshot => { train.acceleration = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Velocity`).on('value', snapshot => { train.velocity = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Mass`).on('value', snapshot => { train.mass = snapshot.val(); });
@@ -73,10 +73,10 @@ function makeTrainSim(newTrainId) {
                     }
                 } else {
                     //no brakes
-                    console.log( 
-                        ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : 1) )) - (32.2 * Math.sin(this.grade)) );
+                    // console.log( 'power:',this.power, 'mass:',this.mass,'velocity:',this.velocity,'grade:',this.grade,'acceleration:',
+                        // ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : .1) )) - (32.2 * Math.sin(this.grade*Math.PI/180)) );
                     Firebase.database().ref(`/TrainList/${this.trainId}/Acceleration`).set( 
-                        ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : 1) )) - (32.2 * Math.sin(this.grade)) );
+                        ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : .1) )) - (32.2 * Math.sin(this.grade*Math.PI/180)) );
                 }
             }
 
@@ -114,32 +114,36 @@ function makeTrainSim(newTrainId) {
                 const line = this.line == 'GreenLine' ? trackLayout.greenLine : trackLayout.redLine;
 
                 //hard code to account for yard
-                var connectors;
-                if(this.blocknumber != 0) {
-                    const block = line.find( x => x.blockId == this.blocknumber);
-                    // console.log('block', block)
-                    if(block == undefined ) {
-                        console.warn("RAN OFF EDGE OF TRACK: block not found");
+                var connectors, newblock;
+                do{
+                    if(this.blocknumber != 0) {
+                        const block = line.find( x => x.blockId == (newblock ?? this.blocknumber));
+                        // console.log('block', block)
+                        if(block == undefined ) {
+                            console.warn("RAN OFF EDGE OF TRACK: block not found");
+                            return;
+                        }
+                        connectors = block.connectors[(this.switchstate < block.connectors.length -1 ? this.switchstate : 0)];
+                        // console.log(connectors, block.connectors, this.switchstate);
+                    } else {
+                        if(this.line = 'GreenLine') connectors = [62];
+                        if(this.line = 'RedLine') connectors = [9];
+                    }
+                    newblock = connectors.find( x => x != null && (x > 0 ? x : 0) != this.previousblocknumber);
+                    //preform bounds checking on block id
+                    if(newblock == undefined ) {
+                        console.warn("RAN OFF EDGE OF TRACK: valid connection not found");
                         return;
                     }
-                    connectors = block.connectors[(this.switchstate < block.connectors.length -1 ? this.switchstate : 0)];
-                    // console.log(connectors, block.connectors, this.switchstate);
-                } else {
-                    connectors = [58,62];
+                    if (newblock < 0) newblock = 0;
                 }
-                var newblock = connectors.find( x => x != null && (x > 0 ? x : 0) != this.previousblocknumber);
-                if (newblock < 0) newblock = 0;
-                
-                if(newblock == undefined ) {
-                    console.warn("RAN OFF EDGE OF TRACK: valid connection not found");
-                    return;
-                }
+                while(newblock !== Math.floor(newblock))
 
                 Firebase.database().ref(`/TrainList/${this.trainId}/CurrentBlock`).set(newblock);
                 Firebase.database().ref(`/TrainList/${this.trainId}/PreviousBlock`).set(oldblock);
 
-                Firebase.database().ref(`/${this.line}/${newblock < 0 ? Math.ceil(newblock) : Math.floor(newblock)}/Occupancy`).set(1);
-                Firebase.database().ref(`/${this.line}/${temp}/Occupancy`).set(0);
+                Firebase.database().ref(`/${this.line}/${newblock}/Occupancy`).set(1);
+                Firebase.database().ref(`/${this.line}/${oldblock}/Occupancy`).set(0);
 
                 //set new block values
                 Firebase.database().ref(`/${this.line}/${newblock}/BlockGrade`).once('value', snapshot => {
@@ -164,7 +168,7 @@ function makeTrainSim(newTrainId) {
                 Firebase.database().ref(`/${this.line}/${newblock}/${(newblock-oldblock) > 0 ? 'Beacon+1' : 'Beacon-1'}`).once('value', snapshot => {
                     var beacon=snapshot.val();
                     if( beacon?.CurrentStation != 0 ) {
-                        if( this.NextStation == beacon.CurrentStation){
+                        if( this.NextStation == beacon.CurrentStation || (this.CurrentStation == 'Yard') ){
                             Firebase.database().ref(`/TrainList/${this.trainId}/CurrentStation`).set(beacon.CurrentStation);
                             Firebase.database().ref(`/TrainList/${this.trainId}/NextStation`).set(0);
                             this.StationSide = beacon.StationSide;
