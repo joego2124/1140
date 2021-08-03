@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Firebase from "firebase";
 
 import TrackView from './TrackView';
 import TrainsPanel from './TrainsPanel';
@@ -12,7 +13,7 @@ var trackLayout = require("./TrackLayout.json");
 
 //parallel breadth first search on bidirectional line respecting unidirectional train travel
 function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
-	console.warn("STARTING PATHFIND");
+	console.log(`[CTC] STARTING PATHFIND, startBlockId: ${startBlockId} endBlockId: ${endBlockId}`);
 
 	//define initial blocks
 	let startBlock = lineLayout.find(v => v.blockId === startBlockId);
@@ -21,8 +22,11 @@ function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
 	//define stack with starting block
 	let stack = [[{current: startBlock, previous: _prevBlock}]]; 
 
-	while (stack.length > 0) {
+	let count = 0;
 
+	while (stack.length > 0) {
+		count++;
+		if (count > 300) break; // hard limit
 		//get the current branch from stack
 		let currBranches = stack[stack.length - 1], newBranches = [];
 		// console.log(stack[stack.length - 1]);
@@ -33,7 +37,7 @@ function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
 			let prevBlock = currBranches[k].previous;
 
 			// console.log(`currentBlock: ${currentBlock.blockId}, prevBlock: ${prevBlock.blockId}`);
-
+			
 			//if the current leaf block is the destination
 			if (currentBlock.blockId == endBlockId) {
 				console.log("found solution");
@@ -55,6 +59,9 @@ function bfs(startBlockId, endBlockId, _prevBlockId, lineLayout) {
 			for (let i = 0; i < currentBlock.connectors.length; i++) {
 				for (let j = 0; j < currentBlock.connectors[i].length; j++) {
 					let neighborBlockId = currentBlock.connectors[i][j]; //neighboring block
+					// if (currentBlock.blockId === 29 && neighborBlockId != null) {
+					// 	console.log(neighborBlockId, neighborBlockId != prevBlock.blockId, currentBlock.connectors[i].find(id => id === prevBlock.blockId));
+					// }
 					//make sure block exists and isn't the previous block
 					if (neighborBlockId != null && neighborBlockId != prevBlock.blockId) { 
 						//make sure the move to neighboring block is valid
@@ -102,12 +109,43 @@ function CTC() {
 	const [selectedTrain, setSelectedTrain] = useState({});
 	const [selectedBlock, setSelectedBlock] = useState({});
 	const [trainsList, setTrainsList] = useState({});
-	
-	//update trains list
+	const [redBlocks, setRedBlocks] = useState([]);
+	const [greenBlocks, setGreenBlocks] = useState([]);
+	const [blockLists, setBlockLists] = useState({});
+
+	//update trains and blocks list
 	useEffect(() => {
-		DatabaseGet(setTrainsList, "TrainList");
+		Firebase.database().ref('/TrainList').on('value', snapshot => {
+			let list = snapshot.val();
+			list.databasePath = "/TrainList";
+			setTrainsList(list);
+		});
+		Firebase.database().ref('/GreenLine').on('value', snapshot => {
+			let blocks = [];
+			for (const [index, block] of Object.entries(snapshot.val())) {
+				blocks.push(block);
+			}
+			blocks.databasePath = "/GreenLine";
+			setGreenBlocks(blocks);
+		});
+		Firebase.database().ref('/RedLine').on('value', snapshot => {
+			let blocks = [];
+			for (const [index, block] of Object.entries(snapshot.val())) {
+				blocks.push(block);
+			}
+			blocks.databasePath = "/RedLine";
+			setRedBlocks(blocks);
+		});
 	}, []);
-	
+
+	useEffect(() => {
+		console.log("[CTC] red or green database line blocks changed");
+		setBlockLists({"red": redBlocks, "green": greenBlocks});
+	}, [redBlocks, greenBlocks]);
+
+	useEffect(() => console.log(`[CTC] new selectedBlock, ${selectedBlock.databasePath}`), [selectedBlock]);
+	useEffect(() => console.log(`[CTC] new selectedTrain, ${selectedTrain.databasePath}`), [selectedTrain]);
+
 	return (
 		<div>
 			<header className="App-header">
@@ -125,6 +163,7 @@ function CTC() {
 					selectedTrain={selectedTrain}
 					trainsList={trainsList}
 					setSelectedBlock={setSelectedBlock}
+					blockLists={blockLists}
 				/>
 			</header>
 			<ScheduleModal
