@@ -63,6 +63,10 @@ const WaysidePanel = ({
     setSelectedWaysideList(
       selColor == 'GreenLine' ? greenWaysideList : redWaysideList
     );
+    setSelectedWayside(
+      selColor == 'GreenLine' ? greenWaysideList[0] : redWaysideList[0]
+    );
+    setSelectedWaysideName('WSC' + 1);
   }
 
   return (
