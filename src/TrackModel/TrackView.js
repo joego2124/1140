@@ -45,7 +45,7 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({setSelectedBlock, setLineColor, trainsList, blockList}) => {
+const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 
 	document.body.style.overflow='hidden';
 
@@ -118,6 +118,8 @@ const TrackView = ({setSelectedBlock, setLineColor, trainsList, blockList}) => {
 			const clickHandler = () => {
 				// console.log(`svg clicked: ${currBlock.blockId}`);
 				setSelectedBlock( `${currBlock.blockId}` );
+				console.log("curr: ", currBlock.color);
+				setLineName( `${currBlock.color}` );
 			}
 			
 			//create new svg and push to trackBlockSVGs

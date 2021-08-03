@@ -22,7 +22,7 @@ function TrackModel() {
 	const [jsonTree, setJsonTree] = useState([]);
 	const [blockList, setBlockList] = useState([]);
 	const [selectedBlock, setSelectedBlock] = useState(`1`);
-	const [lineColor, setLineColor] = useState("RedLine");
+	const [lineName, setLineName] = useState("RedLine");
 
 	// Update trains list
 	useEffect(() => {
@@ -43,14 +43,15 @@ function TrackModel() {
 	// 	console.log(`IN TRACKMODEL: ${lineColor}`),
 	// 	[selectedBlock]
 	// 	);
-	// useEffect(() => console.log(`IN TRACKMODEL: ${selectedBlock}`), [selectedBlock]);
-	// useEffect(() => console.log(`IN TRACKMODEL: ${lineColor}`), [lineColor]);
+	useEffect(() => console.log(`IN TRACKMODEL: ${selectedBlock}`), [selectedBlock]);
+	useEffect(() => console.log(`linename: `, lineName), [lineName]);
+
 	useEffect(() => getBlockListData(), [jsonTree]);
 
 	return (
 		<>
 			<div>
-				<TrackView setSelectedBlock={setSelectedBlock} setLineColor={setLineColor} trainsList={trainsList} blockList={blockList} />
+				<TrackView setSelectedBlock={setSelectedBlock} setLineName={setLineName} trainsList={trainsList} blockList={blockList} />
 			</div>
 			<div style={{
 				position: "absolute",
