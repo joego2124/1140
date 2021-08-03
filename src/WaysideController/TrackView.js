@@ -54,7 +54,12 @@ const gridBlocks = 50;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({ selectedWayside, setSelectedBlock, trainsList }) => {
+const TrackView = ({
+  selectedWayside,
+  setSelectedBlock,
+  trainsList,
+  trackColor,
+}) => {
   document.body.style.overflow = 'hidden';
 
   //   const [selectedBlock, setSelectedBlock] = useState(0);
@@ -62,7 +67,7 @@ const TrackView = ({ selectedWayside, setSelectedBlock, trainsList }) => {
 
   let trackBlockSVGs = [];
   let visitedBlockIds = [];
-  let lineName = 'greenLine';
+  let lineName = trackColor == 'GreenLine' ? 'greenLine' : 'redLine';
 
   //recursive function to generate a list of tracks for rendering
   const traceTrack = (currBlock, currPos, trackLayoutList) => {
@@ -107,8 +112,9 @@ const TrackView = ({ selectedWayside, setSelectedBlock, trainsList }) => {
             }
             const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
             if (
-              selectedWayside?.find((v) => v.BlockNumber == nextBlockId) !=
-              undefined
+              selectedWayside?.find(
+                (v) => v.BlockNumber == Math.trunc(nextBlockId)
+              ) != undefined
             ) {
               traceTrack(nextBlock, nextPos, trackLayoutList);
             }
@@ -154,7 +160,6 @@ const TrackView = ({ selectedWayside, setSelectedBlock, trainsList }) => {
         let targBlockId = Math.floor(trainArr[1].CurrentBlock);
         let compBlockId = Math.floor(currBlock.blockId);
         if (targBlockId == compBlockId) {
-          console.log(trainArr[0], trainArr[1]);
           color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? 0.25 : 1})`;
         }
       });
@@ -164,11 +169,13 @@ const TrackView = ({ selectedWayside, setSelectedBlock, trainsList }) => {
 
         if (selectedWayside != undefined) {
           let selBlock = selectedWayside?.find(
-            (v) => v.BlockNumber == currBlock.blockId
+            (v) => v.BlockNumber == Math.trunc(currBlock.blockId)
           );
           console.log(selBlock);
           setSelectedBlock(
-            selectedWayside?.find((v) => v.BlockNumber == currBlock.blockId)
+            selectedWayside?.find(
+              (v) => v.BlockNumber == Math.trunc(currBlock.blockId)
+            )
           );
         } else {
           setSelectedBlock(selectedWayside[0]);
@@ -243,12 +250,20 @@ const TrackView = ({ selectedWayside, setSelectedBlock, trainsList }) => {
 
   let mappedBlocks = 0;
   if (selectedWayside?.length > 0) {
-    mappedBlocks = selectedWayside?.map((block) => {
-      let mappedBlock = trackLayout.greenLine.find(
-        (v) => v.blockId == block.BlockNumber
-      );
-      return mappedBlock;
+    let tColor = trackColor == 'GreenLine' ? 'greenLine' : 'redLine';
+    // mappedBlocks = selectedWayside?.map((block) => {
+    //   let mappedBlock = trackLayout[tColor].find(
+    //     (v) => Math.trunc(v.blockId) == block.BlockNumber
+    //   );
+    mappedBlocks = [];
+    selectedWayside?.forEach((waysideBlock) => {
+      trackLayout[tColor].forEach((trackLayoutBlock) => {
+        if (Math.trunc(trackLayoutBlock.blockId) == waysideBlock.BlockNumber) {
+          mappedBlocks.push(trackLayoutBlock);
+        }
+      });
     });
+    console.log(mappedBlocks);
   }
 
   if (selectedWayside?.length > 0) {
