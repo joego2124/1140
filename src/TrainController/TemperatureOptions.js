@@ -9,8 +9,8 @@ function TemperatureOptions({parentName, selectedTrain}) {
             <h3>TEMPERATURE</h3>
             <Container>
                 <Col>
-                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='ExternalTemperature' message='Ext. Temp' units='°F'/>
-                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='InternalTemperature' message='Int. Temp' units='°F'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='ExternalTemperature' message='External Temperature' units='°F'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='InternalTemperature' message='Internal Temperature' units='°F'/>
                     <TempInput selectedTrain={selectedTrain} parentName={parentName} varName='InternalTemperature'/>
                 </Col>
             </Container>

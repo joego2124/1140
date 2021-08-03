@@ -35,21 +35,17 @@ function TrainContollerDriver() {
 
 	return (
 		<div>
-			<p text-align='center'>{selectedTrain.TrainId}</p>
-			<header className="App-header">
+			<div style={{ textAlign: `right` }} ><mark><strong>{selectedTrain.TrainId}</strong></mark></div>
+			<header>
+				<div style={{ paddingTop: `100px`, paddingLeft: `300px`, paddingRight: `150px` }}>
 				<Container>
-					<Col>
-					<DoorOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					<BrakingOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					</Col>
-					<Col>
-					<ModeOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					<LightOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					</Col>
-					<TemperatureOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					<FailureStatus selectedTrain={selectedTrain} parentName={parentName}/>
-					<TrainStatus selectedTrain={selectedTrain} parentName={parentName}/>
+					<Col><DoorOptions selectedTrain={selectedTrain} parentName={parentName}/><BrakingOptions selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><ModeOptions selectedTrain={selectedTrain} parentName={parentName}/><LightOptions selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><TemperatureOptions selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><FailureStatus selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><TrainStatus selectedTrain={selectedTrain} parentName={parentName}/></Col>
 				</Container>
+				</div>
 				<TrainsPanel 
 					setSelectedTrain={setSelectedTrain}
 					setAddTrainModal={setAddTrainModal}
