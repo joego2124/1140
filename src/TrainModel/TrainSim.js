@@ -73,18 +73,18 @@ function makeTrainSim(newTrainId) {
                     }
                 } else {
                     //no brakes
-                    // console.log( 'power:',this.power, 'mass:',this.mass,'velocity:',this.velocity,'grade:',this.grade,'acceleration:',
-                        // ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : .1) )) - (32.2 * Math.sin(this.grade*Math.PI/180)) );
-                    Firebase.database().ref(`/TrainList/${this.trainId}/Acceleration`).set( 
-                        ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : .1) )) - (32.2 * Math.sin(this.grade*Math.PI/180)) );
+                    var acc = ((this.power * 740)/(this.mass * (this.velocity != 0 ? this.velocity : .1) )) - (32.2 * Math.sin(this.grade*Math.PI/180));
+                    // console.log( 'power:',this.power, 'mass:',this.mass,'velocity:',this.velocity,'grade:',this.grade,'acceleration:', acc );
+                    Firebase.database().ref(`/TrainList/${this.trainId}/Acceleration`).set( acc );
+                    if(acc < 0) console.warn('BACKSLIDE ON TRAIN ',this.trainId)
                 }
             }
 
             Firebase.database().ref(`/TrainList/${this.trainId}/Velocity`).set( 
-                this.velocity + this.acceleration );
+                Math.max( this.velocity + this.acceleration, 0) );
 
             Firebase.database().ref(`/TrainList/${this.trainId}/Position`).set( 
-                this.position + this.velocity );
+                Math.max( this.position + this.velocity, 0 ) );
 
             //handle station
             if(this.velocity == 0 && this.Station != 0 && this.HasStoppedAtSation == false) {
