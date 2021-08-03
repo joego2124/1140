@@ -4,7 +4,7 @@ blocks: 60,61,62,63,64,65,0
 
 switch: 62
 
-SET: switch TO 1
+SET: switch TO (1)
 IF: occupancy{blocks-0,62} SET switch TO 0
 
 IF: occupancy{blocks-65} SET authority{blocks-64,63} TO 0

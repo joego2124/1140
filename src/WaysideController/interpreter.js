@@ -529,15 +529,15 @@ exports.parseFile = (plc) => {
 
             if (j == 0) {
               if (element.data.name.includes('blocks')) {
-                var array = new Array(blocksData.length);
-                var ones = new Array(blocksData.length);
+                var array = new Array(blocks.length);
+                var ones = new Array(blocks.length);
 
                 ones.fill('1', 0, ones.length);
                 array.fill('0', 0, array.lenth);
 
                 //foreach branch
                 element.data.data.forEach((element) => {
-                  array[blocksData.findIndex((el) => el == element)] = '1';
+                  array[blocks.findIndex((el) => el == element)] = '1';
                 });
 
                 var arg = element.type.includes('OCCUPANCY')
@@ -546,7 +546,7 @@ exports.parseFile = (plc) => {
 
                 var ifAndStr = String.format(ifAndCall, '[' + array + ']', arg);
               } else if (element.data.name.includes('branch')) {
-                var ones = new Array(blocksData.length);
+                var ones = new Array(blocks.length);
 
                 ones.fill('1', 0, ones.length);
 
@@ -559,13 +559,13 @@ exports.parseFile = (plc) => {
 
                 var ifAndStr = String.format(ifAndCall, name, arg);
               } else if (element.data.name.includes('yard')) {
-                var array = new Array(blocksData.length);
-                var ones = new Array(blocksData.length);
+                var array = new Array(blocks.length);
+                var ones = new Array(blocks.length);
 
                 ones.fill('1', 0, ones.length);
                 array.fill('0', 0, array.lenth);
 
-                array[blocksData.findIndex((el) => el == '0')] = '1';
+                array[blocks.findIndex((el) => el == '0')] = '1';
 
                 var name = '[' + array + ']';
 
@@ -592,25 +592,25 @@ exports.parseFile = (plc) => {
               //GET VARIABLE NAME OF SET
               if (element.type.includes('SWITCH')) {
               } else if (element.data.name.includes('blocks')) {
-                var array = new Array(blocksData.length);
+                var array = new Array(blocks.length);
 
                 array.fill('0', 0, array.lenth);
 
                 element.data.data.forEach((element) => {
-                  array[blocksData.findIndex((el) => el == element)] = '1';
+                  array[blocks.findIndex((el) => el == element)] = '1';
                 });
                 var name = '[' + array + ']';
               } else if (element.data.name.includes('branch')) {
                 var split = element.data.name.split('-');
                 var name = split[0] + split[1];
               } else if (element.data.name.includes('yard')) {
-                var array = new Array(blocksData.length);
-                var ones = new Array(blocksData.length);
+                var array = new Array(blocks.length);
+                var ones = new Array(blocks.length);
 
                 ones.fill('1', 0, ones.length);
                 array.fill('0', 0, array.lenth);
 
-                array[blocksData.findIndex((el) => el == '0')] = '1';
+                array[blocks.findIndex((el) => el == '0')] = '1';
 
                 var name = '[' + array + ']';
               }
@@ -623,7 +623,7 @@ exports.parseFile = (plc) => {
                 if (tokens[i].data[j + 1].type.includes('SWITCH')) {
                   ops.push(String.format(setSwitchState, element.value));
                 } else {
-                  var ones = new Array(blocksData.length);
+                  var ones = new Array(blocks.length);
 
                   ones.fill(element.value, 0, ones.length);
 

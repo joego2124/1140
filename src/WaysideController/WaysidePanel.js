@@ -104,7 +104,9 @@ const WaysidePanel = ({
             </div>
           </div>
         </Button>
-        <div class='waysidePanelHolder'>{waysideButtonList}</div>
+        <div style={{ scrollBehavior: 'smooth' }}>
+          <div class='waysidePanelHolder'>{waysideButtonList}</div>
+        </div>
       </SlidingPane>
     </div>
   );
