@@ -4,30 +4,37 @@ import Firebase from 'firebase';
 
 const SetTempModal = (props) => {
 
-    var localDesiredTemp, localEnvironmentTemp;
+    const [databaseTemps, setDatabaseTemps] = useState({
+      currentTemperature: -9999,
+      desiredTrackTemperature: -9999,
+    });
     const [desiredTemp, setDesiredTemp] = useState();
     const [environmentTemp, setEnvironmentTemp] = useState();
 
     // Get temperature variables
     useEffect(() => {
-      Firebase.database().ref(`/${props.lineName}/CurrentTemperature`).once( 'value', snapshot => {
-        localEnvironmentTemp = snapshot.val();
+      Firebase.database().ref(`/${props.lineName}`).on('value', snapshot => {
+        let lineData = snapshot.val();
+        setDatabaseTemps({
+          currentTemperature: lineData.CurrentTemperature,
+          desiredTrackTemperature: lineData.DesiredTrackTemperature,
+        });
       });
-    }, [props.selectedBlock, desiredTemp, environmentTemp]);
-    useEffect(() => {
-      Firebase.database().ref(`/${props.lineName}/DesiredTrackTemperature`).once( 'value', snapshot => {
-        localDesiredTemp = snapshot.val();
-      });
-    }, [props.selectedBlock, localDesiredTemp, localEnvironmentTemp]);
+    }, []);
 
     // Checking if track heater needs to be turned on
     useEffect(() => {
-        if( (localEnvironmentTemp < localDesiredTemp) ? 
-          Firebase.database().ref(`/${props.lineName}/TrackHeater`).set( true ) :
-          Firebase.database().ref(`/${props.lineName}/TrackHeater`).set( false ) );
-          console.log("actualTemp: ", localEnvironmentTemp);
-          console.log("desiredTemp: ", localDesiredTemp);},
-          [props.lineName, props.selectedBlock, localDesiredTemp, localEnvironmentTemp]);
+      let localEnvironmentTemp = databaseTemps.currentTemperature 
+      let localDesiredTemp = databaseTemps.desiredTrackTemperature 
+        if( localEnvironmentTemp < localDesiredTemp) {
+          Firebase.database().ref(`/${props.lineName}/TrackHeater`).set( true );
+        } else {
+          Firebase.database().ref(`/${props.lineName}/TrackHeater`).set( false );
+        }
+        console.log("actualTemp: ", localEnvironmentTemp);
+        console.log("desiredTemp: ", localDesiredTemp);
+        console.log("");
+    },  [databaseTemps]);
 
 	return (
 		<Modal
@@ -50,7 +57,7 @@ const SetTempModal = (props) => {
                     name = "desiredTemp"
                     min = "80"
                     max = "140"
-                    placeholder={desiredTemp} />
+                    placeholder={databaseTemps.desiredTrackTemperature} />
             </Form.Group>
 
             <Form.Group onChange={ e => {
@@ -60,27 +67,20 @@ const SetTempModal = (props) => {
                     name = "desiredTemp"
                     min = "-40"
                     max = "140"
-                    placeholder={environmentTemp} />
+                    placeholder={databaseTemps.currentTrackTemperature} />
             </Form.Group>
         </Form>
       </Modal.Body>
 
       <Modal.Footer>
         <Button onClick={() => {
-            // console.log(`/${props.lineName}/DesiredTrackTemperature`);
             Firebase.database().ref(`/${props.lineName}/DesiredTrackTemperature`).set(Number(desiredTemp));
-            Firebase.database().ref(`/${props.lineName}/DesiredTrackTemperature`).once( 'value', snapshot => {
-              localDesiredTemp = snapshot.val();
-            });
-            console.log("BUTTONactualTemp: ", localDesiredTemp);
+            console.log("BUTTONactualTemp: ", desiredTemp);
         }}>Set Desired Track Temperature</Button>
 
         <Button onClick={() => {
             Firebase.database().ref(`/${props.lineName}/CurrentTemperature`).set(Number(environmentTemp));
-            Firebase.database().ref(`/${props.lineName}/CurrentTemperature`).once( 'value', snapshot => {
-              localEnvironmentTemp = snapshot.val();
-            });
-            console.log("BUTTONactualTemp: ", localEnvironmentTemp);
+            console.log("BUTTONactualTemp: ", environmentTemp);
         }}>Set Environmental Temperature</Button>
 
         <Button onClick={props.onHide}>Cancel</Button>
