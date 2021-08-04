@@ -116,7 +116,7 @@ const TrackView = ({setSelectedBlock, trainsList, blockList}) => {
 			});
 
 			const clickHandler = () => {
-				console.log(`svg clicked: ${currBlock.blockId}`);
+				// console.log(`svg clicked: ${currBlock.blockId}`);
 				setSelectedBlock( `${currBlock.blockId}` );
 			}
 			
@@ -174,10 +174,6 @@ const TrackView = ({setSelectedBlock, trainsList, blockList}) => {
 					case 3: dy = dist; break;
 				}
 				beacons.push(
-					// <OverlayTrigger
-					// 	placement="top"
-					// 	overlay={<Tooltip>{"BEACON"}</Tooltip>}
-					// >
 						<BsFillSquareFill size="50px" style={{
 							position: "absolute", 
 							left: currPos.x + dx + 50,
@@ -188,7 +184,6 @@ const TrackView = ({setSelectedBlock, trainsList, blockList}) => {
 							overflow: "visible",
 							zIndex: 3000,
 						}}/>
-					// </OverlayTrigger>
 				);
 			});
 		}

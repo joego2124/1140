@@ -8,7 +8,7 @@
 		"WSC6": {"blocks": [81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100], "PLCstatus": false}
 	},
 	"RedLine": {
-		"WS1" : {"blocks": [], "PLCStatus": false},
+		"WS1" : {"blocks": [0,8,9,10], "PLCStatus": false},
 		"WS2" : {"blocks": [], "PLCStatus": false},
 		"WS3" : {"blocks": [], "PLCStatus": false}
 	}

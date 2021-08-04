@@ -52,7 +52,7 @@ const ScheduleModal = (props) => {
 						</tr>
 					</thead>
 					<tbody>
-						{trainLabelList}
+						{/* {trainLabelList} */}
 					</tbody>
 				</Table>
       </Modal.Body>

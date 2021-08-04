@@ -20,10 +20,9 @@ function VarDisplay({ message, path }) {
   }, [path]);
 
 	return (
-		<div className="componentDiv">
-			{message}:
-			<div className="componentText">{vari}</div>
-		</div>
+		<>
+			{message}: {vari}
+		</>
 	)
 }
 
