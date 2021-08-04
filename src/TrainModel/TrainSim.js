@@ -41,13 +41,13 @@ function makeTrainSim(newTrainId) {
     Firebase.database().ref(`/TrainList/${newTrainId}/Line`).on('value', snapshot => { train.line = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/CurrentBlock`).on('value', snapshot => { 
         const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
-        if(safeblock)
+        if(safeblock != snapshot.val())
             console.warn('BLOCK ID OUT OF RANGE: ',newTrainId, snapshot.val());
         train.blocknumber = safeblock; 
     });
     Firebase.database().ref(`/TrainList/${newTrainId}/PreviousBlock`).on('value', snapshot => {
         const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
-        if(safeblock)
+        if(safeblock != snapshot.val())
             console.warn('BLOCK ID OUT OF RANGE: ',newTrainId, snapshot.val());
         train.previousblocknumber = safeblock; 
     });
