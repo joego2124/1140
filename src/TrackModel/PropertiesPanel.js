@@ -16,9 +16,8 @@ function PropertiesPanel({ selectedBlock, lineName }) {
 	// console.log(`PropertiesPanel selected block: ${selectedBlock}`)
 
 	const [tempModalShow, setTempModalShow] = useState(false);
-	const [actualTemp, setActualTemp] = useState(95);
-	
-	useEffect(() => {setTimeout(() => DatabaseGetMulti(setActualTemp, `/${lineName}/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
+	const [actualTemp, setActualTemp] = useState(72);
+	const [desiredTemp, setDesiredTemp] = useState(80);
 
 	return (
 		// Properties title
@@ -63,7 +62,8 @@ function PropertiesPanel({ selectedBlock, lineName }) {
 				<SetTempModal
 						show={tempModalShow}
 						lineName={`${lineName}`}
-						onHide={() => {setTempModalShow(false)}}
+						onHide={() => {setTempModalShow(false)}} 
+						selectedBlock={selectedBlock}
 				/>
 			</div>
 		</div>

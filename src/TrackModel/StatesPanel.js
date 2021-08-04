@@ -23,28 +23,15 @@ function StatesPanel({ selectedBlock, lineName }){
 		Firebase.app(); // if already initialized, use that one
 	}
 
+	var actualTempLocal, desiredTempLocal;
 	var trackHeater;
-	const [actualTemp, setTemp] = useState(0);
-	// const [desiredTemp, setDesTemp] = useState(0);
+	const [actualTemp, setActualTemp] = useState(0);
+	const [desiredTemp, setDesiredTemp] = useState(0);
 	const [trackOccup, setTrackOccup] = useState(0);
 	// const [trackHeater, setTrackHeater] = useState(0);
 	const [failBrokenRail, setFailBrokenRail] = useState();
 	// const [failTrackCirc, setFailTrackCirc] = useState(0);
 	// const [failBeacon, setFailBeacon] = useState(0);
-
-	useEffect(() => {
-		setTimeout(() => DatabaseGetMulti(setTemp, `/${lineName}/${selectedBlock}/Temperature`), 500);
-	}, [selectedBlock]);
-	useEffect(() => {
-		setTimeout(() => DatabaseGetMulti(setTrackOccup, `/${lineName}/${selectedBlock}/Occupancy`), 500);
-	}, [selectedBlock]);
-	// Failure modes
-	useEffect(() => {
-		setTimeout(() => DatabaseGetMulti(setFailBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`), 500);
-	}, [selectedBlock]);
-
-	// Checking if track heater needs to be turned on
-	// useEffect(() => {setTimeout(() =>  DatabaseGetMulti(setTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
 
 	///////////////////////////////////////////////////////////////
 	//                          OLD CODE                         //
