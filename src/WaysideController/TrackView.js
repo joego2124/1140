@@ -160,7 +160,15 @@ const TrackView = ({
         let targBlockId = Math.floor(trainArr[1].CurrentBlock);
         let compBlockId = Math.floor(currBlock.blockId);
         if (targBlockId == compBlockId) {
-          color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? 0.25 : 1})`;
+          color = `rgb(101, 93, 110, ${
+            currBlock.connectors.length > 1
+              ? i !=
+                selectedWayside.find((v) => v.BlockNumber == currBlock.blockId)
+                  .SwitchState
+                ? 0.25
+                : 1
+              : 1
+          })`;
         }
       });
 
