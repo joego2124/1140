@@ -1,0 +1,6 @@
+WSC11: Red Line
+
+blocks: 36,37,38,39,40,71,70
+switch: 38
+
+SET: switch TO (0)
