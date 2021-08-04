@@ -40,14 +40,16 @@ function makeTrainSim(newTrainId) {
 
     Firebase.database().ref(`/TrainList/${newTrainId}/Line`).on('value', snapshot => { train.line = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/CurrentBlock`).on('value', snapshot => { 
-        if(snapshot.val() < 0 ? 0 : Math.floor(snapshot.val()))
-            console.warn('BLOCK ID OUT OF RANGE: ',this.trainId, snapshot.val());
-        train.blocknumber = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val()); 
+        const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
+        if(safeblock)
+            console.warn('BLOCK ID OUT OF RANGE: ',newTrainId, snapshot.val());
+        train.blocknumber = safeblock; 
     });
     Firebase.database().ref(`/TrainList/${newTrainId}/PreviousBlock`).on('value', snapshot => {
-        if(snapshot.val() < 0 ? 0 : Math.floor(snapshot.val()))
-            console.warn('BLOCK ID OUT OF RANGE: ',this.trainId, snapshot.val());
-        train.previousblocknumber = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val()); 
+        const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
+        if(safeblock)
+            console.warn('BLOCK ID OUT OF RANGE: ',newTrainId, snapshot.val());
+        train.previousblocknumber = safeblock; 
     });
     Firebase.database().ref(`/TrainList/${newTrainId}/BlockLength`).on('value', snapshot => { train.blocklength = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Grade`).on('value', snapshot => { train.grade = snapshot.val(); });
