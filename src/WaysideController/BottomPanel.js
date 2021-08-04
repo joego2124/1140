@@ -58,24 +58,30 @@ const BottomPanel = ({
 
   function setSwitchStateData() {
     if (selectedBlock.isSwitchBlock == 1) {
+      console.log(selectedWayside[0]);
+      let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+      console.log(line);
       let newState = selectedBlock?.SwitchState == 0 ? 1 : 0;
-      let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+      let link = line + '/' + selectedBlock.BlockNumber + '/SwitchState';
+      console.log(link);
       Firebase.database().ref(link).set(newState);
     }
   }
 
   function getSwitchStateData() {
-    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+    let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+    let link = line + '/' + selectedBlock.BlockNumber + '/SwitchState';
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       selectedBlock.SwitchState = snapshot.val();
     });
   }
 
-  useEffect(() => getSwitchStateData(), [selectedBlock.SwitchState]);
+  useEffect(() => getSwitchStateData(), [selectedBlock]);
 
   function getOccupancyData() {
-    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/Occupancy';
+    let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+    let link = line + '/' + selectedBlock.BlockNumber + '/Occupancy';
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       selectedBlock.Occupancy = snapshot.val();
@@ -85,7 +91,8 @@ const BottomPanel = ({
   useEffect(() => getOccupancyData(), [selectedBlock.Occupancy]);
 
   function getAuthorityData() {
-    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/Authority';
+    let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+    let link = line + '/' + selectedBlock.BlockNumber + '/Authority';
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       selectedBlock.Authority = snapshot.val();
