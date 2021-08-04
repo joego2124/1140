@@ -3,8 +3,8 @@ WSC3: Green Line
 blocks: 46,47,48,49,50,51,52,53,54,55,56,57,58,59
 switch: 58
 
-SET: switch TO (1)
-IF: authority{blocks-59} SET switch TO 0
+SET: switch TO (0)
+IF: authority{blocks-59} SET switch TO 1
 IF: occupancy{blocks-48} SET authority{blocks-46,47} TO 0
 IF: occupancy{blocks-57} SET authority{blocks-56,55} TO 0
 IF: occupancy{blocks-56,55} SET authority{blocks-54,43} TO 0
