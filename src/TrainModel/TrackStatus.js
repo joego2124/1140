@@ -21,7 +21,7 @@ function TrackStatus(parentName) {
 			<div className="trainModelRow">
 				<div className="trainModelColumn">
 					<VarDisplay parentName={blockID} varName='Elevation' message='Elevation [ft]'/>
-					<VarDisplay parentName={blockID} varName='Grade' message='Grade [°]'/>
+					<VarDisplay parentName={parentName} varName='Grade' message='Grade [°]'/>
 					<VarDisplay parentName={blockID} varName='Authority' message='Authority [blocks]'/>
 					<VarIndicator parentName={blockID} varName='LightState' message='Light Sensor'/>
 				</div>

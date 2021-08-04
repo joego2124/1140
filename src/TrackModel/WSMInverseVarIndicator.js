@@ -1,23 +1,28 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Button, Container, Row  } from 'react-bootstrap';
-import {DatabaseGet} from '../Database';
 import { BsCircleFill } from "react-icons/bs";
+import Firebase from "firebase";
 import { DatabaseGetMulti } from '../components/DatabaseMulti';
 
-// TODO: GET THIS FUNCTIONING
-
-function WSMInverseIndicator({varName, message, selectedBlock}) {
+function WSMInverseIndicator({ selectedBlock, path }) {
 	
-	// const [vari, setVari] = useState(false);
+	const [vari, setVari] = useState();
 
-	// useEffect(() => {setTimeout(()=>DatabaseGet(setVari, varName, parentName), 500);}, [selectedBlock]);
+	useEffect(() => {
+		setTimeout(() => {
+		if (!path) {
+			console.warn(`PATH NOT FOUND`);
+		} else {
+			Firebase.database().ref(path).on('value', snapshot => {
+				const state = snapshot.val();
+				setVari(state);
+			});
+		}
+		}, 500);
+	  }, [selectedBlock, path]);
 	
-	// return (
-	// 	<div>
-	// 		<BsCircleFill size="1.0em" color={!vari ? "#C44242" : 'green'}/>{' '}
-	// 		{message}
-	// 	</div>
-	// )
+	return (
+		<BsCircleFill size="0.8em" color={vari == 1 ? "#C44242" : 'green'}/>
+	)
 }
 
 export default WSMInverseIndicator

@@ -121,6 +121,7 @@ const WaysideController = () => {
   return (
     <div>
       <header className='App-header'>
+        <div>{selectedWaysideName}</div>
         <WaysidePanel
           setTrackColor={setTrackColor}
           setSelectedWayside={setSelectedWayside}

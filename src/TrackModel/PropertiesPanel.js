@@ -1,34 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import SlidingPane from "react-sliding-pane";
 import { Button } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import DatabaseGet from '../Database'
 import config from '../config';
 import Firebase from "firebase";
-import WSMDisplay from './WSMVarDisplay';
-import VarDisplay from '../components/VarDisplayMulti';
+import VarDisplayMulti from '../components/VarDisplayMulti';
+import SetTempModal from './SetTempModal';
+import { DatabaseGetMulti } from '../components/DatabaseMulti';
 
-// const [blockList, setBlockList] = useState([]);
-
-// function getBlockListData() {
-//     let tempList = [];
-//     let ref = Firebase.database().ref('/RedLine');
-//     ref.on('value', (snapshot) => {
-//       for (const [key, value] of Object.entries(snapshot.val())) {
-//         for (const [i, v] of Object.entries(value)) {
-//           console.log(i, v);
-//           tempList.push(v);
-//         }
-//       }
-//       setBlockList(tempList);
-//       console.log(tempList);
-//       console.log(blockList);
-//     });
-//   }
-
-function PropertiesPanel({selectedBlock}) {
+function PropertiesPanel({selectedBlock,}) {
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -37,6 +15,11 @@ function PropertiesPanel({selectedBlock}) {
 	}
 	// console.log(`PropertiesPanel selected block: ${selectedBlock}`)
 
+	const [tempModalShow, setTempModalShow] = useState(false);
+	const [actualTemp, setActualTemp] = useState(95);
+	
+	useEffect(() => {setTimeout(() => DatabaseGetMulti(setActualTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
+
 	return (
 		// Properties title
 		<div style={{
@@ -44,24 +27,44 @@ function PropertiesPanel({selectedBlock}) {
 			background: "#c4c4c4",
 			width: "30%",
 		}}>
+			<h3>PROPERTIES</h3>
 			<div style={{
-				textAlign: "center",
-				paddingLeft: 50,
-				paddingRight: 50,
+				textAlign: "left",
+				paddingLeft: 100,
+				paddingRight: 10,
 				paddingBottom: 10
 			}}>
-				<h3>PROPERTIES</h3>
-				<VarDisplay message='Block Length [m]' path={`/GreenLine/${selectedBlock}/BlockLength`} />
-				<VarDisplay message='Directions of Travel' path={`/GreenLine/${selectedBlock}/DirectionOfTravel`} />
-				<VarDisplay message='Elevation [m]' path={`/GreenLine/${selectedBlock}/Elevation`} />
-				<VarDisplay message='Desired Track Temperature [°F]' path={`/GreenLine/${selectedBlock}/DesiredTrackTemperature`} />
-				<VarDisplay message='Railway Crossing' path={`/GreenLine/${selectedBlock}/isLevelCrossingBlock`} />
-				<VarDisplay message='Speed Limit [mph]' path={`/GreenLine/${selectedBlock}/SpeedLimit`} />
-
-				<Button variant="primary" size="sm" >
-					Set Desired Temp
+				<VarDisplayMulti message='Block Length [ft]' path={`/GreenLine/${selectedBlock}/BlockLength`} />
+				<br />
+				<VarDisplayMulti message='Directions of Travel' path={`/GreenLine/${selectedBlock}/DirectionOfTravel`} />
+				<br />
+				<VarDisplayMulti message='Elevation [ft]' path={`/GreenLine/${selectedBlock}/Elevation`} />
+				<br />
+				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`/GreenLine/DesiredTrackTemperature`} />
+				<br />
+				<VarDisplayMulti message='Railway Crossing' path={`/GreenLine/${selectedBlock}/isLevelCrossingBlock`} />
+				<br />
+				<VarDisplayMulti message='Speed Limit [mph]' path={`/GreenLine/${selectedBlock}/SpeedLimit`} />
+				<br />
+			</div>
+			<div style={{
+				textAlign: "right",
+				paddingLeft: 100,
+				paddingRight: 10,
+				paddingBottom: 10
+			}}>
+				<Button
+						variant="primary"
+						size="sm"
+						onClick={() => setTempModalShow(true)}
+					>
+						Set Temperatures
 				</Button>
-				{/* <p style={{textColor: "grey"}}>__</p> */}
+				<SetTempModal
+						show={tempModalShow}
+						lineName={"GreenLine"}
+						onHide={() => {setTempModalShow(false)}}
+				/>
 			</div>
 		</div>
 
