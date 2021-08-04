@@ -1,0 +1,13 @@
+WSC8: Red Line
+
+blocks:1,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23
+listener: 15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52
+switch: 15
+
+branch-1: 1,2,3
+
+
+SET: switch TO (0)
+IF: occupancy{blocks-1} SET switch TO 1
+IF: occupancy{listener} SET authority{branch-1} TO 0
+IF: authority{blocks-1} SET switch TO 0
