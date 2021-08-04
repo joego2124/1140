@@ -109,7 +109,7 @@ const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 			// TODO: remove color of SVG if track is not occupied
 			Object.entries(trainsList).forEach(trainArr => {
 				let targBlockId = Math.floor(trainArr[1].CurrentBlock);
-				let compBlockId = Math.floor(currBlock.blockId);
+				let compBlockId = Math.floor( Math.abs(currBlock.blockId) );
 				if (targBlockId == compBlockId) {
 					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
 				}
@@ -117,9 +117,20 @@ const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 
 			const clickHandler = () => {
 				// console.log(`svg clicked: ${currBlock.blockId}`);
-				setSelectedBlock( `${currBlock.blockId}` );
-				// console.log("curr: ", currBlock.color);
-				setLineName( `${currBlock.color}` );
+				if( currBlock.blockId < 0 )
+				{
+					// Yard ID = 0
+					setSelectedBlock( `${0}` );
+					setLineName( `${currBlock.color}` );
+				}
+				else
+				{
+					let flooredBlockId = Math.floor( currBlock.blockId );
+					console.log("BLOCKID: ", flooredBlockId);
+					setSelectedBlock( `${flooredBlockId}` );
+					// console.log("curr: ", currBlock.color);
+					setLineName( `${currBlock.color}` );
+				}
 			}
 			
 			//create new svg and push to trackBlockSVGs

@@ -16,8 +16,6 @@ function PropertiesPanel({ selectedBlock, lineName }) {
 	// console.log(`PropertiesPanel selected block: ${selectedBlock}`)
 
 	const [tempModalShow, setTempModalShow] = useState(false);
-	const [actualTemp, setActualTemp] = useState(72);
-	const [desiredTemp, setDesiredTemp] = useState(80);
 
 	return (
 		// Properties title

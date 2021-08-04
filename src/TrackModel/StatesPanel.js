@@ -14,6 +14,7 @@ import { DatabaseGetMulti } from '../components/DatabaseMulti';
 import { DatabaseSetMulti } from '../components/DatabaseMulti';
 import SplitButton from 'react-bootstrap/SplitButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import SetBeaconInfoModal from './SetBeaconInfoModal';
 
 function StatesPanel({ selectedBlock, lineName }){
 
@@ -23,30 +24,14 @@ function StatesPanel({ selectedBlock, lineName }){
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	var actualTempLocal, desiredTempLocal;
 	var trackHeater;
-	const [actualTemp, setActualTemp] = useState(0);
-	const [desiredTemp, setDesiredTemp] = useState(0);
 	const [trackOccup, setTrackOccup] = useState(0);
-	// const [trackHeater, setTrackHeater] = useState(0);
 	const [failBrokenRail, setFailBrokenRail] = useState();
+
+	const [tempModalShow, setTempModalShow] = useState(false);
+	const [beaconModalShow, setBeaconModalShow] = useState(false);
 	// const [failTrackCirc, setFailTrackCirc] = useState(0);
 	// const [failBeacon, setFailBeacon] = useState(0);
-
-	///////////////////////////////////////////////////////////////
-	//                          OLD CODE                         //
-	///////////////////////////////////////////////////////////////
-	// useEffect(() => {setTimeout(() => DatabaseGet(setTemp, 'Temperature', parentName), 500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName),500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setTrackOccup, 'TrackOccupancy', parentName), 500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setFailBrokenRail, 'FailureBrokenRail', parentName),500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setFailTrackCirc, 'FailureTrackCircuit', parentName),500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setFailBeacon, 'BeaconFailure', parentName),500);}, [parentName]);
-
-	// Checking if track heater needs to be turned on
-	// useEffect(() => {DatabaseSet((actualTemp < desiredTemp) ? true : false, "TrackHeater", parentName)}, [actualTemp, desiredTemp, parentName]);
-	// Disable track components if a failure is detected
-	// useEffect(() => {DatabaseSet(failBrokenRail ? false : true, "TrackOccupancy", parentName);}, [failBrokenRail]);
 
 	return (
 		<div style={{
@@ -78,6 +63,22 @@ function StatesPanel({ selectedBlock, lineName }){
 								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/MaxCapacity`} />
 								{' '}Maximum capacity?
 							</div>
+							<div>
+								<br />
+								<br />
+								<br />
+								<Button 
+								 size="sm"
+								 onClick={() => setBeaconModalShow(true)}>
+									Edit Beacon Info
+								</Button>
+								<SetBeaconInfoModal 
+									show={beaconModalShow} 
+									lineName={`${lineName}`}
+									onHide={() => {setBeaconModalShow(false)}}
+									selectedBlock={selectedBlock}
+								/>
+							</div>
 						</Col>
 						<Col xs={4}>
 							<h4>TRACK ELEMENTS</h4>
@@ -95,6 +96,7 @@ function StatesPanel({ selectedBlock, lineName }){
 											<VarDisplayMulti message='Station Side' path={`/${lineName}/${selectedBlock}/Beacon-1/StationSide`} />
 										</Dropdown.Item>
 									</DropdownButton>
+
 									<DropdownButton as={ButtonGroup} title="Beacon+1 Info" id="bg-nested-dropdown" size="sm">
 										<Dropdown.Item eventKey="1">
 											<VarDisplayMulti message='Current Station' path={`/${lineName}/${selectedBlock}/Beacon+1/CurrentStation`} />
