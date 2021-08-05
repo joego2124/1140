@@ -253,6 +253,7 @@ const BottomPanel = ({
             <Button
               variant='light'
               className='moveSwitchButton'
+              disabled={!selectedBlock.isSwitchBlock}
               onClick={setSwitchStateData}
             >
               <div className='buttonDiv'>
