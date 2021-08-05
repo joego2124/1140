@@ -27,7 +27,6 @@ function generateTicketSales( totalTickets ) {
         });
         Object.entries(stationLists).forEach(arr => { 
             let lineName = arr[0];
-            console.log(`LASDHFBHA ${lineName}: ${arr[1]}`);
             arr[1].forEach(stationId => {
                 // This can be changed from 120, it's just the max number of tix
                 // that can be sold at a station. Aribtrary value

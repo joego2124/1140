@@ -212,7 +212,7 @@ function StatesPanel({ selectedBlock, lineName }){
 											// Set color of button
 											if( beaconFailure ? setVariantBeacon("outline-dark") : setVariantBeacon("danger"));
 										}}>
-										Beacon Failure
+										Power Failure
 									</Button>
 								</ButtonGroup>
 								
