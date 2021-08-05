@@ -9,7 +9,7 @@ function StationOptions({parentName, selectedTrain}) {
             <h3>STATIONS</h3>
             <Container>
                 <Col>
-                  <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='NextStation' message='Next Station' units=''/>
+                  <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='Stations' message='Next Station' units=''/>
                   <ButtonIndicatorTime message='Announce'/>
                 </Col>
             </Container>

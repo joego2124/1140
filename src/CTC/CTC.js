@@ -126,6 +126,7 @@ function CTC() {
 		});
 		Firebase.database().ref('/GreenLine').on('value', snapshot => {
 			let blocks = [];
+			console.log(snapshot.val());
 			for (const [index, block] of Object.entries(snapshot.val())) {
 				blocks.push(block);
 			}

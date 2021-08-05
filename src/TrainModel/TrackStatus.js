@@ -24,6 +24,7 @@ function TrackStatus(parentName) {
 					<div><VarDisplayMulti className='componentText' path={`/${line}/${blockID}/Grade`} message='Grade [°]'/></div>
 					<div><VarDisplayMulti className='componentText' path={`/${line}/${blockID}/Authority`} message='Authority [blocks]'/></div>
 					<div><VarDisplayMulti className='componentText' path={`/TrainList/${parentName.parentName}/Line`} message='Line'/></div>
+					<div><VarDisplayMulti className='componentText' path={`/TrainList/${parentName.parentName}/CurrentBlock`} message='Block'/></div>
 				</div>
 				<div className="trainModelColumn">
 					<div><VarDisplayMulti className='componentText' path={`/${line}/${blockID}/SignalState`} message='Signal Status'/> </div>
