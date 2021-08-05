@@ -5,6 +5,7 @@ import { BsPauseFill, BsPlayFill } from 'react-icons/bs';
 import Firebase from "firebase";
 import physicsTick from './TrainModel/PhysicsSim';
 import updatePower from './TrainController/Power';
+import generateTicketSales from './TrackModel/PassengerAndTicketInfo';
 import config from './config';
 
 function TopBar() {
@@ -21,15 +22,23 @@ function TopBar() {
 		Firebase.app(); // if already initialized, use that one
 	}
 
+	
+
 	//running clock
 	function clockTick() {
 		if(!paused) {
 			Firebase.database().ref('/SimulationClock/Time').transaction( time => {
+				physicsTick();
+				// updatePower();
+
+				// These functions run every hour
+				console.log(time % 10);
+				if (time % 10 == 0) {
+					generateTicketSales();
+				}
+				
 				return time + 1;
 			});
-
-			physicsTick();
-			updatePower();
 
 			if(!paused) {
 				setTimer(setTimeout(() => clockTick(), 1000 * (1/speed)));

@@ -14,16 +14,9 @@ import { DatabaseGetMulti } from '../components/DatabaseMulti';
 import { DatabaseSetMulti } from '../components/DatabaseMulti';
 import SplitButton from 'react-bootstrap/SplitButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import SetBeaconInfoModal from './SetBeaconInfoModal';
 
-function getRandomInt( max ) {
-	return Math.floor(Math.random() * max);
-}
-
-function generateTicketSales( max ) {
-	return Math.floor(Math.random() * max);
-}
-
-function StatesPanel({selectedBlock}){
+function StatesPanel({ selectedBlock, lineName }){
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -31,32 +24,14 @@ function StatesPanel({selectedBlock}){
 		Firebase.app(); // if already initialized, use that one
 	}
 
-	const [actualTemp, setTemp] = useState(0);
-	// const [desiredTemp, setDesTemp] = useState(0);
+	var trackHeater;
 	const [trackOccup, setTrackOccup] = useState(0);
 	const [failBrokenRail, setFailBrokenRail] = useState();
+
+	const [tempModalShow, setTempModalShow] = useState(false);
+	const [beaconModalShow, setBeaconModalShow] = useState(false);
 	// const [failTrackCirc, setFailTrackCirc] = useState(0);
 	// const [failBeacon, setFailBeacon] = useState(0);
-
-	// console.log( `INSIDE STATES PANEL: ${selectedBlock}` );
-	useEffect(() => {setTimeout(() => DatabaseGetMulti(setTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
-	useEffect(() => {setTimeout(() => DatabaseGetMulti(setTrackOccup, `/GreenLine/${selectedBlock}/Occupancy`), 500);}, [selectedBlock]);
-	// Failure modes
-	useEffect(() => {setTimeout(() => DatabaseGetMulti(setFailBrokenRail, `/GreenLine/${selectedBlock}/FailureBrokenRail`), 500);}, [selectedBlock]);
-
-	// Checking if track heater needs to be turned on
-	// useEffect(() => {setTimeout(() =>  DatabaseGetMulti(setTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setTemp, 'Temperature', parentName), 500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setDesTemp, 'DesiredTrackTemperature', parentName),500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setTrackOccup, 'TrackOccupancy', parentName), 500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setFailBrokenRail, 'FailureBrokenRail', parentName),500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setFailTrackCirc, 'FailureTrackCircuit', parentName),500);}, [parentName]);
-	// useEffect(() => {setTimeout(() => DatabaseGet(setFailBeacon, 'BeaconFailure', parentName),500);}, [parentName]);
-
-	// Checking if track heater needs to be turned on
-	// useEffect(() => {DatabaseSet((actualTemp < desiredTemp) ? true : false, "TrackHeater", parentName)}, [actualTemp, desiredTemp, parentName]);
-	// Disable track components if a failure is detected
-	// useEffect(() => {DatabaseSet(failBrokenRail ? false : true, "TrackOccupancy", parentName);}, [failBrokenRail]);
 
 	return (
 		<div style={{
@@ -75,18 +50,34 @@ function StatesPanel({selectedBlock}){
 					<Row>
 						<Col xs={4}>
 							<h4>
-								<WSMInverseIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/Occupancy`} />
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/Occupancy`} />
 								{' '}AVAILABILITY
 							</h4>
 							<div>
-								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/Occupancy`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/Occupancy`} />
 								{' '}Track occupied?
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/MaintenanceStatus`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/MaintenanceStatus`} />
 								{' '}Track under maintenance?
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/MaxCapacity`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/MaxCapacity`} />
 								{' '}Maximum capacity?
+							</div>
+							<div>
+								<br />
+								<br />
+								<br />
+								<Button 
+								 size="sm"
+								 onClick={() => setBeaconModalShow(true)}>
+									Edit Beacon Info
+								</Button>
+								<SetBeaconInfoModal 
+									show={beaconModalShow} 
+									lineName={`${lineName}`}
+									onHide={() => {setBeaconModalShow(false)}}
+									selectedBlock={selectedBlock}
+								/>
 							</div>
 						</Col>
 						<Col xs={4}>
@@ -96,58 +87,70 @@ function StatesPanel({selectedBlock}){
 								<ButtonGroup>
 									<DropdownButton as={ButtonGroup} title="Beacon-1 Info" id="bg-nested-dropdown" size="sm">
 										<Dropdown.Item eventKey="1">
-											<VarDisplayMulti message='Current Station' path={`/GreenLine/${selectedBlock}/Beacon-1/CurrentStation`} />
+											<VarDisplayMulti message='Current Station' path={`/${lineName}/${selectedBlock}/Beacon-1/CurrentStation`} />
 										</Dropdown.Item>
 										<Dropdown.Item eventKey="2">
-											<VarDisplayMulti message='Next Station' path={`/GreenLine/${selectedBlock}/Beacon-1/NextStation`} />
+											<VarDisplayMulti message='Next Station' path={`/${lineName}/${selectedBlock}/Beacon-1/NextStation`} />
 										</Dropdown.Item>
 										<Dropdown.Item eventKey="3">
-											<VarDisplayMulti message='Station Side' path={`/GreenLine/${selectedBlock}/Beacon-1/StationSide`} />
+											<VarDisplayMulti message='Station Side' path={`/${lineName}/${selectedBlock}/Beacon-1/StationSide`} />
 										</Dropdown.Item>
 									</DropdownButton>
+
 									<DropdownButton as={ButtonGroup} title="Beacon+1 Info" id="bg-nested-dropdown" size="sm">
 										<Dropdown.Item eventKey="1">
-											<VarDisplayMulti message='Current Station' path={`/GreenLine/${selectedBlock}/Beacon+1/CurrentStation`} />
+											<VarDisplayMulti message='Current Station' path={`/${lineName}/${selectedBlock}/Beacon+1/CurrentStation`} />
 										</Dropdown.Item>
 										<Dropdown.Item eventKey="2">
-											<VarDisplayMulti message='Next Station' path={`/GreenLine/${selectedBlock}/Beacon+1/NextStation`} />
+											<VarDisplayMulti message='Next Station' path={`/${lineName}/${selectedBlock}/Beacon+1/NextStation`} />
 										</Dropdown.Item>
 										<Dropdown.Item eventKey="3">
-											<VarDisplayMulti message='Station Side' path={`/GreenLine/${selectedBlock}/Beacon+1/StationSide`} />
+											<VarDisplayMulti message='Station Side' path={`/${lineName}/${selectedBlock}/Beacon+1/StationSide`} />
 										</Dropdown.Item>
 									</DropdownButton>
 								</ButtonGroup>
 								</div>							
 							</p>
 							<div>
-								<WSMInverseIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/CrossingLights`} />
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/CrossingLights`} />
 								{' '}Signal State
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/LevelCrossingState`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/LevelCrossingState`} />
 								{' '}Railway Crossing
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/GreenLine/${selectedBlock}/TrackHeater`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/TrackHeater`} />
 								{' '}Track Heater
 								<br />
-								<VarDisplayMulti message='Current Temperature [°F]' path={`/GreenLine/CurrentTemperature`} />
+								<VarDisplayMulti message='Current Temperature [°F]' path={`/${lineName}/CurrentTemperature`} />
+								<br />
+								<Button size="sm" 
+									onClick={()=>
+										{
+											Firebase.database().ref(`/${lineName}/TrackHeater`).once( 'value', snapshot => {
+												trackHeater = snapshot.val();
+											});
+											Firebase.database().ref(`/${lineName}/TrackHeater`).set( !trackHeater );;
+										}}>
+									Toggle Heater
+								</Button>
 							</div>
 						</Col>
 						<Col>
 							<h4>PASSENGERS</h4>
 							<p textAlign="left">
-								<VarDisplayMulti message='Passengers boarding' path={`/GreenLine/${selectedBlock}/Station/PassengersBoarding`} />
+								<VarDisplayMulti message='Passengers boarding' path={`/${lineName}/${selectedBlock}/Station/PassengersBoarding`} />
 								<br />
-								<VarDisplayMulti message='Passengers departing' path={`/GreenLine/${selectedBlock}/Station/PassengersDeparting`} />
+								<VarDisplayMulti message='Passengers departing' path={`/${lineName}/${selectedBlock}/Station/PassengersDeparting`} />
 								<br />
-								<VarDisplayMulti message='Ticket sales' path={`/GreenLine/${selectedBlock}/Station/Tickets`} />
+								<VarDisplayMulti message='Ticket sales' path={`/${lineName}/${selectedBlock}/Station/Tickets`} />
 							</p>
 							<h4>FAILURE MODES</h4>
 								<ButtonGroup size="sm">
 									<Button variant="outline-dark"
 										size="sm"
 										onClick={()=>{
-											DatabaseGetMulti(setFailBrokenRail, `/GreenLine/${selectedBlock}/FailureBrokenRail`);
-											DatabaseSetMulti(!failBrokenRail, `/GreenLine/${selectedBlock}/FailureBrokenRail`);
+											// DatabaseGetMulti(setFailBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
+											// DatabaseSetMulti(!failBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
 										}}>
 									Broken Rail
 									</Button>

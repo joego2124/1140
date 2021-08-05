@@ -6,7 +6,7 @@ import VarDisplayMulti from '../components/VarDisplayMulti';
 import SetTempModal from './SetTempModal';
 import { DatabaseGetMulti } from '../components/DatabaseMulti';
 
-function PropertiesPanel({selectedBlock,}) {
+function PropertiesPanel({ selectedBlock, lineName }) {
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
@@ -16,9 +16,6 @@ function PropertiesPanel({selectedBlock,}) {
 	// console.log(`PropertiesPanel selected block: ${selectedBlock}`)
 
 	const [tempModalShow, setTempModalShow] = useState(false);
-	const [actualTemp, setActualTemp] = useState(95);
-	
-	useEffect(() => {setTimeout(() => DatabaseGetMulti(setActualTemp, `/GreenLine/${selectedBlock}/Temperature`), 500);}, [selectedBlock]);
 
 	return (
 		// Properties title
@@ -34,17 +31,17 @@ function PropertiesPanel({selectedBlock,}) {
 				paddingRight: 10,
 				paddingBottom: 10
 			}}>
-				<VarDisplayMulti message='Block Length [ft]' path={`/GreenLine/${selectedBlock}/BlockLength`} />
+				<VarDisplayMulti message='Block Length [ft]' path={`/${lineName}/${selectedBlock}/BlockLength`} />
 				<br />
-				<VarDisplayMulti message='Directions of Travel' path={`/GreenLine/${selectedBlock}/DirectionOfTravel`} />
+				<VarDisplayMulti message='Directions of Travel' path={`/${lineName}/${selectedBlock}/DirectionOfTravel`} />
 				<br />
-				<VarDisplayMulti message='Elevation [ft]' path={`/GreenLine/${selectedBlock}/Elevation`} />
+				<VarDisplayMulti message='Elevation [ft]' path={`/${lineName}/${selectedBlock}/Elevation`} />
 				<br />
-				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`/GreenLine/DesiredTrackTemperature`} />
+				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`/${lineName}/DesiredTrackTemperature`} />
 				<br />
-				<VarDisplayMulti message='Railway Crossing' path={`/GreenLine/${selectedBlock}/isLevelCrossingBlock`} />
+				<VarDisplayMulti message='Railway Crossing' path={`/${lineName}/${selectedBlock}/isLevelCrossingBlock`} />
 				<br />
-				<VarDisplayMulti message='Speed Limit [mph]' path={`/GreenLine/${selectedBlock}/SpeedLimit`} />
+				<VarDisplayMulti message='Speed Limit [mph]' path={`/${lineName}/${selectedBlock}/SpeedLimit`} />
 				<br />
 			</div>
 			<div style={{
@@ -62,8 +59,9 @@ function PropertiesPanel({selectedBlock,}) {
 				</Button>
 				<SetTempModal
 						show={tempModalShow}
-						lineName={"GreenLine"}
-						onHide={() => {setTempModalShow(false)}}
+						lineName={`${lineName}`}
+						onHide={() => {setTempModalShow(false)}} 
+						selectedBlock={selectedBlock}
 				/>
 			</div>
 		</div>
