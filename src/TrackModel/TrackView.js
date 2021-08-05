@@ -98,34 +98,34 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 
 	//TODO: refactor so doesnt rerender on EVERY train change
 	//render train icons on track
-	useEffect(() => {
-		console.log("trains rerendered");
-		setTrainSVGs(Object.entries(trainsList).map(trainArr => {
-			let train = trainArr[1];
-			if (trainArr[0] != "databasePath") {
-				let layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"]
-				.find(block => Math.trunc(block.blockId) === Math.trunc(train.CurrentBlock));
-				if (layoutBlock == undefined) layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"][0];
-				return trackBlockCircle(
-					<BiTrain 
-						key={train.TrainId}
-						style={{
-							position: "absolute",
-							top: "50%", 
-							left: "50%",
-							width: 35,
-							height: 35, 
-							transform: "translate(-50%, -50%)",
-						}}
-					/>,
-					"white",
-					`rgb(${occupiedColor}, 1)`,
-					() => {},
-					layoutBlock?.position
-				);
-			}
-		}));
-	}, [trainsList]);
+	// useEffect(() => {
+	// 	console.log("trains rerendered");
+	// 	setTrainSVGs(Object.entries(trainsList).map(trainArr => {
+	// 		let train = trainArr[1];
+	// 		if (trainArr[0] != "databasePath") {
+	// 			let layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"]
+	// 			.find(block => Math.trunc(block.blockId) === Math.trunc(train.CurrentBlock));
+	// 			if (layoutBlock == undefined) layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"][0];
+	// 			return trackBlockCircle(
+	// 				<BiTrain 
+	// 					key={train.TrainId}
+	// 					style={{
+	// 						position: "absolute",
+	// 						top: "50%", 
+	// 						left: "50%",
+	// 						width: 35,
+	// 						height: 35, 
+	// 						transform: "translate(-50%, -50%)",
+	// 					}}
+	// 				/>,
+	// 				"white",
+	// 				`rgb(${occupiedColor}, 1)`,
+	// 				() => {},
+	// 				layoutBlock?.position
+	// 			);
+	// 		}
+	// 	}));
+	// }, [trainsList]);
 
 	//recursive function to generate a list of tracks for rendering
 	const traceTrack = (currBlock, currPos, trackLayoutList, lineName) => {
