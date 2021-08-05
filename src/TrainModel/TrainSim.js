@@ -1,5 +1,4 @@
 import Firebase from "firebase";
-import { useState } from 'react'
 var trackLayout = require("../CTC/TrackLayout.json");
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
@@ -26,6 +25,7 @@ function makeTrainSim(newTrainId) {
     train.Station = 0;
     train.HasStoppedAtSation = false;
     train.passengers = 0;
+    train.carCount = 1;
 
     Firebase.database().ref(`/TrainList/${newTrainId}/Power`).on('value', snapshot => { train.power = clamp(snapshot.val(), 0, 120); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Acceleration`).on('value', snapshot => { train.acceleration = snapshot.val(); });
@@ -37,17 +37,18 @@ function makeTrainSim(newTrainId) {
     Firebase.database().ref(`/TrainList/${newTrainId}/NextStation`).on('value', snapshot => { train.NextStation = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/CurrentStation`).on('value', snapshot => { train.CurrentStation = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Passengers`).on('value', snapshot => { train.passengers = snapshot.val(); });
+    Firebase.database().ref(`/TrainList/${newTrainId}/CarCount`).on('value', snapshot => { train.carCount = snapshot.val(); });
 
     Firebase.database().ref(`/TrainList/${newTrainId}/Line`).on('value', snapshot => { train.line = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/CurrentBlock`).on('value', snapshot => { 
         const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
-        if(safeblock != snapshot.val())
+        if(safeblock !== snapshot.val())
             console.warn('BLOCK ID OUT OF RANGE: ',newTrainId, snapshot.val());
         train.blocknumber = safeblock; 
     });
     Firebase.database().ref(`/TrainList/${newTrainId}/PreviousBlock`).on('value', snapshot => {
         const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
-        if(safeblock != snapshot.val())
+        if(safeblock !== snapshot.val())
             console.warn('BLOCK ID OUT OF RANGE: ',newTrainId, snapshot.val());
         train.previousblocknumber = safeblock; 
     });
@@ -60,7 +61,7 @@ function makeTrainSim(newTrainId) {
     train.simulateTrain = function () {
             console.log('simulating', this.trainId, this.power);
 
-            if(this.ebrake == true) {
+            if(this.ebrake === true) {
                 //e brakes
                 if(Math.abs(this.velocity) < 10){
                     Firebase.database().ref(`/TrainList/${this.trainId}/Velocity`).set(0);
@@ -98,11 +99,14 @@ function makeTrainSim(newTrainId) {
 
             //handle station
             if(this.velocity == 0 && this.Station != 0 && this.HasStoppedAtSation == false) {
+                console.log(this.trainId, ' has stopped in the station at block ', this.blocknumber);
                 this.HasStoppedAtSation = true;
                 const departingPassengers = Math.floor((Math.random() * this.passengers) + 1);
+                const boardingPassengers = Math.floor((Math.random() * this.Station.Tickets) + 1);
                 Firebase.database().ref(`/${this.line}/${this.blocknumber}/Station/PassengersDeparting`).set(departingPassengers);
-                Firebase.database().ref(`/TrainList/${this.trainId}/Passengers`).set(this.passengers - departingPassengers);
-                this.HasStoppedAtSation = true; 
+                Firebase.database().ref(`/${this.line}/${this.blocknumber}/Station/PassengersBoarding`).set(boardingPassengers);
+                Firebase.database().ref(`/TrainList/${this.trainId}/Passengers`).set(clamp(
+                    this.passengers - departingPassengers+boardingPassengers, 0, this.carCount * 222) );
             }
 
 
@@ -154,6 +158,9 @@ function makeTrainSim(newTrainId) {
 
                 Firebase.database().ref(`/${this.line}/${newblock}/Occupancy`).set(1);
                 Firebase.database().ref(`/${this.line}/${oldblock}/Occupancy`).set(0);
+
+                Firebase.database().ref(`/${this.line}/${newblock}/MaxCapacity`).set( this.passengers >= 222 ? true : false);
+                Firebase.database().ref(`/${this.line}/${oldblock}/MaxCapacity`).set(0);
 
                 //set new block values
                 Firebase.database().ref(`/${this.line}/${newblock}/BlockGrade`).once('value', snapshot => {

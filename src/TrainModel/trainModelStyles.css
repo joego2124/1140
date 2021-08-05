@@ -23,6 +23,11 @@
 .trainModelItem {
 	flex-grow: 1;
 	margin: 5px;
+	border: #282c34 ;
+	border-radius: 10px;
+	border-style: solid;
+	width: min-content;
+	padding: 5px;
 }
 
 .trainModelList {
@@ -35,4 +40,17 @@
 	align-items: center;
 	justify-content: flex-start;
 	padding: 24px 32px;
+	border: #282c34 ;
+	border-radius: 10px;
+	border-style: solid;
+	height: 100%;
+}
+
+.Border {
+  border: #282c34 ;
+  border-radius: 10px;
+  border-style: solid;
+  width: min-content;
+  margin: 5px;
+  padding: 5px;
 }
