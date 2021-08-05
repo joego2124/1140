@@ -5,10 +5,7 @@ import Firebase from "firebase";
 import PropertiesPanel from './PropertiesPanel';
 import StatesPanel from './StatesPanel';
 import TrackView from './TrackView';
-import UploadLayoutButton from './UploadLayoutButton';
-import { left } from '@popperjs/core';
-// import ScheduleModal from '../CTC/ScheduleModal';
-
+import { DatabaseGetMulti } from '../components/DatabaseMulti';
 import { DatabaseGet, DatabaseSet }  from "../Database";
 
 function TrackModel() {
@@ -25,12 +22,11 @@ function TrackModel() {
 	const [jsonTree, setJsonTree] = useState([]);
 	const [blockList, setBlockList] = useState([]);
 	const [selectedBlock, setSelectedBlock] = useState(`1`);
+	const [lineName, setLineName] = useState("RedLine");
 
+	// Update trains list
 	useEffect(() => {
 		DatabaseGet(setTrainsList, "TrainList");
-	}, []);
-	useEffect(() => {
-		DatabaseGet(setJsonTree, "GreenLine");
 	}, []);
 
 	function getBlockListData() {
@@ -42,26 +38,14 @@ function TrackModel() {
 	}
 
 	useEffect(() => console.log(`IN TRACKMODEL: ${selectedBlock}`), [selectedBlock]);
+	useEffect(() => console.log(`linename: `, lineName), [lineName]);
+
 	useEffect(() => getBlockListData(), [jsonTree]);
 
 	return (
 		<>
-			{/* <div style={{
-				paddingTop: 20,
-				textAlign: "left",
-				paddingLeft: 100
-			}}>
-				<UploadLayoutButton />
-			</div> */}
-			{/* <div style={{
-				paddingTop: 50,
-				textAlign: "right",
-				paddingRight: 340
-			}}>
-				<h2>Test of Interactive Track Layout</h2>
-			</div> */}
 			<div>
-				<TrackView setSelectedBlock={setSelectedBlock} trainsList={trainsList} blockList={blockList} />
+				<TrackView setSelectedBlock={setSelectedBlock} setLineName={setLineName} trainsList={trainsList} blockList={blockList} />
 			</div>
 			<div style={{
 				position: "absolute",
@@ -80,8 +64,8 @@ function TrackModel() {
 				width: "100%",
 				position: "absolute",
 			}}>
-				<PropertiesPanel selectedBlock={selectedBlock} />
-				<StatesPanel selectedBlock={selectedBlock} />
+				<PropertiesPanel selectedBlock={selectedBlock} lineName={lineName} />
+				<StatesPanel selectedBlock={selectedBlock} lineName={lineName} />
 			</div>
 			
 		</>
