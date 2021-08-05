@@ -7,8 +7,9 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { DatabaseGet, DatabaseSet }  from "../Database";
 
 import "../styles.css";
+import {trainTemplate} from "./TrainTemplate"
 
-var trackLayout = require("./TrackLayout.json");
+var trackLayout = require("./TrackLayout");
 
 const CustomMenu = React.forwardRef(
   ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
@@ -150,8 +151,8 @@ const AddTrainModal = (props) => {
 					newTrain.DepartureTime = departureTime;
 					newTrain.Line = `${lineColor === "red" ? "Red" : "Green"}Line`;
 					newTrain.Route = props.routeTrain(stationSelections, lineColor);
-					newTrain.CurrentBlock = newTrain.Route[1];
-					newTrain.PreviousBlock = newTrain.Route[0];
+					newTrain.CurrentBlock = 0;
+					newTrain.PreviousBlock = 0;
 					newTrain.RouteIndex = 1;
 					Firebase.database().ref(`/TrainList/${trainId}`).set(newTrain);
 
@@ -197,59 +198,6 @@ const styles = {
 		paddingLeft: "5px",
 		paddingRight: "5px",
 	}
-}
-
-const trainTemplate = {
-	TrainId: "",
-	CurrentBlock: 1,
-	PreviousBlock : 0,
-	RouteIndex: 0,
-	Route: [],
-	Stations: [],
-	DepartureTime: "12:00",
-	Line: "green",
-
-	Acceleration: 0,
-	AccelerationLimit: 5,
-	AnyFailures: false,
-	BlockAuthority : 0,
-	BlockLength : 50,
-	BrakeFailure: false,
-	CommandedPower : 0,
-	DecelerationLimit: -5,
-	DoorStatus: false,
-	EBrakeStatus: false,
-	EDoorStatus: false,
-	EngineFailure: false,
-	ExternalLightState: false,
-	ExternalTemperature: 70,
-	Grade : 0,
-	Height: 12,
-	InternalLightState: false,
-	InternalTemperature: 70,
-	LeftDoorStatus: false,
-	Length: 300,
-	LightState : false,
-  Line : "GreenLine",
-	ManualMode: false,
-	Mass: 277817,
-	Passengers: 0,
-	Position : 0,
-	Power: 0,
-	RightDoorStatus: false,
-	SBrakeStatus: false,
-	SetpointSpeed: 0,
-	SignalFailure: false,
-	SpeedLimit: 45,
-	Velocity: 0,
-	Width: 10,
-
-	Kp: 35,
-	Ki: 1,
-	uk: 0,
-	ukm1: 0,
-	ek: 0,
-	ekm1: 0,
 }
 
 export default AddTrainModal

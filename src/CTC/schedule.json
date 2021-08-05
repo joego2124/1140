@@ -1,0 +1,14 @@
+{
+  "TSTRD": {
+    "TrainId": "TRN99",
+    "Stations": "7, 16, -1",
+    "DepartureTime": "16:00",
+    "Line": "RedLine"
+  },
+  "TSTGRN": {
+    "TrainId": "TRN99",
+    "Stations": "2, -16",
+    "DepartureTime": "15:30",
+    "Line": "GreenLine"
+  }
+}
