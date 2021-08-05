@@ -122,7 +122,13 @@ const BottomPanel = ({
           <div className='dataLeft'>
             <div className='dataName'>
               Status:
-              <div className='dataValue'>{selectedBlock?.BlockStatus}</div>
+              <div className='dataValue'>
+                {selectedBlock?.MaintenanceStatus == 1 ? (
+                  <div className='dataValue'>Under Maintenance</div>
+                ) : (
+                  <div className='dataValue'>Operational</div>
+                )}
+              </div>
             </div>
             <div className='dataName'>
               Authority:
