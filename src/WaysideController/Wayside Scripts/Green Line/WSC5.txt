@@ -19,5 +19,5 @@ IF: occupancy{blocks-72,71} SET authority{blocks-70,69} TO 0
 
 IF: occupancy{listener} SET authority{blocks-75,74,73} TO 0
 
-IF: authority{blocks-77} SET switch TO 1
-IF: authority{blocks-101} SET switch TO 0
+IF: authority{blocks-77} SET switch TO 0
+IF: authority{blocks-101} SET switch TO 1

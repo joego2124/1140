@@ -31,7 +31,7 @@ exports.changeTrainLength = functions.database.ref('/TrainList/{trainId}/CarCoun
     //since the database write uses a value from the previous operation we will ensure it only gets called once the previous operation is done.
     //the entire stack of calls will return one promise that we must add to the list to return from our function
     promises.push(passengers = database.ref(`/TrainList/${trainId}/Passengers`).get().then( (snapshot => {
-        database.ref(`/TrainList/${trainId}/Mass`).set((carCount * 90169) + (snapshot.val() * 170))
+        database.ref(`/TrainList/${trainId}/Mass`).set((carCount * 81800) + (snapshot.val() * 170))
     })));
 
     return Promise.all(promises);
@@ -44,8 +44,32 @@ exports.changePassengers = functions.database.ref('/TrainList/{trainId}/Passenge
     const database = admin.database();
 
     return database.ref(`/TrainList/${trainId}/CarCount`).get().then( (snapshot) => {
-        database.ref(`/TrainList/${trainId}/Mass`).set((snapshot.val() * 90169) + (passengers * 170))
+        database.ref(`/TrainList/${trainId}/Mass`).set((snapshot.val() * 81800) + (passengers * 170))
     });
+})
+
+exports.openServiceDoors = functions.database.ref('/TrainList/{trainId}/DoorStatus').onUpdate( (change, context) => {
+    const doorStatus = change.after.val();
+    const trainId = context.params.trainId;
+
+    const database = admin.database();
+
+    if (doorStatus == false){
+        database.ref(`/TrainList/${trainId}/LeftDoorStatus`).set(false);
+        database.ref(`/TrainList/${trainId}/RightDoorStatus`).set(false);
+    }
+    else{
+
+        return database.ref(`/TrainList/${trainId}/StationSide`).get().then( (snapshot) => {
+            const stationside = snapshot.val();
+            if(stationside.includes('Left'))
+                database.ref(`/TrainList/${trainId}/LeftDoorStatus`).set(true);
+            if(stationside.includes('Right'))
+                database.ref(`/TrainList/${trainId}/RightDoorStatus`).set(true);
+        });
+
+    }
+
 })
 
 exports.trainAdded = functions.database.ref(`/TrainList/{trainId}`).onCreate( (snapshot, context) => {
@@ -53,7 +77,7 @@ exports.trainAdded = functions.database.ref(`/TrainList/{trainId}`).onCreate( (s
     console.log('Train Added', trainId);
 
     // return admin.database().ref(`/TrainIds`).push(trainId);
-    return admin.database().ref(`/TrainIds/${trainId}`).set(trainId);
+    return admin.database().ref(`/TrainIds/-${trainId}`).set(trainId);
 })
 
 exports.trainRemoved = functions.database.ref(`/TrainList/{trainId}`).onDelete( (snapshot, context) => {
@@ -61,5 +85,5 @@ exports.trainRemoved = functions.database.ref(`/TrainList/{trainId}`).onDelete( 
     console.log('Train Removed', trainId);
     
     // return admin.database().ref(`/TrainIds`).remove(trainId);
-    return admin.database().ref(`/TrainIds/${trainId}`).remove();
+    return admin.database().ref(`/TrainIds/-${trainId}`).remove();
 })

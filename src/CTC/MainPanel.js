@@ -1,7 +1,9 @@
-	import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import SlidingPane from "react-sliding-pane";
 import { Button, Dropdown } from 'react-bootstrap';
 import ValueIO from "./ValueIO";
+import Firebase from "firebase";
+
 
 import "./styles.css"
 
@@ -16,6 +18,7 @@ const MainPanel = ({
 
 	const [open, setOpen] = useState(true);
 	const [manualMode, setManualMode] = useState(false);
+	const [throughput, setThroughput] = useState(0);
 
 	const formatSwitchState = useCallback(switchState => {
 		console.log("formatted switch state");
@@ -37,7 +40,11 @@ const MainPanel = ({
 		}
 		
 		return "N/A";
-	}, [selectedBlock])
+	}, [selectedBlock]);
+
+	useEffect(() => {
+		Firebase.database().ref("/CTC/Throughput").on("value", snapshot => setThroughput(snapshot.val()));
+	}, []);
 
 	console.log("[CTC/MainPanel] selected block changed: ", selectedBlock);
 
@@ -134,7 +141,7 @@ const MainPanel = ({
 								}}
 							/>
 							<ValueIO 
-								valueType={selectedBlock.isSwitchBlock == 1 ? "input" : "output"}
+								valueType={(selectedBlock.isSwitchBlock == 1 && selectedBlock.MaintenanceStatus == 1) ? "input" : "output"}
 								valueLabel="Switch State"
 								valueDatabasePath={`${selectedBlock.databasePath}/SwitchState`}
 								valueData={{
@@ -180,8 +187,8 @@ const MainPanel = ({
 								valueType="output"
 								valueLabel="Tickets"
 								valueData={{
-									value: "RENGIVEME",
-									units: "units/hr"
+									value: throughput,
+									units: "tickets/hr"
 								}}
 							/>
 						</div>

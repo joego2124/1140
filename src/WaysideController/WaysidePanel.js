@@ -22,11 +22,22 @@ const WaysidePanel = ({
 
   useEffect(() => {
     var buttonList = [];
+    console.log(selectedWaysideList);
     for (const [waysideName, waysideObj] of Object.entries(
       selectedWaysideList
     )) {
       buttonList.push(
-        <Button variant='light' className='waysideButton' key={waysideName}>
+        <Button
+          variant='light'
+          className='waysideButton'
+          key={waysideName}
+          onClick={() => {
+            setSelectedWaysideAndName(
+              waysideObj,
+              parseInt(waysideName) + (localColor == 'GreenLine' ? 1 : 7)
+            );
+          }}
+        >
           <div className='buttonDiv'>
             <BsCircleFill
               size='1.5em'
@@ -34,16 +45,8 @@ const WaysidePanel = ({
                 localColor == 'RedLine' ? '#C44242' : 'rgba(49,135,133, 1)'
               }
             />
-            <div
-              className='buttonText'
-              onClick={() => {
-                setSelectedWaysideAndName(
-                  waysideObj,
-                  parseInt(waysideName) + 1
-                );
-              }}
-            >
-              WSC {parseInt(waysideName) + 1}
+            <div className='buttonText'>
+              WSC {parseInt(waysideName) + (localColor == 'GreenLine' ? 1 : 7)}
             </div>
           </div>
         </Button>
@@ -55,6 +58,35 @@ const WaysidePanel = ({
   function setSelectedWaysideAndName(obj, name) {
     setSelectedWayside(obj);
     setSelectedWaysideName('WSC' + name);
+    // for (let i = 0; i < 150; i++) {
+    //   let link = 'GreenLine/' + i + '/Occupancy';
+    //   Firebase.database().ref(link).set(0);
+    // }
+
+    // for (let i = 0; i < 76; i++) {
+    //   let link = 'RedLine/' + i + '/Occupancy';
+    //   Firebase.database().ref(link).set(0);
+    // }
+
+    // for (let i = 0; i < 150; i++) {
+    //   let link = 'GreenLine/' + i + '/Authority';
+    //   Firebase.database().ref(link).set(0);
+    // }
+
+    // for (let i = 0; i < 76; i++) {
+    //   let link = 'RedLine/' + i + '/Authority';
+    //   Firebase.database().ref(link).set(0);
+    // }
+
+    // for (let i = 0; i < 150; i++) {
+    //   let link = 'GreenLine/' + i + '/SwitchState';
+    //   Firebase.database().ref(link).set(0);
+    // }
+
+    // for (let i = 0; i < 76; i++) {
+    //   let link = 'RedLine/' + i + '/SwitchState';
+    //   Firebase.database().ref(link).set(0);
+    // }
   }
 
   function setColorAndSelectedWayside(selColor) {
@@ -66,7 +98,7 @@ const WaysidePanel = ({
     setSelectedWayside(
       selColor == 'GreenLine' ? greenWaysideList[0] : redWaysideList[0]
     );
-    setSelectedWaysideName('WSC' + 1);
+    setSelectedWaysideName('WSC' + (selColor == 'GreenLine' ? 1 : 7));
   }
 
   return (
@@ -92,29 +124,27 @@ const WaysidePanel = ({
         style={{ paddingTop: '10rem' }}
         onRequestClose={() => setOpen(false)}
       >
-        <Button variant='light' className='greenLineButton'>
+        <Button
+          variant='light'
+          className='greenLineButton'
+          onClick={() => {
+            setColorAndSelectedWayside('GreenLine');
+          }}
+        >
           <div className='buttonDiv'>
-            <div
-              className='buttonText'
-              onClick={() => {
-                setColorAndSelectedWayside('GreenLine');
-              }}
-            >
-              Green Line
-            </div>
+            <div className='buttonText'>Green Line</div>
           </div>
         </Button>
 
-        <Button variant='light' className='redLineButton'>
+        <Button
+          variant='light'
+          className='redLineButton'
+          onClick={() => {
+            setColorAndSelectedWayside('RedLine');
+          }}
+        >
           <div className='buttonDiv'>
-            <div
-              className='buttonText'
-              onClick={() => {
-                setColorAndSelectedWayside('RedLine');
-              }}
-            >
-              Red Line
-            </div>
+            <div className='buttonText'>Red Line</div>
           </div>
         </Button>
         <div style={{ overflow: 'scroll', height: '30em' }}>

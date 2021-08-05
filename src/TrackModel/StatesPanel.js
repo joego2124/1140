@@ -65,17 +65,17 @@ function StatesPanel({ selectedBlock, lineName }){
 					<Row>
 						<Col xs={4}>
 							<h4>
-								<WSMInverseIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/Occupancy`} />
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Occupancy`} />
 								{' '}AVAILABILITY
 							</h4>
 							<div>
-								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/Occupancy`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Occupancy`} />
 								{' '}Track occupied?
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/MaintenanceStatus`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/MaintenanceStatus`} />
 								{' '}Track under maintenance?
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/MaxCapacity`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/MaxCapacity`} />
 								{' '}Maximum capacity?
 							</div>
 						</Col>
@@ -86,34 +86,34 @@ function StatesPanel({ selectedBlock, lineName }){
 								<ButtonGroup>
 									<DropdownButton as={ButtonGroup} title="Beacon-1 Info" id="bg-nested-dropdown" size="sm">
 										<Dropdown.Item eventKey="1">
-											<VarDisplayMulti message='Current Station' path={`/${lineName}/${selectedBlock}/Beacon-1/CurrentStation`} />
+											<VarDisplayMulti message='Current Station' path={`${selectedBlock.databasePath}/Beacon-1/CurrentStation`} />
 										</Dropdown.Item>
 										<Dropdown.Item eventKey="2">
-											<VarDisplayMulti message='Next Station' path={`/${lineName}/${selectedBlock}/Beacon-1/NextStation`} />
+											<VarDisplayMulti message='Next Station' path={`${selectedBlock.databasePath}/Beacon-1/NextStation`} />
 										</Dropdown.Item>
 										<Dropdown.Item eventKey="3">
-											<VarDisplayMulti message='Station Side' path={`/${lineName}/${selectedBlock}/Beacon-1/StationSide`} />
+											<VarDisplayMulti message='Station Side' path={`${selectedBlock.databasePath}/Beacon-1/StationSide`} />
 										</Dropdown.Item>
 									</DropdownButton>
 									<DropdownButton as={ButtonGroup} title="Beacon+1 Info" id="bg-nested-dropdown" size="sm">
 										<Dropdown.Item eventKey="1">
-											<VarDisplayMulti message='Current Station' path={`/${lineName}/${selectedBlock}/Beacon+1/CurrentStation`} />
+											<VarDisplayMulti message='Current Station' path={`${selectedBlock.databasePath}/Beacon+1/CurrentStation`} />
 										</Dropdown.Item>
 										<Dropdown.Item eventKey="2">
-											<VarDisplayMulti message='Next Station' path={`/${lineName}/${selectedBlock}/Beacon+1/NextStation`} />
+											<VarDisplayMulti message='Next Station' path={`${selectedBlock.databasePath}/Beacon+1/NextStation`} />
 										</Dropdown.Item>
 										<Dropdown.Item eventKey="3">
-											<VarDisplayMulti message='Station Side' path={`/${lineName}/${selectedBlock}/Beacon+1/StationSide`} />
+											<VarDisplayMulti message='Station Side' path={`${selectedBlock.databasePath}/Beacon+1/StationSide`} />
 										</Dropdown.Item>
 									</DropdownButton>
 								</ButtonGroup>
 								</div>							
 							</p>
 							<div>
-								<WSMInverseIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/CrossingLights`} />
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/CrossingLights`} />
 								{' '}Signal State
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/${selectedBlock}/LevelCrossingState`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/LevelCrossingState`} />
 								{' '}Railway Crossing
 								<br />
 								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/TrackHeater`} />
@@ -136,11 +136,11 @@ function StatesPanel({ selectedBlock, lineName }){
 						<Col>
 							<h4>PASSENGERS</h4>
 							<p textAlign="left">
-								<VarDisplayMulti message='Passengers boarding' path={`/${lineName}/${selectedBlock}/Station/PassengersBoarding`} />
+								<VarDisplayMulti message='Passengers boarding' path={`${selectedBlock.databasePath}/Station/PassengersBoarding`} />
 								<br />
-								<VarDisplayMulti message='Passengers departing' path={`/${lineName}/${selectedBlock}/Station/PassengersDeparting`} />
+								<VarDisplayMulti message='Passengers departing' path={`${selectedBlock.databasePath}/Station/PassengersDeparting`} />
 								<br />
-								<VarDisplayMulti message='Ticket sales' path={`/${lineName}/${selectedBlock}/Station/Tickets`} />
+								<VarDisplayMulti message='Ticket sales' path={`${selectedBlock.databasePath}/Station/Tickets`} />
 							</p>
 							<h4>FAILURE MODES</h4>
 								<ButtonGroup size="sm">

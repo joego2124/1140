@@ -58,45 +58,74 @@ const BottomPanel = ({
 
   function setSwitchStateData() {
     if (selectedBlock.isSwitchBlock == 1) {
-      console.log(selectedWayside[0]);
-      let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
-      console.log(line);
-      let newState = selectedBlock?.SwitchState == 0 ? 1 : 0;
-      let link = line + '/' + selectedBlock.BlockNumber + '/SwitchState';
-      console.log(link);
-      Firebase.database().ref(link).set(newState);
+      if (selectedBlock.MaintenanceStatus == 0) {
+        console.log(selectedWayside[0]);
+        let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+        console.log(line);
+        let newState = selectedBlock?.SwitchState == 0 ? 1 : 0;
+        let link = line + '/' + selectedBlock.BlockNumber + '/SwitchState';
+        console.log(link);
+        Firebase.database().ref(link).set(newState);
+      }
     }
   }
 
+  function getMaintenanceStatusData() {
+    if (selectedBlock != undefined) {
+      let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+      let link = line + '/' + selectedBlock.BlockNumber + '/MaintenanceStatus';
+      let ref = Firebase.database().ref(link);
+      ref.on('value', (snapshot) => {
+        selectedBlock.MaintenanceStatus = snapshot.val();
+      });
+    }
+  }
+
+  useEffect(() => getMaintenanceStatusData(), [selectedBlock]);
+
   function getSwitchStateData() {
-    let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
-    let link = line + '/' + selectedBlock.BlockNumber + '/SwitchState';
-    let ref = Firebase.database().ref(link);
-    ref.on('value', (snapshot) => {
-      selectedBlock.SwitchState = snapshot.val();
-    });
+    if (selectedBlock != undefined) {
+      let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+      let link = line + '/' + selectedBlock.BlockNumber + '/SwitchState';
+      let ref = Firebase.database().ref(link);
+      ref.on('value', (snapshot) => {
+        selectedBlock.SwitchState = snapshot.val();
+      });
+    }
   }
 
   useEffect(() => getSwitchStateData(), [selectedBlock]);
 
   function getOccupancyData() {
-    let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
-    let link = line + '/' + selectedBlock.BlockNumber + '/Occupancy';
-    let ref = Firebase.database().ref(link);
-    ref.on('value', (snapshot) => {
-      selectedBlock.Occupancy = snapshot.val();
-    });
+    if (selectedBlock != undefined) {
+      let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+      let link =
+        line +
+        '/' +
+        (selectedBlock.BlockNumber < 0 ? 0 : selectedBlock.BlockNumber) +
+        '/Occupancy';
+      let ref = Firebase.database().ref(link);
+      ref.on('value', (snapshot) => {
+        selectedBlock.Occupancy = snapshot.val();
+      });
+    }
   }
 
   useEffect(() => getOccupancyData(), [selectedBlock]);
 
   function getAuthorityData() {
-    let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
-    let link = line + '/' + selectedBlock.BlockNumber + '/Authority';
-    let ref = Firebase.database().ref(link);
-    ref.on('value', (snapshot) => {
-      selectedBlock.Authority = snapshot.val();
-    });
+    if (selectedBlock != undefined) {
+      let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+      let link =
+        line +
+        '/' +
+        (selectedBlock.BlockNumber < 0 ? 0 : selectedBlock.BlockNumber) +
+        '/Authority';
+      let ref = Firebase.database().ref(link);
+      ref.on('value', (snapshot) => {
+        selectedBlock.Authority = snapshot.val();
+      });
+    }
   }
 
   useEffect(() => getAuthorityData(), [selectedBlock]);
@@ -122,7 +151,13 @@ const BottomPanel = ({
           <div className='dataLeft'>
             <div className='dataName'>
               Status:
-              <div className='dataValue'>{selectedBlock?.BlockStatus}</div>
+              <div className='dataValue'>
+                {selectedBlock?.MaintenanceStatus == 1 ? (
+                  <div className='dataValue'>Under Maintenance</div>
+                ) : (
+                  <div className='dataValue'>Operational</div>
+                )}
+              </div>
             </div>
             <div className='dataName'>
               Authority:
@@ -218,6 +253,7 @@ const BottomPanel = ({
             <Button
               variant='light'
               className='moveSwitchButton'
+              disabled={!selectedBlock.isSwitchBlock}
               onClick={setSwitchStateData}
             >
               <div className='buttonDiv'>

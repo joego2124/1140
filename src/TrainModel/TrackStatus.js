@@ -1,35 +1,37 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Button, Container, Col  } from 'react-bootstrap';
-import VarDisplay from '../components/VarDisplay';
+import VarDisplayMulti from './VarDisplayMulti';
 import VarIndicator from '../components/VarIndicator';
 import { DatabaseGet } from '../Database';
 import "./trainModelStyles.css";
+import "../components/componentStyles.css";
 
 function TrackStatus(parentName) {
 
 	const [blockID,setBlockId] = useState('0');
 	const [line,setLine] = useState('RedLine');
 	
-	useEffect(() => {setTimeout(()=>DatabaseGet(setLine, 'Line', parentName), 500);}, [parentName]);
-	useEffect(() => {setTimeout(()=>DatabaseGet(setBlockId, 'CurrentBlock', line), 500);}, [line]);
+	useEffect(() => {setTimeout(()=>{DatabaseGet(setLine, 'Line', parentName.parentName);}, 500);}, [parentName]);
+	useEffect(() => {setTimeout(()=>{DatabaseGet(setBlockId, 'CurrentBlock', parentName.parentName);}, 500);}, [parentName]);
 
-	// useEffect(setBlockId('Block1'));
+	useEffect(()=>console.log('block id changed to', blockID), [blockID]);
 
 	return (
-		<div style={{borderStyle: 'solid', height:"50%", width: '80vh'}}>
-			<h1>Track Status</h1>
+		<div className='Border'>
+			<h2>Track Status</h2>
 			<div className="trainModelRow">
 				<div className="trainModelColumn">
-					<VarDisplay parentName={blockID} varName='Elevation' message='Elevation [ft]'/>
-					<VarDisplay parentName={parentName} varName='Grade' message='Grade [°]'/>
-					<VarDisplay parentName={blockID} varName='Authority' message='Authority [blocks]'/>
-					<VarIndicator parentName={blockID} varName='LightState' message='Light Sensor'/>
+					<div><VarDisplayMulti className='componentText' path={`/${line}/${blockID}/Elevation`} message='Elevation [ft]'/></div>
+					<div><VarDisplayMulti className='componentText' path={`/${line}/${blockID}/Grade`} message='Grade [°]'/></div>
+					<div><VarDisplayMulti className='componentText' path={`/${line}/${blockID}/Authority`} message='Authority [blocks]'/></div>
+					<div><VarDisplayMulti className='componentText' path={`/TrainList/${parentName.parentName}/Line`} message='Line'/></div>
+					<div><VarDisplayMulti className='componentText' path={`/TrainList/${parentName.parentName}/CurrentBlock`} message='Block'/></div>
 				</div>
 				<div className="trainModelColumn">
-					<VarDisplay parentName={blockID} varName='SignalState' message='Signal Status'/> 
-					<VarDisplay parentName={blockID} varName='SpeedLimit' message='Speed Limit [mi/h]'/>
-					<VarDisplay parentName={blockID} varName='CommandedSpeed' message='Commanded Speed [mi/h]'/>
-					<VarIndicator parentName={blockID} varName='BeaconFailure' message='Beacon Failure'/>
+					<div><VarDisplayMulti className='componentText' path={`/${line}/${blockID}/SignalState`} message='Signal Status'/> </div>
+					<div><VarDisplayMulti className='componentText' path={`/${line}/${blockID}/SpeedLimit`} message='Speed Limit [mi/h]'/></div>
+					{/* <div><VarDisplayMulti className='componentText' path={`/${line}/${blockID}/CommandedSpeed`} message='Commanded Speed [mi/h]'/></div> */}
+					{/* <div><VarIndicatorMulti path={`/${line}/${blockID}/BeaconFailure`} message='Beacon Failure'/></div> */}
+					<VarIndicator parentName={parentName} varName='LightState' message='Light Sensor'/>
 				</div>
 			</div>
 		</div>
