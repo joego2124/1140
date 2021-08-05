@@ -7,6 +7,7 @@ import { BsFillSquareFill } from "react-icons/bs";
 import { GiLevelCrossing } from "react-icons/gi";
 import { GiTrafficLightsGreen } from "react-icons/gi";
 import { GiTrafficLightsRed } from "react-icons/gi";
+import { FaTrafficLight } from "react-icons/fa";
 import { BsCircleFill } from "react-icons/bs";
 import Blocks from '../CTC/assets/Blocks';
 // import './styles.css';
@@ -233,6 +234,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 
 		let beacons = [];
 		if (currBlock.station != undefined) {
+			let filledBlockIds = currBlock.connectors[(actualBlock?.Authority)];
 			currBlock.connectors[0].forEach((id, i) => {
 				if (id === null) return;
 				let dx = 0, dy = 0;
@@ -244,7 +246,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					case 3: dy = dist; break;
 				}
 				beacons.push(
-					<BsFillSquareFill size="50px" style={{
+					<div>
+						<BsFillSquareFill size="50px" style={{
 						position: "absolute", 
 						left: currPos.x + dx + 50,
 						top: currPos.y + dy + 50, 
@@ -253,7 +256,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 						color: color,
 						overflow: "visible",
 						zIndex: 1,
-					}}/>
+						}}/>
+					</div>
 				);
 			});
 		}
@@ -338,6 +342,27 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			});
 		}
 
+		// // FIXME: display lights at stations
+		// let stationLights = [];
+		// if (currBlock.station != undefined) {
+		// 	if (actualBlock?.Authority == 1 ? color = "green" : color = "red");
+		// 	stationLights.push(
+		// 		<div>
+		// 		<GiLevelCrossing size="50px" style={{
+		// 			position: "absolute", 
+		// 			left: currPos.x + dx + 50,
+		// 			top: currPos.y + dy + 50, 
+		// 			height: "40px",
+		// 			width: "40px",
+		// 			color: color,
+		// 			overflow: "visible",
+		// 			zIndex: 1
+		// 		}}/>
+		// 		</div>
+		// 		);
+		// 	};
+		// }
+
 		let newBlockSVGs = <div key={lineColor + currBlock.blockId}>
 			<OverlayTrigger
 				placement="top"
@@ -373,6 +398,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			{beacons}
 			{lights}
 			{railwayCrossings}
+			{/* {stationLights} */}
 		</div>
 
 		if (lineName === "greenLine") {
