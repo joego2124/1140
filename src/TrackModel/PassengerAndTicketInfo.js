@@ -1,20 +1,17 @@
 import Firebase from "firebase";
 
-var totalTickets = 0;
-
 // Description: Returns a random number between 0 and max.
 function getRandomInt( max ) {
     return Math.floor(Math.random() * max);
 }
 
 // Description: Sets ticket sales for each station along the route for each train
-function generateTicketSales( ) {
+function generateTicketSales( totalTickets ) {
+    var ticketSum = 0;
     var stationLists = {
         GreenLine: [],
         RedLine: [],
     };
-
-    // console.log("tickets running");
 
     // Get train list and create list of stations.
     Firebase.database().ref('/TrainList').once('value', snapshot => {
@@ -30,22 +27,24 @@ function generateTicketSales( ) {
         });
         Object.entries(stationLists).forEach(arr => { 
             let lineName = arr[0];
-            let totalTickets = 0;
-            console.log(`${lineName}: ${arr[1]}`);
             arr[1].forEach(stationId => {
-                let tempTickets = getRandomInt( 50 );
-                // totalTickets += tempTickets;
+                // This can be changed from 120, it's just the max number of tix
+                // that can be sold at a station. Aribtrary value
+                let tempTickets = getRandomInt( 120 );
+                ticketSum += tempTickets;
 
                 // Set ticket value for stations
                 Firebase.database().ref(`/${lineName}/${stationId}/Station/Tickets`).set( Number(tempTickets) );
-                // Set throughput value
-                // Firebase.database().ref(`/${lineName}/${stationId}/Station/Tickets`).set( Number(tempTickets) );
             });
         });
+        // Set throughput value
+        // FIXME: I'm dividing by 10 to match what's in TopBar.js, but this may need to be adjusted
+        let throughput = ticketSum / 10;
+        Firebase.database().ref(`/CTC/Throughput`).set( Number( Math.floor(throughput)) );
     });
 
     return(
-        totalTickets
+        ticketSum
     )
 }
 

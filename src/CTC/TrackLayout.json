@@ -33,7 +33,7 @@
 		{ "blockId": 17,   "section": "E", "connectors": [[18, null, 16, null]], "color": "GreenLine"},
 		{ "blockId": 18,   "section": "E", "connectors": [[19, null, 17, null]], "color": "GreenLine"},
 		{ "blockId": 19,   "section": "E", "connectors": [[null, null, 18, 20]], "color": "GreenLine", "isLevelCrossingBlock": "Yes"},
-		{ "blockId": 20,   "section": "E", "connectors": [[null, 19, null, 21]], "color": "GreenLine"}, 
+		{ "blockId": 20,   "section": "E", "connectors": [[null, 19, null, 21]], "color": "GreenLine"},
 
 		{ "blockId": 21,   "section": "F", "connectors": [[null, 20, null, 22]], "color": "GreenLine"},
 		{ "blockId": 22,   "section": "F", "connectors": [[null, 21, null, 23]], "station": "WHITED", "color": "GreenLine"},

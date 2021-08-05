@@ -4,8 +4,10 @@ import { Button, OverlayTrigger, Tooltip, Dropdown, DropdownButton } from 'react
 import { BiTrain } from 'react-icons/bi';
 import { IoGitCompareSharp } from 'react-icons/io5';
 import { BsFillSquareFill } from "react-icons/bs";
+import { GiLevelCrossing } from "react-icons/gi";
 import { GiTrafficLightsGreen } from "react-icons/gi";
 import { GiTrafficLightsRed } from "react-icons/gi";
+import { FaTrafficLight } from "react-icons/fa";
 import { BsCircleFill } from "react-icons/bs";
 import Blocks from '../CTC/assets/Blocks';
 // import './styles.css';
@@ -97,7 +99,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	let visitedBlockIds = [];
 
 	//TODO: refactor so doesnt rerender on EVERY train change
-	//render train icons on track
+	// render train icons on track
 	// useEffect(() => {
 	// 	console.log("trains rerendered");
 	// 	setTrainSVGs(Object.entries(trainsList).map(trainArr => {
@@ -226,10 +228,13 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			blockSVGs.push(newSVG);
 		});
 
-		let beacons = [];
+		// Select color based on occupancy and authority
 		let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`;
 		if (actualBlock?.Occupancy == 1) color = `rgb(${occupiedColor}, 1)`;
+
+		let beacons = [];
 		if (currBlock.station != undefined) {
+			let filledBlockIds = currBlock.connectors[(actualBlock?.Authority)];
 			currBlock.connectors[0].forEach((id, i) => {
 				if (id === null) return;
 				let dx = 0, dy = 0;
@@ -241,7 +246,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					case 3: dy = dist; break;
 				}
 				beacons.push(
-					<BsFillSquareFill size="50px" style={{
+					<div>
+						<BsFillSquareFill size="50px" style={{
 						position: "absolute", 
 						left: currPos.x + dx + 50,
 						top: currPos.y + dy + 50, 
@@ -250,7 +256,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 						color: color,
 						overflow: "visible",
 						zIndex: 1,
-					}}/>
+						}}/>
+					</div>
 				);
 			});
 		}
@@ -300,6 +307,62 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			});
 		}
 
+		let railwayCrossings = [];
+		if (currBlock.isLevelCrossingBlock == "Yes") {
+			currBlock.connectors[0].forEach((id, i) => {
+				if (id != null || railwayCrossings.length != 0) return;
+				let dx = 0, dy = 0;
+				let dist = 23;
+				switch(i) {
+					case 0: dx = -34; 
+							dy = -30;
+							break;
+					case 1: dy = -dist; break;
+					case 2: dx = 16; 
+							dy = 10;
+							break;
+					case 3: dy = dist; break;
+				}
+				// Green means railway crossing is active, red means it's not
+				if (actualBlock?.Authority == 1 ? color = "red" : color = "green");
+				railwayCrossings.push(
+					<div>
+					<GiLevelCrossing size="50px" style={{
+						position: "absolute", 
+						left: currPos.x + dx + 50,
+						top: currPos.y + dy + 50, 
+						height: "40px",
+						width: "40px",
+						color: color,
+						overflow: "visible",
+						zIndex: 1
+					}}/>
+					</div>
+				);
+			});
+		}
+
+		// // FIXME: display lights at stations
+		// let stationLights = [];
+		// if (currBlock.station != undefined) {
+		// 	if (actualBlock?.Authority == 1 ? color = "green" : color = "red");
+		// 	stationLights.push(
+		// 		<div>
+		// 		<GiLevelCrossing size="50px" style={{
+		// 			position: "absolute", 
+		// 			left: currPos.x + dx + 50,
+		// 			top: currPos.y + dy + 50, 
+		// 			height: "40px",
+		// 			width: "40px",
+		// 			color: color,
+		// 			overflow: "visible",
+		// 			zIndex: 1
+		// 		}}/>
+		// 		</div>
+		// 		);
+		// 	};
+		// }
+
 		let newBlockSVGs = <div key={lineColor + currBlock.blockId}>
 			<OverlayTrigger
 				placement="top"
@@ -334,6 +397,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			{blockSVGs}
 			{beacons}
 			{lights}
+			{railwayCrossings}
+			{/* {stationLights} */}
 		</div>
 
 		if (lineName === "greenLine") {
