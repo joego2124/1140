@@ -102,11 +102,15 @@ const TrackView = ({
   const updateSelectedBlock = useCallback(
     (blockId) => {
       console.log(`svg clicked: ${blockId}`);
-
       if (selectedWayside != undefined) {
+        console.log(
+          selectedWayside.find((v) => v.BlockNumber == Math.trunc(blockId))
+        );
+        // console.log(selectedWayside.find((blockId) => blockId).BlockNumber);
         let selBlock = selectedWayside?.find(
           (v) => v.BlockNumber == Math.trunc(blockId)
         );
+        console.log(selBlock);
         setSelectedBlock(selBlock);
       } else {
         setSelectedBlock(selectedWayside[0]);

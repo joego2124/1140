@@ -99,7 +99,11 @@ const BottomPanel = ({
   function getOccupancyData() {
     if (selectedBlock != undefined) {
       let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
-      let link = line + '/' + selectedBlock.BlockNumber + '/Occupancy';
+      let link =
+        line +
+        '/' +
+        (selectedBlock.BlockNumber < 0 ? 0 : selectedBlock.BlockNumber) +
+        '/Occupancy';
       let ref = Firebase.database().ref(link);
       ref.on('value', (snapshot) => {
         selectedBlock.Occupancy = snapshot.val();
@@ -112,7 +116,11 @@ const BottomPanel = ({
   function getAuthorityData() {
     if (selectedBlock != undefined) {
       let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
-      let link = line + '/' + selectedBlock.BlockNumber + '/Authority';
+      let link =
+        line +
+        '/' +
+        (selectedBlock.BlockNumber < 0 ? 0 : selectedBlock.BlockNumber) +
+        '/Authority';
       let ref = Firebase.database().ref(link);
       ref.on('value', (snapshot) => {
         selectedBlock.Authority = snapshot.val();

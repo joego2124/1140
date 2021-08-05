@@ -77,6 +77,16 @@ const WaysidePanel = ({
     //   let link = 'RedLine/' + i + '/Authority';
     //   Firebase.database().ref(link).set(0);
     // }
+
+    // for (let i = 0; i < 150; i++) {
+    //   let link = 'GreenLine/' + i + '/SwitchState';
+    //   Firebase.database().ref(link).set(0);
+    // }
+
+    // for (let i = 0; i < 76; i++) {
+    //   let link = 'RedLine/' + i + '/SwitchState';
+    //   Firebase.database().ref(link).set(0);
+    // }
   }
 
   function setColorAndSelectedWayside(selColor) {
