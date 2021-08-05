@@ -259,10 +259,6 @@ const TrackView = ({
   let mappedBlocks = 0;
   if (selectedWayside?.length > 0) {
     let tColor = trackColor == 'GreenLine' ? 'greenLine' : 'redLine';
-    // mappedBlocks = selectedWayside?.map((block) => {
-    //   let mappedBlock = trackLayout[tColor].find(
-    //     (v) => Math.trunc(v.blockId) == block.BlockNumber
-    //   );
     mappedBlocks = [];
     selectedWayside?.forEach((waysideBlock) => {
       trackLayout[tColor].forEach((trackLayoutBlock) => {

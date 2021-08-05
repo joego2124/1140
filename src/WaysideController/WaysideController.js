@@ -4,8 +4,8 @@ import Firebase from 'firebase';
 import config from '../config';
 import WaysidePanel from './WaysidePanel';
 import BottomPanel from './BottomPanel';
-import TempWaysideView from './TempWaysideView';
 import TrackView from '../WaysideController/TrackView';
+import WaysideView from '../WaysideController/WaysideView';
 
 import { DatabaseGet, DatabaseSet } from '../Database';
 var waysideGrouping = require('./WaysideControllers.json');
@@ -130,11 +130,13 @@ const WaysideController = () => {
           setSelectedWaysideName={setSelectedWaysideName}
         />
         {selectedWayside.length > 0 ? (
-          <TrackView
+          <WaysideView
             trackColor={trackColor}
             setSelectedBlock={setSelectedBlock}
             selectedWayside={selectedWayside}
             trainsList={trainsList}
+            greenJsonTree={greenJsonTree}
+            redJsonTree={redJsonTree}
           />
         ) : (
           <div></div>
