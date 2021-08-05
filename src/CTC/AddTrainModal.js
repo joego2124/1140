@@ -150,8 +150,8 @@ const AddTrainModal = (props) => {
 					newTrain.DepartureTime = departureTime;
 					newTrain.Line = `${lineColor === "red" ? "Red" : "Green"}Line`;
 					newTrain.Route = props.routeTrain(stationSelections, lineColor);
-					newTrain.CurrentBlock = newTrain.Route[1];
-					newTrain.PreviousBlock = newTrain.Route[0];
+					newTrain.CurrentBlock = 0;
+					newTrain.PreviousBlock = 0;
 					newTrain.RouteIndex = 1;
 					Firebase.database().ref(`/TrainList/${trainId}`).set(newTrain);
 
@@ -244,6 +244,7 @@ const trainTemplate = {
 	SetpointSpeed: 0,
 	SignalFailure: false,
 	SpeedLimit: 45,
+	StationSide: '',
 	Velocity: 0,
 	Width: 10,
 
