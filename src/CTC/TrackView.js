@@ -69,12 +69,12 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	const [filteredLineSVGs, setFilteredLineSVGs] = useState([]);
 	const [trainSVGs, setTrainSVGs] = useState([]);
 
+	//TODO: refactor so set blockid
 	const updateSelectedBlock = useCallback((blockId, color) => {
 		let blockDatabaseIndex;
 		let selectedBlock = blockLists[color]?.find((block, index) => {
 			if (index != "databasePath") {
-				let roundedBlockId = block.BlockNumber < 0 ? Math.ceil(block.BlockNumber) : Math.floor(block.BlockNumber);
-				if (roundedBlockId === blockId) {
+				if (Math.trunc(block.BlockNumber) === blockId) {
 					blockDatabaseIndex = index;
 					return true;
 				}
@@ -90,8 +90,10 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	let redBlockSVGs = [];
 	let visitedBlockIds = [];
 
+	//TODO: refactor so doesnt rerender on EVERY train change
 	//render train icons on track
 	useEffect(() => {
+		console.log("trains rerendered");
 		setTrainSVGs(Object.entries(trainsList).map(trainArr => {
 			let train = trainArr[1];
 			if (trainArr[0] != "databasePath") {
@@ -286,6 +288,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 		}
 	}
 
+	//TODO: refactor so doesnt rerender on EVERY block change
 	useEffect(() => {
 		if (Object.keys(blockLists).length == 0) return;
 		console.log("[CTC/TrackView] Rendering track view");

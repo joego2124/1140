@@ -140,7 +140,13 @@ function CTC() {
 
 	useEffect(() => {
 		console.log("[CTC] red or green database line blocks changed");
-		setBlockLists({"red": redBlocks, "green": greenBlocks});
+		let newBlockList = {"red": redBlocks, "green": greenBlocks};
+		let color = selectedBlock.Line.toLowerCase().includes("red") ? "red" : "green";
+		let blockIndex = selectedBlock.BlockNumber < 0 ? 0 : selectedBlock.BlockNumber;
+		let updatedSelectedBlock = newBlockList[color][blockIndex];
+		updatedSelectedBlock.databasePath = `${newBlockList[color].databasePath}/${blockIndex}`;
+		setSelectedBlock(updatedSelectedBlock);
+		setBlockLists(newBlockList);
 	}, [redBlocks, greenBlocks]);
 
 	useEffect(() => console.log(`[CTC] new selectedBlock, ${selectedBlock.databasePath}`), [selectedBlock]);
@@ -167,10 +173,10 @@ function CTC() {
 				/>
 			</header>
 			<ScheduleModal
-        show={scheduleModalShow}
-        onHide={() => setScheduleModalShow(false)}
-				trainsList={trainsList}
-      />
+				show={scheduleModalShow}
+				onHide={() => setScheduleModalShow(false)}
+						trainsList={trainsList}
+			/>
 			<AddTrainModal 
 				show={addTrainModal}
 				trainsList={trainsList}

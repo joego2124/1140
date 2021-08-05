@@ -14,6 +14,8 @@ const MainPanel = ({
 	const [open, setOpen] = useState(true);
 	const [manualMode, setManualMode] = useState(false);
 
+	console.log("[CTC/MainPanel] selected block changed: ", selectedBlock);
+
 	return (
 		<div>
 			<Button onClick={()=>setOpen(true)} className="showControlPanelButton">Show Controls</Button>
