@@ -63,7 +63,7 @@ exports.onCTCTrainCurrentBlockChange = functions.database.ref('/TrainList/{train
 
   return database.ref(`/TrainList/${trainId}`).once('value').then(trainSnapshot => {
     const train = trainSnapshot.val();
-    console.log(`[Functions/onCTCTrainCurrentBlockChange] Train ${trainId} moved to , block ${train.CurrentBlock} on ${train.LineName}, target block: ${train.Route[routeIndex]}`);
+    console.log(`[Functions/onCTCTrainCurrentBlockChange] Train ${trainId} moved to , block ${train.CurrentBlock} on ${train.LineName}, target block: ${train.Route[train.RouteIndex + 1]}`);
 
     //increment train route index
     database.ref(`/TrainList/${trainId}`).set({...train, RouteIndex: train.RouteIndex + 1});

@@ -217,15 +217,11 @@ function makeTrainSim(newTrainId) {
             return;
           }
           connectors =
-            block.connectors[
-              this.switchstate < block.connectors.length - 1
-                ? this.switchstate
-                : 0
-            ];
+            block.connectors[this.switchstate];
           // console.log(connectors, block.connectors, this.switchstate);
         } else {
-          if ((this.line = 'GreenLine')) connectors = [62];
-          if ((this.line = 'RedLine')) connectors = [9];
+          if ((this.line.toLowerCase().includes("green"))) connectors = [62];
+          if ((this.line.toLowerCase().includes("red"))) connectors = [9];
         }
         newblock = connectors.find(
           (x) => x != null && (x > 0 ? x : 0) != this.previousblocknumber

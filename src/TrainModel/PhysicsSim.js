@@ -6,9 +6,11 @@ var simList;
 
 Firebase.database().ref('/TrainIds').on('value', snapshot => {
     simList = [];
-    Object.entries(snapshot.val()).forEach(arr => { 
-        simList.push(makeTrainSim(arr[1]));
-    });
+    if(snapshot.val() != null && snapshot.val() != undefined){
+        Object.entries(snapshot.val()).forEach(arr => { 
+            simList.push(makeTrainSim(arr[1]));
+        });
+    }
 });
 
 function physicsTick() {

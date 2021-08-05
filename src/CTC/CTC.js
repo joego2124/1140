@@ -117,7 +117,11 @@ function CTC() {
 	useEffect(() => {
 		Firebase.database().ref('/TrainList').on('value', snapshot => {
 			let list = snapshot.val();
-			list.databasePath = "/TrainList";
+			if(list != undefined && list != null){
+				list.databasePath = "/TrainList";
+			}
+			else
+				list = [];
 			setTrainsList(list);
 		});
 		Firebase.database().ref('/GreenLine').on('value', snapshot => {
