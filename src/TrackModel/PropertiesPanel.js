@@ -31,17 +31,17 @@ function PropertiesPanel({ selectedBlock, lineName }) {
 				paddingRight: 10,
 				paddingBottom: 10
 			}}>
-				<VarDisplayMulti message='Block Length [ft]' path={`/${lineName}/${selectedBlock}/BlockLength`} />
+				<VarDisplayMulti message='Block Length [ft]' path={`${selectedBlock.databasePath}/BlockLength`} />
 				<br />
-				<VarDisplayMulti message='Directions of Travel' path={`/${lineName}/${selectedBlock}/DirectionOfTravel`} />
+				<VarDisplayMulti message='Directions of Travel' path={`${selectedBlock.databasePath}/DirectionOfTravel`} />
 				<br />
-				<VarDisplayMulti message='Elevation [ft]' path={`/${lineName}/${selectedBlock}/Elevation`} />
+				<VarDisplayMulti message='Elevation [ft]' path={`${selectedBlock.databasePath}/Elevation`} />
 				<br />
-				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`/${lineName}/DesiredTrackTemperature`} />
+				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`${selectedBlock.databasePath}/DesiredTrackTemperature`} />
 				<br />
-				<VarDisplayMulti message='Railway Crossing' path={`/${lineName}/${selectedBlock}/isLevelCrossingBlock`} />
+				<VarDisplayMulti message='Railway Crossing' path={`${selectedBlock.databasePath}/isLevelCrossingBlock`} />
 				<br />
-				<VarDisplayMulti message='Speed Limit [mph]' path={`/${lineName}/${selectedBlock}/SpeedLimit`} />
+				<VarDisplayMulti message='Speed Limit [mph]' path={`${selectedBlock.databasePath}/SpeedLimit`} />
 				<br />
 			</div>
 			<div style={{
