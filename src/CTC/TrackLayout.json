@@ -78,7 +78,7 @@
 		{ "blockId": 56,   "section": "I", "connectors": [[55.1, null, 57, null]], "color": "GreenLine"},
 		{ "blockId": 57,   "section": "I", "connectors": [[56, null, 58, null]], "station": "OVERBROOK", "color": "GreenLine"},
 
-		{ "blockId": 58,   "section": "J", "connectors": [[57, -1, null, null], [58, null, null, 59]], "color": "GreenLine"},
+		{ "blockId": 58,   "section": "J", "connectors": [[57, -1, null, null], [57, null, null, 59]], "color": "GreenLine"},
 		{ "blockId": 59,   "section": "J", "connectors": [[null, 58, 60, null]], "color": "GreenLine"},
 		{ "blockId": 60,   "section": "J", "connectors": [[59, null, null, 61]], "color": "GreenLine"},
 		{ "blockId": 61,   "section": "J", "connectors": [[null, 60, null, 62]], "color": "GreenLine"},

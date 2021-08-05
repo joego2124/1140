@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Table, Form } from 'react-bootstrap';
 
+import Firebase from "firebase";
 import { trainTemplate } from './TrainTemplate';
 
 const ScheduleModal = (props) => {
@@ -9,24 +10,24 @@ const ScheduleModal = (props) => {
 
 	const handleChange = e => {
     const fileReader = new FileReader();
-		console.log(e.target.files[0]);
     fileReader.readAsText(e.target.files[0], "UTF-8");
     fileReader.onload = e => {
-			console.log("e.target.result", JSON.parse(e.target.result));
       setFile(JSON.parse(e.target.result));
     };
   };
 
 	useEffect(() => {
 		if (file != null && typeof file == "object") {
-			Object.entries(file).forEach(train => {
+			Object.entries(file).forEach(trainArr => {
+				console.log(trainArr[0]);
+				let train = trainArr[1];
 				let newTrain = {...trainTemplate, ...train};
-				newTrain.Stations = stationSelections;
 				newTrain.Route = props.routeTrain(train.Stations, train.Line.toLowerCase().includes("red") ? "red" : "green");
 				newTrain.CurrentBlock = 0;
 				newTrain.PreviousBlock = 0;
 				newTrain.RouteIndex = 1;
-				Firebase.database().ref(`/TrainList/${trainId}`).set(newTrain);
+				Firebase.database().ref(`/TrainList/${train.TrainId}`).set(newTrain);
+				Firebase.database().ref(`/TrainList/${train.Line}/0/Occupancy`).set(1);
 			});
 		}
 	}, [file]);
