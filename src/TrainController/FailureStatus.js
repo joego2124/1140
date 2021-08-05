@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Col } from 'react-bootstrap';
-import VarIndicator from '../components/VarIndicator';
+import VarIndicator from './components/VarIndicator';
 
 function FailureStatus({parentName, selectedTrain}) {
     return (
