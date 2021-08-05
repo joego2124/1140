@@ -88,53 +88,57 @@ function makeTrainSim(newTrainId) {
     .on('value', (snapshot) => {
       console.log('CURRENT BLOCK: ' + snapshot.val());
       const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
-      if (safeblock!== snapshot.val())
+      if (safeblock !== snapshot.val())
         console.warn('BLOCK ID OUT OF RANGE: ', newTrainId, snapshot.val());
       train.blocknumber = safeblock;
       console.log('SAFEBLOCK ' + safeblock);
 
       Firebase.database()
-            .ref(`/${train.line}/${safeblock}/BlockGrade`)
-            .on('value', (snapshot) => {
-              Firebase.database()
-                .ref(`/TrainList/${train.trainId}/Grade`)
-                .set(snapshot.val());
-            });
+        .ref(`/${train.line}/${safeblock}/BlockGrade`)
+        .on('value', (snapshot) => {
           Firebase.database()
-            .ref(`/${train.line}/${safeblock}/BlockLength`)
-            .on('value', (snapshot) => {
-              Firebase.database()
-                .ref(`/TrainList/${train.trainId}/BlockLength`)
-                .set(snapshot.val());
-            });
+            .ref(`/TrainList/${train.trainId}/Grade`)
+            .set(snapshot.val());
+        });
+      Firebase.database()
+        .ref(`/${train.line}/${safeblock}/BlockLength`)
+        .on('value', (snapshot) => {
           Firebase.database()
-            .ref(`/${train.line}/${train.blocknumber}/Authority`)
-            .on('value', (snapshot) => {
-              console.log(`/${train.line}/${train.blocknumber}/Authority` + "\n" + snapshot.val());
-              console.log();
-              Firebase.database()
-                .ref(`/TrainList/${train.trainId}/BlockAuthority`)
-                .set(snapshot.val());
-            });
+            .ref(`/TrainList/${train.trainId}/BlockLength`)
+            .set(snapshot.val());
+        });
+      Firebase.database()
+        .ref(`/${train.line}/${train.blocknumber}/Authority`)
+        .on('value', (snapshot) => {
+          console.log(
+            `/${train.line}/${train.blocknumber}/Authority` +
+              '\n' +
+              snapshot.val()
+          );
+          console.log();
           Firebase.database()
-            .ref(`/${train.line}/${safeblock}/SpeedLimit`)
-            .on('value', (snapshot) => {
-              Firebase.database()
-                .ref(`/TrainList/${train.trainId}/SpeedLimit`)
-                .set(snapshot.val());
-            });
-  
+            .ref(`/TrainList/${train.trainId}/BlockAuthority`)
+            .set(snapshot.val());
+        });
+      Firebase.database()
+        .ref(`/${train.line}/${safeblock}/SpeedLimit`)
+        .on('value', (snapshot) => {
           Firebase.database()
-            .ref(`/${train.line}/${safeblock}/Station`)
-            .on('value', (snapshot) => {
-              train.Station = snapshot.val();
-            });
+            .ref(`/TrainList/${train.trainId}/SpeedLimit`)
+            .set(snapshot.val());
+        });
+
+      Firebase.database()
+        .ref(`/${train.line}/${safeblock}/Station`)
+        .on('value', (snapshot) => {
+          train.Station = snapshot.val();
+        });
     });
   Firebase.database()
     .ref(`/TrainList/${newTrainId}/PreviousBlock`)
     .on('value', (snapshot) => {
       const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
-      if (safeblock!== snapshot.val())
+      if (safeblock !== snapshot.val())
         console.warn('BLOCK ID OUT OF RANGE: ', newTrainId, snapshot.val());
       train.previousblocknumber = safeblock;
     });
@@ -188,10 +192,22 @@ function makeTrainSim(newTrainId) {
           (this.power * 740) /
             (this.mass * (this.velocity != 0 ? this.velocity : 0.1)) -
           32.2 * Math.sin((this.grade * Math.PI) / 180);
-        console.log( 'power:',this.power, 'mass:',this.mass,'velocity:',this.velocity,'grade:',this.grade,'acceleration:', acc );
+        // if (acc == NaN || acc == null || acc == undefined) acc = 0;
+        console.log(
+          'power:',
+          this.power,
+          'mass:',
+          this.mass,
+          'velocity:',
+          this.velocity,
+          'grade:',
+          this.grade,
+          'acceleration:',
+          acc
+        );
         Firebase.database()
           .ref(`/TrainList/${this.trainId}/Acceleration`)
-          .set(acc);
+          .set(isNaN(acc) ? 0 : acc);
         if (acc < 0) console.warn('BACKSLIDE ON TRAIN ', this.trainId);
       }
     }
@@ -211,18 +227,33 @@ function makeTrainSim(newTrainId) {
       this.HasStoppedAtSation == false
     ) {
       this.HasStoppedAtSation = true;
-      
-      console.log(this.trainId, ' has stopped in the station at block ', this.blocknumber);
+
+      console.log(
+        this.trainId,
+        ' has stopped in the station at block ',
+        this.blocknumber
+      );
 
       const departingPassengers = Math.floor(
         Math.random() * this.passengers + 1
       );
-      
-      const boardingPassengers = Math.floor((Math.random() * this.Station.Tickets) + 1);
 
-      Firebase.database().ref(`/${this.line}/${this.blocknumber}/Station/PassengersBoarding`).set(boardingPassengers);
-      Firebase.database().ref(`/TrainList/${this.trainId}/Passengers`).set(clamp(
-        this.passengers - departingPassengers+boardingPassengers, 0, this.carCount * 222) );
+      const boardingPassengers = Math.floor(
+        Math.random() * this.Station.Tickets + 1
+      );
+
+      Firebase.database()
+        .ref(`/${this.line}/${this.blocknumber}/Station/PassengersBoarding`)
+        .set(boardingPassengers);
+      Firebase.database()
+        .ref(`/TrainList/${this.trainId}/Passengers`)
+        .set(
+          clamp(
+            this.passengers - departingPassengers + boardingPassengers,
+            0,
+            this.carCount * 222
+          )
+        );
     }
 
     //enter new block
@@ -257,12 +288,11 @@ function makeTrainSim(newTrainId) {
             console.warn('RAN OFF EDGE OF TRACK: block not found');
             return;
           }
-          connectors =
-            block.connectors[this.switchstate];
+          connectors = block.connectors[this.switchstate];
           // console.log(connectors, block.connectors, this.switchstate);
         } else {
-          if ((this.line.toLowerCase().includes("green"))) connectors = [62];
-          if ((this.line.toLowerCase().includes("red"))) connectors = [9];
+          if (this.line.toLowerCase().includes('green')) connectors = [62];
+          if (this.line.toLowerCase().includes('red')) connectors = [9];
         }
         newblock = connectors.find(
           (x) => x != null && (x > 0 ? x : 0) != this.previousblocknumber
@@ -275,7 +305,7 @@ function makeTrainSim(newTrainId) {
         if (newblock < 0) newblock = 0;
       } while (newblock !== Math.floor(newblock));
       {
-        console.log("FDSAFDSAFDSAFDSAFDSAFDSAFDSAFDSAFDSA");
+        console.log('FDSAFDSAFDSAFDSAFDSAFDSAFDSAFDSAFDSA');
         Firebase.database()
           .ref(`/TrainList/${this.trainId}/CurrentBlock`)
           .set(newblock);
@@ -286,44 +316,46 @@ function makeTrainSim(newTrainId) {
         Firebase.database().ref(`/${this.line}/${newblock}/Occupancy`).set(1);
         Firebase.database().ref(`/${this.line}/${oldblock}/Occupancy`).set(0);
 
-        Firebase.database().ref(`/${this.line}/${newblock}/MaxCapacity`).set( this.passengers >= (this.carCount * 222) ? true : false);
+        Firebase.database()
+          .ref(`/${this.line}/${newblock}/MaxCapacity`)
+          .set(this.passengers >= this.carCount * 222 ? true : false);
         Firebase.database().ref(`/${this.line}/${oldblock}/MaxCapacity`).set(0);
 
         //set new block values
-          // Firebase.database()
-          //   .ref(`/${this.line}/${newblock}/BlockGrade`)
-          //   .on('value', (snapshot) => {
-          //     Firebase.database()
-          //       .ref(`/TrainList/${this.trainId}/Grade`)
-          //       .set(snapshot.val());
-          //   });
-          // Firebase.database()
-          //   .ref(`/${this.line}/${newblock}/BlockLength`)
-          //   .on('value', (snapshot) => {
-          //     Firebase.database()
-          //       .ref(`/TrainList/${this.trainId}/BlockLength`)
-          //       .set(snapshot.val());
-          //   });
-          // Firebase.database()
-          //   .ref(`/${this.line}/${newblock}/Authority`)
-          //   .on('value', (snapshot) => {
-          //     Firebase.database()
-          //       .ref(`/TrainList/${this.trainId}/BlockAuthority`)
-          //       .set(snapshot.val());
-          //   });
-          // Firebase.database()
-          //   .ref(`/${this.line}/${newblock}/SpeedLimit`)
-          //   .on('value', (snapshot) => {
-          //     Firebase.database()
-          //       .ref(`/TrainList/${this.trainId}/SpeedLimit`)
-          //       .set(snapshot.val());
-          //   });
-  
-          // Firebase.database()
-          //   .ref(`/${this.line}/${newblock}/Station`)
-          //   .on('value', (snapshot) => {
-          //     this.Station = snapshot.val();
-          //   });
+        // Firebase.database()
+        //   .ref(`/${this.line}/${newblock}/BlockGrade`)
+        //   .on('value', (snapshot) => {
+        //     Firebase.database()
+        //       .ref(`/TrainList/${this.trainId}/Grade`)
+        //       .set(snapshot.val());
+        //   });
+        // Firebase.database()
+        //   .ref(`/${this.line}/${newblock}/BlockLength`)
+        //   .on('value', (snapshot) => {
+        //     Firebase.database()
+        //       .ref(`/TrainList/${this.trainId}/BlockLength`)
+        //       .set(snapshot.val());
+        //   });
+        // Firebase.database()
+        //   .ref(`/${this.line}/${newblock}/Authority`)
+        //   .on('value', (snapshot) => {
+        //     Firebase.database()
+        //       .ref(`/TrainList/${this.trainId}/BlockAuthority`)
+        //       .set(snapshot.val());
+        //   });
+        // Firebase.database()
+        //   .ref(`/${this.line}/${newblock}/SpeedLimit`)
+        //   .on('value', (snapshot) => {
+        //     Firebase.database()
+        //       .ref(`/TrainList/${this.trainId}/SpeedLimit`)
+        //       .set(snapshot.val());
+        //   });
+
+        // Firebase.database()
+        //   .ref(`/${this.line}/${newblock}/Station`)
+        //   .on('value', (snapshot) => {
+        //     this.Station = snapshot.val();
+        //   });
 
         //load becon info
         // var beacon;

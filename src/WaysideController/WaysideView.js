@@ -130,15 +130,8 @@ const TrackView = ({
         let train = trainArr[1];
         console.warn('Hello');
         if (trainArr[0] != 'databasePath' && train.Line == trackColor) {
-          let layoutBlock = selectedWayside.find((block) =>
-            console.log(
-              block.CurrentBlock,
-              Math.trunc(train.CurrentBlock < 0 ? 0 : train.CurrentBlock)
-            )
-            // return (
-            //   block.CurrentBlock ==
-            //   Math.trunc(train.CurrentBlock < 0 ? 0 : train.CurrentBlock)
-            // );
+          let layoutBlock = selectedWayside.find(
+            (block) => block.CurrentBlock == train.CurrentBlock
           );
           console.log(layoutBlock, train.CurrentBlock);
           if (layoutBlock != undefined) {
