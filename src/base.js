@@ -9,4 +9,4 @@ if (window.location.hostname === "localhost") {
   firebase.database().useEmulator('localhost', 9000);
 }
 
-export default firebaseApp;
+export default firebaseApp; 

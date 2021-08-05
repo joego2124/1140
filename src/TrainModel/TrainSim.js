@@ -319,10 +319,12 @@ function makeTrainSim(newTrainId) {
       {
         Firebase.database()
           .ref(`/TrainList/${this.trainId}/CurrentBlock`)
-          .set(newblock);
-        Firebase.database()
-          .ref(`/TrainList/${this.trainId}/PreviousBlock`)
-          .set(oldblock);
+          .set(newblock).then(res => {
+            Firebase.database()
+            .ref(`/TrainList/${this.trainId}/PreviousBlock`)
+            .set(oldblock);
+          })
+
 
         Firebase.database().ref(`/${this.line}/${newblock}/Occupancy`).set(1);
         Firebase.database().ref(`/${this.line}/${oldblock}/Occupancy`).set(0);
