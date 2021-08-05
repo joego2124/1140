@@ -41,7 +41,7 @@ function generateTicketSales( totalTickets ) {
         // Set throughput value
         // FIXME: I'm dividing by 10 to match what's in TopBar.js, but this may need to be adjusted
         let throughput = ticketSum / 10;
-        Firebase.database().ref(`/CTC/Throughput`).set( Number(throughput) );
+        Firebase.database().ref(`/CTC/Throughput`).set( Number( Math.floor(throughput)) );
     });
 
     return(
