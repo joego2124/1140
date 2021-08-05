@@ -105,9 +105,9 @@ const MainPanel = ({
 						<div className="controlPanelSubSection">
 							<ValueIO 
 								valueType="output"
-								valueLabel="Next Block"
+								valueLabel="Previous Block"
 								valueData={{
-									value: selectedTrain.NextBlock,
+									value: selectedTrain.PreviousBlock,
 								}}
 							/>
 							<ValueIO 
