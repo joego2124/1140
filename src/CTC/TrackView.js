@@ -12,6 +12,8 @@ import './styles.css';
 
 var trackLayout = require("./TrackLayout.json");
 
+const occupiedColor = '122, 87, 140';
+
 const trackBlockCircle = (centerElement, fill, stroke, clickHandler, currPos) => <div
 	style={{
 		position: "absolute",
@@ -101,8 +103,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			let train = trainArr[1];
 			if (trainArr[0] != "databasePath") {
 				let layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"]
-				.find(block => Math.trunc(block.blockId) === Math.trunc(train.CurrentBlock));
-				if (layoutBlock == undefined) layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"][0];
+					.find(block => block.blockId === train.CurrentBlock);
+				if (layoutBlock == undefined) return;
 				return trackBlockCircle(
 					<BiTrain 
 						key={train.TrainId}
@@ -116,7 +118,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 						}}
 					/>,
 					"white",
-					"rgb(101, 93, 110, 1)",
+					`rgb(${occupiedColor}, 1)`,
 					() => {},
 					layoutBlock?.position
 				);
@@ -183,7 +185,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			//show occupancy based on blocks
 			let block = blockLists[lineColor][Math.trunc(currBlock.blockId)];
 			if (block?.Occupancy == 1) {
-				color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
+				color = `rgb(${occupiedColor}, ${actualBlock?.SwitchState == index ? 1 : .25})`;
 			}
 
 			//create new svg and push to track block SVGs
@@ -224,6 +226,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 		});
 
 		let beacons = [];
+		let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`;
+		if (actualBlock?.Occupancy == 1) color = `rgb(${occupiedColor}, 1)`;
 		if (currBlock.station != undefined) {
 			currBlock.connectors[0].forEach((id, i) => {
 				if (id === null) return;
@@ -242,7 +246,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 						top: currPos.y + dy + 50, 
 						height: "20px",
 						width: "20px",
-						color: `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`,
+						color: color,
 						overflow: "visible",
 						zIndex: 1,
 					}}/>
@@ -251,7 +255,6 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 		}
 
 		let lights = [];
-		let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`;
 		if (currBlock.connectors.length > 1) {
 			let lightHistory = [null, null, null, null];
 			let filledBlockIds = currBlock.connectors[actualBlock?.SwitchState];
@@ -286,7 +289,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 								top: currPos.y + dy + 52.5, 
 								height: "15px",
 								width: "15px",
-								color: filledBlockIds?.find(v => v == id) == undefined ? "white" : color,
+								color: filledBlockIds?.find(v => v == id) == undefined ? "rgb(255, 255, 255, .75)" : color,
 								overflow: "visible",
 								zIndex: 1010,
 							}}/>

@@ -1,7 +1,9 @@
-import React, { useState, useCallback } from 'react';
-import SlidingPane from 'react-sliding-pane';
+	import React, { useState, useCallback, useEffect } from 'react';
+import SlidingPane from "react-sliding-pane";
 import { Button, Dropdown } from 'react-bootstrap';
-import ValueIO from './ValueIO';
+import ValueIO from "./ValueIO";
+import Firebase from "firebase";
+
 
 import './styles.css';
 
@@ -20,26 +22,35 @@ const MainPanel = ({ setModalShow, selectedTrain, selectedBlock }) => {
         (block) => Math.trunc(block.blockId) == selectedBlock.BlockNumber
       );
 
-      if (layoutBlock != undefined) {
-        if (layoutBlock.connectors.length < 2) return 'N/A';
-        let str = '';
-        let flag = false;
-        layoutBlock.connectors[switchState].forEach((id) => {
-          str += id != null ? id : '';
-          if (!flag && id != null) {
-            flag = true;
-            str += ' : ';
-          }
-        });
-        return str;
-      }
+	const [open, setOpen] = useState(true);
+	const [manualMode, setManualMode] = useState(false);
+	const [throughput, setThroughput] = useState(0);
 
       return 'N/A';
     },
     [selectedBlock]
   );
 
-  console.log('[CTC/MainPanel] selected block changed: ', selectedBlock);
+		if (layoutBlock != undefined) {
+			if (layoutBlock.connectors.length < 2) return "N/A"
+			let str = "";
+			let flag = false;
+			layoutBlock.connectors[switchState].forEach(id => {
+				str += id != null ? id : "";
+				if (!flag && id != null) {
+					flag = true;
+					str += " : ";	
+				};
+			});
+			return str;
+		}
+		
+		return "N/A";
+	}, [selectedBlock]);
+
+	useEffect(() => {
+		Firebase.database().ref("/CTC/Throughput").on("value", snapshot => setThroughput(snapshot.val()));
+	}, []);
 
   return (
     <div>
@@ -180,35 +191,101 @@ const MainPanel = ({ setModalShow, selectedTrain, selectedBlock }) => {
 
             <div className='controlPanelDivider'></div>
 
-            <div className='controlPanelSubSection'>
-              <ValueIO
-                valueType='output'
-                valueLabel='Selected Block'
-                valueData={{
-                  value: `${selectedBlock.Line}${selectedBlock.BlockNumber}`,
-                }}
-              />
-              <ValueIO
-                valueType='output'
-                valueLabel='Track Occupancy'
-                valueData={{
-                  value: selectedBlock.Occupancy === 0 ? 'FALSE' : 'TRUE',
-                }}
-              />
-              <ValueIO
-                valueType='output'
-                valueLabel='Tickets'
-                valueData={{
-                  value: 'RENGIVEME',
-                  units: 'units/hr',
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </SlidingPane>
-    </div>
-  );
-};
+						<div className="controlPanelSubSection">
+							<ValueIO 
+								valueType="output"
+								valueLabel="Next Block"
+								valueData={{
+									value: selectedTrain.NextBlock,
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Commanded Speed"
+								valueData={{
+									value: selectedTrain.SpeedLimit,
+									units: "mi/hr"
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Train ID"
+								valueData={{
+									value: selectedTrain.TrainId,
+								}}
+							/>
+						</div>
+					</div>
+					<div className = "controlPanelSection">
+						<div className="controlPanelSubSection">
+							<ValueIO 
+								valueType="input"
+								valueLabel="Signal State"
+								valueDatabasePath={`${selectedTrain.databasePath}/SignalState`}
+								valueData={{
+									value: selectedTrain.SignalState,
+									dropdownList: [
+										<Dropdown.Item href="#/action-1">Action</Dropdown.Item>,
+									],
+								}}
+							/>
+							<ValueIO 
+								valueType={(selectedBlock.isSwitchBlock == 1 && selectedBlock.MaintenanceStatus == 1) ? "input" : "output"}
+								valueLabel="Switch State"
+								valueDatabasePath={`${selectedBlock.databasePath}/SwitchState`}
+								valueData={{
+									value: !formatSwitchState(selectedBlock.SwitchState) ? "N/A" : formatSwitchState(selectedBlock.SwitchState),
+									dropdownList: [
+										<Dropdown.Item eventKey={1}>{formatSwitchState(1)}</Dropdown.Item>,
+										<Dropdown.Item eventKey={0}>{formatSwitchState(0)}</Dropdown.Item>,
+									],
+								}}
+							/>
+							<ValueIO 
+								valueType="input"
+								valueLabel="Maintenance Status"
+								valueDatabasePath={`${selectedBlock.databasePath}/MaintenanceStatus`}
+								valueData={{
+									value: selectedBlock.MaintenanceStatus == 1 ? "TRUE" : "FALSE",
+									dropdownList: [
+										<Dropdown.Item eventKey={1}>TRUE</Dropdown.Item>,
+										<Dropdown.Item eventKey={0}>FALSE</Dropdown.Item>,
+									],
+								}}
+							/>
+						</div>
 
-export default MainPanel;
+						<div className="controlPanelDivider"></div>
+						
+						<div className="controlPanelSubSection">
+							<ValueIO 
+								valueType="output"
+								valueLabel="Selected Block"
+								valueData={{
+									value: `${selectedBlock.Line}${selectedBlock.BlockNumber}`,
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Track Occupancy"
+								valueData={{
+									value: selectedBlock.Occupancy === 0 ? "FALSE" : "TRUE",
+								}}
+							/>
+							<ValueIO 
+								valueType="output"
+								valueLabel="Tickets"
+								valueData={{
+									value: throughput,
+									units: "tickets/hr"
+								}}
+							/>
+						</div>
+					</div>
+				</div>
+			</SlidingPane>
+		</div>
+	)
+}
+
+export default MainPanel

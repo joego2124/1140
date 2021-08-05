@@ -1,39 +1,60 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Blocks from '../CTC/assets/Blocks';
-import '../CTC/styles.css';
+import { Button, OverlayTrigger, Tooltip, Dropdown, DropdownButton } from 'react-bootstrap';
+import { BiTrain } from 'react-icons/bi';
+import { IoGitCompareSharp } from 'react-icons/io5';
 import { BsFillSquareFill } from "react-icons/bs";
-import { DatabaseGetMulti } from '../components/DatabaseMulti';
-import { DatabaseSetMulti } from '../components/DatabaseMulti';
+import { GiTrafficLightsGreen } from "react-icons/gi";
+import { GiTrafficLightsRed } from "react-icons/gi";
+import { BsCircleFill } from "react-icons/bs";
+import Blocks from '../CTC/assets/Blocks';
+// import './styles.css';
 
 var trackLayout = require("../CTC/TrackLayout.json");
 
-const trackBlockCircle = (blockType, centerElement, fill, stroke, clickHandler) => <div>
+const occupiedColor = '122, 87, 140';
+
+const trackBlockCircle = (centerElement, fill, stroke, clickHandler, currPos) => <div
+	style={{
+		position: "absolute",
+		zIndex: 1003,  
+		left: currPos.x + 60,
+		top: currPos.y + 60, 
+		transform: "translate(-50%, -50%)",
+		height: 100,
+		width: 100,
+		backgroundColor: "rgba(255, 255, 0, 0)",
+		overflow: "visible",
+	}}
+>
 	<div 
 		onClick={clickHandler}
 		style={{ 
 			position: "absolute", 
-			zIndex: 1002, 
-			top: blockType === "straight" ? "47.5%" : "5%", 
-			left: blockType === "straight" ? "50%" : "9%", 
+			zIndex: 1004, 
+			top: "50%", 
+			left: "50%", 
 			transform: "translate(-50%, -50%)",
 			fontWeight: 550,
-			color: stroke
+			height: 50,
+			width: 50,
+			color: stroke,
+			backgroundColor: "rgba(255, 125, 125, 0)",
 	}}>{centerElement}</div>
 	<svg 
 		width={75}
 		height={75}
-		viewBox={`0 0 ${100} ${100}`}
+		viewBox={`-15 -15 100 100`}
 		stroke={stroke}
 		fill={fill}
 		xmlns="http://www.w3.org/2000/svg" 
 		style={{
 			position: "absolute",
-			left: blockType === "straight" ? "61%" : "29.5%",
-			top: blockType === "straight" ? "61%" : "29.5%",
+			top: "50%", 
+			left: "50%", 
 			transform: "translate(-50%, -50%)",
 			zIndex: 1001,
+			backgroundColor: "rgba(255, 0, 255, 0)",
 		}} 
 		onClick={clickHandler}
 	>
@@ -41,30 +62,85 @@ const trackBlockCircle = (blockType, centerElement, fill, stroke, clickHandler) 
 	</svg>
 </div>
 
-const gridBlocks = 50;
+const gridBlocks = 500;
 const gridSize = 120;
 const maxLength = gridBlocks * gridSize;
 
-const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
+const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) => {
 
 	document.body.style.overflow='hidden';
 
-	// const [selectedBlock, setSelectedBlock] = useState(0);
+	const [lineFilter, setLineFilter] = useState("both");
+	const [filteredLineSVGs, setFilteredLineSVGs] = useState([]);
+	const [trainSVGs, setTrainSVGs] = useState([]);
 
-	let trackBlockSVGs = [];
+	//TODO: refactor so set blockid
+	const updateSelectedBlock = useCallback((blockId, color) => {
+		let blockDatabaseIndex;
+		let selectedBlock = blockLists[color]?.find((block, index) => {
+			if (index != "databasePath") {
+				if (Math.trunc(block.BlockNumber) === blockId) {
+					blockDatabaseIndex = index;
+					return true;
+				}
+			}
+		});
+		if (selectedBlock != undefined) {
+			selectedBlock.databasePath = `${blockLists[color].databasePath}/${blockDatabaseIndex}`;
+			console.log("DEBUG", selectedBlock.databasePath);
+			setSelectedBlock(selectedBlock);
+		}
+	}, [blockLists]);
+
+	let greenBlockSVGs = [];
+	let redBlockSVGs = [];
 	let visitedBlockIds = [];
-	let lineName;
+
+	//TODO: refactor so doesnt rerender on EVERY train change
+	//render train icons on track
+	// useEffect(() => {
+	// 	console.log("trains rerendered");
+	// 	setTrainSVGs(Object.entries(trainsList).map(trainArr => {
+	// 		let train = trainArr[1];
+	// 		if (trainArr[0] != "databasePath") {
+	// 			let layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"]
+	// 			.find(block => Math.trunc(block.blockId) === Math.trunc(train.CurrentBlock));
+	// 			if (layoutBlock == undefined) layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"][0];
+	// 			return trackBlockCircle(
+	// 				<BiTrain 
+	// 					key={train.TrainId}
+	// 					style={{
+	// 						position: "absolute",
+	// 						top: "50%", 
+	// 						left: "50%",
+	// 						width: 35,
+	// 						height: 35, 
+	// 						transform: "translate(-50%, -50%)",
+	// 					}}
+	// 				/>,
+	// 				"white",
+	// 				`rgb(${occupiedColor}, 1)`,
+	// 				() => {},
+	// 				layoutBlock?.position
+	// 			);
+	// 		}
+	// 	}));
+	// }, [trainsList]);
 
 	//recursive function to generate a list of tracks for rendering
-	const traceTrack = (currBlock, currPos, trackLayoutList) => {
+	const traceTrack = (currBlock, currPos, trackLayoutList, lineName) => {
 		
 		let blockSVGs = [];
+		let lineColor = lineName.toLowerCase().includes("red") ? "red" : "green";
+		let actualBlock = blockLists[lineColor][Math.trunc(currBlock.blockId)];
 		
+		currBlock.position = currPos;
+
 		//add current block to list of visited blocks
 		visitedBlockIds.push(currBlock.blockId);
 
 		//iterate through all connections
-		currBlock.connectors.forEach(connnectorArr => {
+		currBlock.connectors.forEach((connnectorArr, index) => {
 
 			let blockTypeName = ""; //var for determining svg to render
 
@@ -86,7 +162,7 @@ const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 							default: break;
 						}
 						const nextPos = { x: currPos.x + dx, y: currPos.y + dy };
-						traceTrack(nextBlock, nextPos, trackLayoutList);
+						traceTrack(nextBlock, nextPos, trackLayoutList, lineName);
 					}
 				}
 				blockTypeName += (nextBlockId === null ? "0" : "1"); //inc blockTypeName
@@ -103,37 +179,17 @@ const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 			//conditional vars
 			let blockType = (blockTypeName === "0101" || blockTypeName === "1010") ? "straight" : "curved";
 			let size = blockType === "straight" ? 100 : 55;
-			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${blockSVGs.length > 0 ? .25 : 1})`;
-
-			// Darken color of SVG if track is occupied
-			// TODO: remove color of SVG if track is not occupied
-			Object.entries(trainsList).forEach(trainArr => {
-				let targBlockId = Math.floor(trainArr[1].CurrentBlock);
-				let compBlockId = Math.floor( Math.abs(currBlock.blockId) );
-				if (targBlockId == compBlockId) {
-					color = `rgb(101, 93, 110, ${blockSVGs.length > 0 ? .25 : 1})`;
-				}
-			});
-
-			const clickHandler = () => {
-				// console.log(`svg clicked: ${currBlock.blockId}`);
-				if( currBlock.blockId < 0 )
-				{
-					// Yard ID = 0
-					setSelectedBlock( `${0}` );
-					setLineName( `${currBlock.color}` );
-				}
-				else
-				{
-					let flooredBlockId = Math.floor( currBlock.blockId );
-					console.log("BLOCKID: ", flooredBlockId);
-					setSelectedBlock( `${flooredBlockId}` );
-					// console.log("curr: ", currBlock.color);
-					setLineName( `${currBlock.color}` );
-				}
-			}
+			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${actualBlock?.SwitchState == index ? 1 : .25})`;
 			
-			//create new svg and push to trackBlockSVGs
+			color = currBlock.section === "YARD" ? "grey" : color; //yard blocks are grey
+
+			//show occupancy based on blocks
+			let block = blockLists[lineColor][Math.trunc(currBlock.blockId)];
+			if (block?.Occupancy == 1) {
+				color = `rgb(${occupiedColor}, ${actualBlock?.SwitchState == index ? 1 : .25})`;
+			}
+
+			//create new svg and push to track block SVGs
 			let newSVG = <div 
 				key={blockSVGs.length}
 				style={{
@@ -142,7 +198,7 @@ const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 					top: currPos.y + dy + 10, 
 					height: size,
 					width: size,
-					// backgroundColor: "rgba(0, 255, 255, .25)",
+					backgroundColor: "rgba(0, 255, 255, 0)",
 					overflow: "visible",
 				}}
 			>
@@ -160,21 +216,19 @@ const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 						transform: "translate(-50%, -50%)",
 						zIndex: 1000,
 					}} 
-					onClick={clickHandler}
+					onClick={() => {
+						updateSelectedBlock(currBlock.blockId, lineColor)
+					}}
 				>
 					{Blocks[blockTypeName]}
-				</svg>	
-				<OverlayTrigger
-					placement="top"
-					overlay={<Tooltip>{currBlock.station}</Tooltip>}
-				>
-					{currBlock.station != undefined ? trackBlockCircle(blockType, "S", "white", color, clickHandler) : <></>}
-				</OverlayTrigger>
+				</svg>
 			</div>
 			blockSVGs.push(newSVG);
 		});
 
 		let beacons = [];
+		let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`;
+		if (actualBlock?.Occupancy == 1) color = `rgb(${occupiedColor}, 1)`;
 		if (currBlock.station != undefined) {
 			currBlock.connectors[0].forEach((id, i) => {
 				if (id === null) return;
@@ -187,21 +241,86 @@ const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 					case 3: dy = dist; break;
 				}
 				beacons.push(
-						<BsFillSquareFill size="50px" style={{
-							position: "absolute", 
-							left: currPos.x + dx + 50,
-							top: currPos.y + dy + 50, 
-							height: "20px",
-							width: "20px",
-							color: `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`,
-							overflow: "visible",
-							zIndex: 3000,
-						}}/>
+					<BsFillSquareFill size="50px" style={{
+						position: "absolute", 
+						left: currPos.x + dx + 50,
+						top: currPos.y + dy + 50, 
+						height: "20px",
+						width: "20px",
+						color: color,
+						overflow: "visible",
+						zIndex: 1,
+					}}/>
 				);
 			});
 		}
 
-		let newBlockSVGs = <div key={lineName + currBlock.blockId}>
+		let lights = [];
+		if (currBlock.connectors.length > 1) {
+			let lightHistory = [null, null, null, null];
+			let filledBlockIds = currBlock.connectors[actualBlock?.SwitchState];
+			
+			currBlock.connectors.forEach(connector => {
+				connector.forEach((id, i) => {
+					if (id === null || lightHistory[i] != null) return;
+					lightHistory[i] = true;
+					let dx = 0, dy = 0;
+					let dist = 41;
+					switch(i) {
+						case 0: dx = -dist; break;
+						case 1: dy = -dist; break;
+						case 2: dx = dist; break;
+						case 3: dy = dist; break;
+					}
+					lights.push(
+						<div>
+							<BsCircleFill size="50px" style={{
+								position: "absolute", 
+								left: currPos.x + dx + 47.5,
+								top: currPos.y + dy + 47.5, 
+								height: "25px",
+								width: "25px",
+								color: color,
+								overflow: "visible",
+								zIndex: 1009,
+							}}/>
+							<BsCircleFill size="50px" style={{
+								position: "absolute", 
+								left: currPos.x + dx + 52.5,
+								top: currPos.y + dy + 52.5, 
+								height: "15px",
+								width: "15px",
+								color: filledBlockIds?.find(v => v == id) == undefined ? "rgb(255, 255, 255, .75)" : color,
+								overflow: "visible",
+								zIndex: 1010,
+							}}/>
+						</div>
+					);
+				});
+			});
+		}
+
+		let newBlockSVGs = <div key={lineColor + currBlock.blockId}>
+			<OverlayTrigger
+				placement="top"
+				overlay={<Tooltip>{currBlock.station}</Tooltip>}
+			>
+				{currBlock.station != undefined ? trackBlockCircle(
+					<IoGitCompareSharp style={{
+						position: "absolute",
+						top: "50%",
+						left: "50%",
+						transform: "translate(-50%, -50%)",
+						width: 30,
+						height: 30,
+					}}/>, 
+					"white", 
+					`rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`, 
+					() => {
+						updateSelectedBlock(currBlock.blockId, lineColor)},
+					currPos
+				) : <></>}
+			</OverlayTrigger>
 			<div
 				style={{
 					position: "absolute",
@@ -214,49 +333,73 @@ const TrackView = ({setSelectedBlock, setLineName,trainsList, blockList}) => {
 			>{`${currBlock.section}${currBlock.blockId}`}</div>
 			{blockSVGs}
 			{beacons}
+			{lights}
 		</div>
 
-		trackBlockSVGs.push(newBlockSVGs);
+		if (lineName === "greenLine") {
+			greenBlockSVGs.push(newBlockSVGs);
+		} else {
+			redBlockSVGs.push(newBlockSVGs);
+		}
 	}
 
-	for (const [key, value] of Object.entries(trackLayout)) {
-		lineName = key;
-		visitedBlockIds = [];
-		traceTrack(
-			value[0], 
-			{x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize}, 
-			value
-		);
-	}
+	//TODO: refactor so doesnt rerender on EVERY block change
+	useEffect(() => {
+		if (Object.keys(blockLists).length == 0) return;
+		console.log("[CTC/TrackView] Rendering track view");
+		greenBlockSVGs = [];
+		redBlockSVGs = [];
+		for (const [key, value] of Object.entries(trackLayout)) {
+			visitedBlockIds = [];
+			traceTrack(
+				value[0], 
+				{x: gridBlocks / 2 * gridSize, y: gridBlocks / 2 * gridSize}, 
+				value,
+				key
+			);
+		}
+		setFilteredLineSVGs(greenBlockSVGs.concat(redBlockSVGs));
+	}, [blockLists]);
 
 	return (
 		<div style={styles.track}>
+			{/* <DropdownButton 
+				className="filterLineButton"
+				id="dropdown-basic-button" 
+				title={`Line: ${lineFilter}`} 
+				onSelect={e => updateFilter(e)}
+			>
+				<Dropdown.Item eventKey="red">Red</Dropdown.Item>
+				<Dropdown.Item eventKey="green">Green</Dropdown.Item>
+				<Dropdown.Item eventKey="both">Both</Dropdown.Item>
+			</DropdownButton> */}
 			<TransformWrapper 
 				limitToBounds={false} 
 				minScale={.01} 
-				initialPositionX={-maxLength / 4.5}
-				initialPositionY={-maxLength / 2.7}
+				initialPositionX={-maxLength / 2.5}
+				initialPositionY={-maxLength / 2.35}
 				initialScale={0.85}
 				panning = {{velocityDisabled: true}} 
 			>
 				<TransformComponent>
-				<div style={{width: `${maxLength}px`, height: `${maxLength}px`}}>
-					<div>
-						{trackBlockSVGs}
+					<div style={{width: `${maxLength}px`, height: `${maxLength}px`}}>
+						<div>
+							{filteredLineSVGs}
+							{trainSVGs}
+						</div>
+						<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+							<defs>
+								<pattern id="smallGrid" width={`${gridSize / 10}`} height={`${gridSize / 10}`} patternUnits="userSpaceOnUse">
+									<path d={`M ${gridSize / 10} 0 L 0 0 0 ${gridSize / 10}`} fill="none" stroke="gray" strokeWidth="0.25"/>
+								</pattern>
+								<pattern id="grid" width={`${gridSize}`} height={`${gridSize}`} patternUnits="userSpaceOnUse">
+									<rect width={`${gridSize}`} height={`${gridSize}`} fill="url(#smallGrid)"/>
+									<path d={`M ${gridSize} 0 L 0 0 0 ${gridSize}`} fill="none" stroke="gray" strokeWidth=".5"/>
+								</pattern>
+							</defs>
+							<rect width="100%" height="100%" fill="url(#grid)" />
+						</svg>
 					</div>
-					<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-						<defs>
-							<pattern id="smallGrid" width={`${gridSize / 10}`} height={`${gridSize / 10}`} patternUnits="userSpaceOnUse">
-								<path d={`M ${gridSize / 10} 0 L 0 0 0 ${gridSize / 10}`} fill="none" stroke="gray" strokeWidth="0.25"/>
-							</pattern>
-							<pattern id="grid" width={`${gridSize}`} height={`${gridSize}`} patternUnits="userSpaceOnUse">
-								<rect width={`${gridSize}`} height={`${gridSize}`} fill="url(#smallGrid)"/>
-								<path d={`M ${gridSize} 0 L 0 0 0 ${gridSize}`} fill="none" stroke="gray" strokeWidth=".5"/>
-							</pattern>
-						</defs>
-						<rect width="100%" height="100%" fill="url(#grid)" />
-					</svg>
-				</div>
 				</TransformComponent>
 			</TransformWrapper>
 		</div>
@@ -267,6 +410,7 @@ const styles = {
 	track: {
 		width: "100%",
 		height: "100%",
+		position: "relative",
 	}
 }
 

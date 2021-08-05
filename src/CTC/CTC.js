@@ -182,7 +182,8 @@ function CTC() {
 			<ScheduleModal
 				show={scheduleModalShow}
 				onHide={() => setScheduleModalShow(false)}
-						trainsList={trainsList}
+				trainsList={trainsList}
+				routeTrain={routeTrain}
 			/>
 			<AddTrainModal 
 				show={addTrainModal}

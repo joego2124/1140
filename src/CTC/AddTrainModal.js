@@ -7,8 +7,9 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { DatabaseGet, DatabaseSet }  from "../Database";
 
 import "../styles.css";
+import {trainTemplate} from "./TrainTemplate"
 
-var trackLayout = require("./TrackLayout.json");
+var trackLayout = require("./TrackLayout");
 
 const CustomMenu = React.forwardRef(
   ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
@@ -154,6 +155,7 @@ const AddTrainModal = (props) => {
 					newTrain.PreviousBlock = 0;
 					newTrain.RouteIndex = 1;
 					Firebase.database().ref(`/TrainList/${trainId}`).set(newTrain);
+					Firebase.database().ref(`/TrainList/${newTrain.Line}/0/Occupancy`).set(1);
 
 					console.log(newTrain);
 					props.onHide();
@@ -199,6 +201,7 @@ const styles = {
 	}
 }
 
+<<<<<<< HEAD
 const trainTemplate = {
 	TrainId: "",
 	CurrentBlock: 0,
@@ -256,5 +259,7 @@ const trainTemplate = {
 	ekm1: 0,
 }
 
+=======
+>>>>>>> CTC
 export default AddTrainModal
 
