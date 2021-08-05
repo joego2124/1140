@@ -219,7 +219,6 @@ const trainTemplate = {
 	DoorStatus: false,
 	EBrakeStatus: false,
 	EDoorStatus: false,
-	EnableHardware: false,
 	EngineFailure: false,
 	ExternalLightState: false,
 	ExternalTemperature: 70,

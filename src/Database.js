@@ -116,6 +116,16 @@ function DatabaseSet2(value, varName, parentName){
     }
 }
 
+function DatabaseSet3(value){
+    
+    var path = '/TC/EnableHW';
+    if (!path) {
+        console.warn(`NOT FOUND IN RTDB TREE`);
+    } else {
+        Firebase.database().ref(path).set(value);
+    }
+}
+
 function DatabaseGet(setter, varName, parentName){
     
     //console.log('varName: ', varName)
@@ -143,6 +153,20 @@ function DatabaseGet2(setter, varName, parentName){
 
     if (!path) {
         console.warn(`${varName} NOT FOUND IN RTDB TREE`);
+    } else {
+        let ref = Firebase.database().ref(path);
+        ref.on('value', snapshot => {
+            const state = snapshot.val();
+            setter(state);
+        });
+    }
+}
+
+function DatabaseGet3(setter){
+
+    var path = '/TC/EnableHW';
+    if (!path) {
+        console.warn(`NOT FOUND IN RTDB TREE`);
     } else {
         let ref = Firebase.database().ref(path);
         ref.on('value', snapshot => {
@@ -197,8 +221,10 @@ export {
     InitializeJsonTree,
     DatabaseSet,
     DatabaseSet2,
+    DatabaseSet3,
     DatabaseGet,
     DatabaseGet2,
+    DatabaseGet3,
     DatabaseAdd,
     DatabaseList,
 }

@@ -82,6 +82,9 @@ function makeTrainSim(newTrainId) {
             if(train.power > powermax){
                 train.power = powermax;
             }
+            else if(train.power < 0){
+                train.power = 0;
+            }
             console.log('+ ek: ', train.ek);
             console.log('+ ekm1: ', train.ekm1);
             console.log('+ uk: ', train.uk);

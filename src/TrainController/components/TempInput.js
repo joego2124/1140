@@ -1,15 +1,21 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import "../../components/componentStyles.css";
+import { DatabaseGet2, DatabaseSet2} from '../../Database';
 import Firebase from 'firebase';
 
 function TempInput({ varName, parentName, selectedTrain }) {
 
   const [desiredTemp, setDesiredTemp] = useState();
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    DatabaseSet2(parseInt(desiredTemp), varName, parentName);
+  };
+
   return (
     <div>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group
             onChange={e => setDesiredTemp(e.target.value)}
             className="mb-3"
@@ -18,14 +24,13 @@ function TempInput({ varName, parentName, selectedTrain }) {
               type="number" 
               name = "desiredTemp"
               min = "68"
-              max = "72"
-              placeholder={desiredTemp}>
+              max = "72">
             </Form.Control>
           </Form.Group>
+          <Button variant='primary' type='submit'>
+            Update
+          </Button>
         </Form>
-        <Button onClick={() => {
-            Firebase.database().ref(`/TrainList/${parentName}/InternalTemperature`).set(Number(desiredTemp));
-        }}>Update</Button>
     </div>
   );
 }

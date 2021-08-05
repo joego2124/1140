@@ -9,10 +9,11 @@ function VarDisplay({varName, message, parentName, units, selectedTrain}) {
   useEffect(() => {
     setTimeout(() => DatabaseGet2(setVari, varName, parentName), 500);
   }, [parentName]);
+
 	return (
 		<div className="componentDiv">
 			<p className="componentLabel">{message}: </p>
-			<div className="componentText">{selectedTrain != undefined ? Math.round((selectedTrain[varName] + Number.EPSILON) * 100 ) / 100 : vari}</div> {units}
+			<div className="componentText">{selectedTrain != undefined ? Math.round((vari + Number.EPSILON) * 100 ) / 100 : vari}</div> {units}
 		</div>
 	)
 }

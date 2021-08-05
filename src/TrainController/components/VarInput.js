@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { Form, Button, Container, Row } from 'react-bootstrap';
-import { DatabaseGetTrainListVal, DatabaseSet } from '../Database';
+import { DatabaseGet2, DatabaseSet2 } from '../Database';
 
 function VarInput({ varName, message, parentName }) {
   const [vari, setVari] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => DatabaseGetTrainListVal(setVari, varName, parentName), 500);
+    setTimeout(() => DatabaseGet2(setVari, varName, parentName), 500);
   }, [parentName]);
   
   const setValue = (val) => {
