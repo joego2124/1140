@@ -74,7 +74,7 @@ function StatesPanel({ selectedBlock, lineName }){
 								</Button>
 								<SetBeaconInfoModal 
 									show={beaconModalShow} 
-									lineName={`${lineName}`}
+									lineName={`${selectedBlock.Line}Line`}
 									onHide={() => {setBeaconModalShow(false)}}
 									selectedBlock={selectedBlock}
 								/>
@@ -118,18 +118,18 @@ function StatesPanel({ selectedBlock, lineName }){
 								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Authority`} />
 								{' '}Railway Crossing
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/TrackHeater`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/${selectedBlock.Line}Line/TrackHeater`} />
 								{' '}Track Heater
 								<br />
-								<VarDisplayMulti message='Current Temperature [°F]' path={`/${lineName}/CurrentTemperature`} />
+								<VarDisplayMulti message='Current Temperature [°F]' path={`/${selectedBlock.Line}Line/CurrentTemperature`} />
 								<br />
 								<Button size="sm" 
 									onClick={()=>
 										{
-											Firebase.database().ref(`/${lineName}/TrackHeater`).once( 'value', snapshot => {
+											Firebase.database().ref(`/${selectedBlock.Line}Line/TrackHeater`).once( 'value', snapshot => {
 												trackHeater = snapshot.val();
 											});
-											Firebase.database().ref(`/${lineName}/TrackHeater`).set( !trackHeater );;
+											Firebase.database().ref(`/${selectedBlock.Line}Line/TrackHeater`).set( !trackHeater );;
 										}}>
 									Toggle Heater
 								</Button>

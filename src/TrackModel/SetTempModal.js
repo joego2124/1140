@@ -13,7 +13,7 @@ const SetTempModal = (props) => {
 
     // Get temperature variables
     useEffect(() => {
-      Firebase.database().ref(`/${props.lineName}`).on('value', snapshot => {
+      Firebase.database().ref(`/${props.selectedBlock.Line}Line`).on('value', snapshot => {
         let lineData = snapshot.val();
         setDatabaseTemps({
           currentTemperature: lineData.CurrentTemperature,
@@ -27,9 +27,9 @@ const SetTempModal = (props) => {
       let localEnvironmentTemp = databaseTemps.currentTemperature 
       let localDesiredTemp = databaseTemps.desiredTrackTemperature 
         if( localEnvironmentTemp < localDesiredTemp) {
-          Firebase.database().ref(`/${props.lineName}/TrackHeater`).set( true );
+          Firebase.database().ref(`/${props.selectedBlock.Line}Line/TrackHeater`).set( true );
         } else {
-          Firebase.database().ref(`/${props.lineName}/TrackHeater`).set( false );
+          Firebase.database().ref(`/${props.selectedBlock.Line}Line/TrackHeater`).set( false );
         }
         console.log("actualTemp: ", localEnvironmentTemp);
         console.log("desiredTemp: ", localDesiredTemp);
@@ -74,13 +74,11 @@ const SetTempModal = (props) => {
 
       <Modal.Footer>
         <Button onClick={() => {
-            Firebase.database().ref(`/${props.lineName}/DesiredTrackTemperature`).set(Number(desiredTemp));
-            console.log("BUTTONactualTemp: ", desiredTemp);
+            Firebase.database().ref(`/${props.selectedBlock.Line}Line/DesiredTrackTemperature`).set(Number(desiredTemp));
         }}>Set Desired Track Temperature</Button>
 
         <Button onClick={() => {
-            Firebase.database().ref(`/${props.lineName}/CurrentTemperature`).set(Number(environmentTemp));
-            console.log("BUTTONactualTemp: ", environmentTemp);
+            Firebase.database().ref(`/${props.selectedBlock.Line}Line/CurrentTemperature`).set(Number(environmentTemp));
         }}>Set Environmental Temperature</Button>
 
         <Button onClick={props.onHide}>Cancel</Button>
