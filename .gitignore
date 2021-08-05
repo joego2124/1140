@@ -17,7 +17,10 @@
 .env.development.local
 .env.test.local
 .env.production.local
-**/logs
+
+database-debug.log
+firebase-debug.log
+ui-debug.log
 
 npm-debug.log*
 yarn-debug.log*
