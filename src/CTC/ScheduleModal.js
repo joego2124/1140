@@ -27,7 +27,7 @@ const ScheduleModal = (props) => {
 				newTrain.PreviousBlock = 0;
 				newTrain.RouteIndex = 1;
 				Firebase.database().ref(`/TrainList/${train.TrainId}`).set(newTrain);
-				Firebase.database().ref(`/TrainList/${train.Line}/0/Occupancy`).set(1);
+				Firebase.database().ref(`/${train.Line}/0/Occupancy`).set(1);
 			});
 		}
 	}, [file]);
@@ -40,12 +40,12 @@ const ScheduleModal = (props) => {
 				labelList.push(
 					<tr>
 						<td>{trainName}</td>
-						<td>{trainObj.Line}</td>
-						<td>{trainObj.Route[trainObj.RouteIndex > 1 ? trainObj.RouteIndex - 1 : 0]}</td>
-						<td>{trainObj.CurrentBlock}</td>
-						<td>{trainObj.Route[trainObj.RouteIndex < trainObj.Route.length ? trainObj.RouteIndex + 1 : 0]}</td>
-						<td>{trainObj.NextStation}</td>
-						<td>{trainObj.DepartureTime}</td>
+						<td>{trainObj?.Line}</td>
+						<td>{trainObj?.Route[trainObj.RouteIndex > 1 ? trainObj.RouteIndex - 1 : 0]}</td>
+						<td>{trainObj?.CurrentBlock}</td>
+						<td>{trainObj?.Route[trainObj.RouteIndex < trainObj.Route.length ? trainObj.RouteIndex + 1 : 0]}</td>
+						<td>{trainObj?.NextStation}</td>
+						<td>{trainObj?.DepartureTime}</td>
 						<td>
 							<Button variant="outline-dark">Toggle Stops</Button>
 						</td>
@@ -88,9 +88,8 @@ const ScheduleModal = (props) => {
 				</Table>
       </Modal.Body>
       <Modal.Footer>
-				{/* <Button variant="dark" type="file" onChange={handleChange}>Upload Schedule</Button> */}
 				<Form.Group controlId="formFile" className="mb-3">
-					<Form.Label>Default file input example</Form.Label>
+					<Form.Label>Upload Schedule</Form.Label>
 					<Form.Control type="file" onChange={handleChange}/>
 				</Form.Group>
         <Button onClick={props.onHide}>Close</Button>
