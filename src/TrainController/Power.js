@@ -6,9 +6,11 @@ var simList = [];
 
 Firebase.database().ref('/TrainIds').on('value', snapshot => {
     simList = [];
-    Object.entries(snapshot.val()).forEach(arr => { 
-        simList.push(makeTrainSim(arr[1]));
-    });
+    if(snapshot.val() != undefined && snapshot.val() != null){
+        Object.entries(snapshot.val()).forEach(arr => { 
+            simList.push(makeTrainSim(arr[1]));
+        });
+    }
 });
 
 function updatePower() {

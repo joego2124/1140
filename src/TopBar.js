@@ -29,7 +29,7 @@ function TopBar() {
 		if(!paused) {
 			Firebase.database().ref('/SimulationClock/Time').transaction( time => {
 				physicsTick();
-				// updatePower();
+				updatePower();
 
 				// These functions run every hour
 				console.log(time % 10);

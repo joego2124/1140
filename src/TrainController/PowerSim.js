@@ -32,8 +32,17 @@ function makeTrainSim(newTrainId) {
     Firebase.database().ref(`/TrainList/${newTrainId}/EBrakeStatus`).on('value', snapshot => { train.ebrakestatus = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/BrakeFailure`).on('value', snapshot => { train.brakefailure = snapshot.val(); });    
     Firebase.database().ref(`/TrainList/${newTrainId}/EngineFailure`).on('value', snapshot => { train.enginefailure = snapshot.val(); });    
-    Firebase.database().ref(`/TrainList/${newTrainId}/SignalFailure`).on('value', snapshot => { train.signalfailure = snapshot.val(); });        
-    Firebase.database().ref(`/TrainList/${newTrainId}/BlockAuthority`).on('value', snapshot => { train.blockauthority = snapshot.val(); });
+    Firebase.database().ref(`/TrainList/${newTrainId}/SignalFailure`).on('value', snapshot => { train.signalfailure = snapshot.val(); });  
+    Firebase.database().ref(`/TrainList/${newTrainId}/Line`).on('value', snapshot => { train.line = snapshot.val(); });        
+    Firebase.database().ref(`/TrainList/${newTrainId}/CurrentBlock`).on('value', snapshot => {
+         train.block = snapshot.val();
+         Firebase.database().ref(`/${train.line}/${train.block}/Authority`).once('value', (snapshot) => {
+             train.blockauthority = snapshot.val();
+         });
+         });
+    
+    
+    // Firebase.database().ref(`/TrainList/${newTrainId}/BlockAuthority`).on('value', snapshot => { train.blockauthority = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Kp`).on('value', snapshot => { train.kp = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Ki`).on('value', snapshot => { train.ki = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/ek`).on('value', snapshot => { train.ek = snapshot.val(); });
@@ -54,6 +63,12 @@ function makeTrainSim(newTrainId) {
         let powermax = 120;
         let anyfailure = !train.blockauthority || train.sbrakestatus || train.ebrakestatus || train.brakefailure || train.enginefailure || train.signalfailure;
         if(anyfailure){
+            console.log(train.blockauthority);
+            console.log(train.sbrakestatus);
+            console.log(train.ebrakestatus);
+            console.log(train.brakefailure);
+            console.log(train.enginefailure);
+            console.log(train.signalfailure);
             train.power = 0;
             console.log('Power set low (0)')
         }
