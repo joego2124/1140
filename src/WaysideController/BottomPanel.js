@@ -88,7 +88,7 @@ const BottomPanel = ({
     });
   }
 
-  useEffect(() => getOccupancyData(), [selectedBlock.Occupancy]);
+  useEffect(() => getOccupancyData(), [selectedBlock]);
 
   function getAuthorityData() {
     let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
@@ -99,7 +99,7 @@ const BottomPanel = ({
     });
   }
 
-  useEffect(() => getAuthorityData(), [selectedBlock.Authority]);
+  useEffect(() => getAuthorityData(), [selectedBlock]);
 
   useEffect(() => handleBlocks(), [selectedWayside]);
 
