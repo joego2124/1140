@@ -150,7 +150,7 @@ function makeTrainSim(newTrainId) {
   Firebase.database()
     .ref(`/TrainList/${newTrainId}/PreviousBlock`)
     .on('value', (snapshot) => {
-      const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
+      const safeblock = snapshot.val() < 0 ? 0 : snapshot.val();
       if (safeblock != snapshot.val())
         console.warn('BLOCK ID OUT OF RANGE: ', newTrainId, snapshot.val());
       train.previousblocknumber = safeblock;
@@ -295,16 +295,16 @@ function makeTrainSim(newTrainId) {
           // console.log(this.blocknumber,'state', snapshot.val(), this.switchstate, 'db');
         });
 
-      const oldblock = this.blocknumber;
+      var oldblock = this.blocknumber;
       //setup sim for red line
       const line =
         this.line == 'GreenLine' ? trackLayout.greenLine : trackLayout.redLine;
 
       //hard code to account for yard
       var connectors, newblock;
-      do {
+      //do {
         if (this.blocknumber != 0) {
-          const block = line.find(
+          var block = line.find(
             (x) => x.blockId == (newblock ?? this.blocknumber)
           );
           // console.log('block', block)
@@ -318,9 +318,25 @@ function makeTrainSim(newTrainId) {
           if (this.line.toLowerCase().includes('green')) connectors = [62];
           if (this.line.toLowerCase().includes('red')) connectors = [9];
         }
+
+        do{
+          console.log("NEWBLOCK BEFORE: " + newblock);
+          console.log("PREVIOUS LOCAL BEFORE: " + this.previousblocknumber);
+        var temp = this.previousblocknumber;
         newblock = connectors.find(
           (x) => x != null && (x > 0 ? x : 0) != this.previousblocknumber
         );
+        block = line.find(
+          (x) => x.blockId == (newblock ?? this.blocknumber)
+        );
+        connectors = block.connectors[this.switchstate];
+        this.previousblocknumber = this.blocknumber;
+        this.blocknumber = newblock;
+        console.log("NEWBLOCK: " + newblock);
+        console.log("PREVIOUS LOCAL: " + this.previousblocknumber);
+        }
+        while((newblock != null && newblock != undefined) && newblock != Math.trunc(newblock))
+
         //preform bounds checking on block id
         if (newblock == undefined) {
           console.warn('RAN OFF EDGE OF TRACK: valid connection not found');
@@ -328,14 +344,14 @@ function makeTrainSim(newTrainId) {
         }
         if (newblock < 0) newblock = 0;
         console.log('exiting to block :', newblock)
-      } while (newblock != Math.floor(newblock));
+      //} while (newblock != Math.floor(newblock));
       {
         Firebase.database()
           .ref(`/TrainList/${this.trainId}/CurrentBlock`)
           .set(newblock).then(res => {
             Firebase.database()
             .ref(`/TrainList/${this.trainId}/PreviousBlock`)
-            .set(oldblock);
+            .set(this.previousblocknumber);
           })
 
 
