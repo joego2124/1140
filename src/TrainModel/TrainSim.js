@@ -27,6 +27,8 @@ function makeTrainSim(newTrainId) {
   train.passengers = 0;
   train.carCount = 1;
   train.Stations = [];
+  train.brakeFailure = false;
+  train.engineFailure = false;
 
   Firebase.database()
     .ref(`/TrainList/${newTrainId}/Power`)
@@ -62,6 +64,16 @@ function makeTrainSim(newTrainId) {
     .ref(`/TrainList/${newTrainId}/EBrakeStatus`)
     .on('value', (snapshot) => {
       train.ebrake = snapshot.val();
+    });
+  Firebase.database()
+    .ref(`/TrainList/${newTrainId}/BrakeFailure`)
+    .on('value', (snapshot) => {
+      train.brakeFailure = snapshot.val();
+    });
+  Firebase.database()
+    .ref(`/TrainList/${newTrainId}/EngineFailure`)
+    .on('value', (snapshot) => {
+      train.engineFailure = snapshot.val();
     });
   Firebase.database()
     .ref(`/TrainList/${newTrainId}/NextStation`)
@@ -160,7 +172,7 @@ function makeTrainSim(newTrainId) {
   train.simulateTrain = function () {
     console.log('simulating', this.trainId, this.power);
 
-    if (this.ebrake == true) {
+    if (this.ebrake == true && this.brakeFailure == false) {
       //e brakes
       if (Math.abs(this.velocity) < 10) {
         Firebase.database().ref(`/TrainList/${this.trainId}/Velocity`).set(0);
@@ -174,7 +186,7 @@ function makeTrainSim(newTrainId) {
           .set(-8.96);
       }
     } else {
-      if (this.sbrake == true) {
+      if (this.sbrake == true && this.brakeFailure == false) {
         //s brakes
         if (Math.abs(this.velocity) < 4) {
           Firebase.database().ref(`/TrainList/${this.trainId}/Velocity`).set(0);
@@ -187,7 +199,7 @@ function makeTrainSim(newTrainId) {
             .ref(`/TrainList/${this.trainId}/Acceleration`)
             .set(-3.9);
         }
-      } else {
+      } else if(this.engineFailure == false) {
         //no brakes
         var acc =
           (this.power * 740) /
@@ -261,8 +273,9 @@ function makeTrainSim(newTrainId) {
         );
     }
     if(this.count < 60) {this.count +=1; console.log('station wait',this.count);}
-    if(this.count == 60)
-      Firebase.database().ref(`/${this.line}/${this.blocknumber}/Authority`).set(1);
+    if(this.count == 60){
+      Firebase.database().ref(`/TrainList/${this.trainId}/DoorStatus`).set(false);
+      Firebase.database().ref(`/${this.line}/${this.blocknumber}/Authority`).set(1);}
 
 
 
@@ -374,6 +387,7 @@ function makeTrainSim(newTrainId) {
           this.count = 0;
           console.log('stopping at station');
           Firebase.database().ref(`/${this.line}/${this.newblock}/Authority`).set(0);
+          Firebase.database().ref(`/${this.line}/${this.newblock}/DoorStatus`).set(true);
         }
 
 
