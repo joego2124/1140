@@ -17,6 +17,7 @@ function PropertiesPanel({ selectedBlock, lineName }) {
 
 	const [tempModalShow, setTempModalShow] = useState(false);
 
+	console.log("DATABASE PATH", selectedBlock.databasePath);
 	return (
 		// Properties title
 		<div style={{
@@ -37,7 +38,9 @@ function PropertiesPanel({ selectedBlock, lineName }) {
 				<br />
 				<VarDisplayMulti message='Elevation [ft]' path={`${selectedBlock.databasePath}/Elevation`} />
 				<br />
-				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`${selectedBlock.databasePath}/DesiredTrackTemperature`} />
+				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`${lineName}/DesiredTrackTemperature`} />
+				<br />
+				<VarDisplayMulti message='Grade [%]' path={`${selectedBlock.databasePath}/BlockGrade`} />
 				<br />
 				<VarDisplayMulti message='Railway Crossing' path={`${selectedBlock.databasePath}/isLevelCrossingBlock`} />
 				<br />
