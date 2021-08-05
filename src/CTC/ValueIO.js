@@ -19,7 +19,7 @@ const ValueIO = ({
 					<Dropdown
 						onSelect={e => {
 							Firebase.database().ref(valueDatabasePath).set((e == 0 || e == 1) ? Number(e) : e);
-							console.log(`[CTC/ManiPanel/ValueIO]cevent key: ${e}, valueDatabasePath: ${valueDatabasePath}`);
+							console.log(`[CTC/ManiPanel/ValueIO] event key: ${e}, valueDatabasePath: ${valueDatabasePath}`);
 						}}
 					>
 						<Dropdown.Toggle 
