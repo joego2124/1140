@@ -31,7 +31,7 @@ exports.changeTrainLength = functions.database.ref('/TrainList/{trainId}/CarCoun
     //since the database write uses a value from the previous operation we will ensure it only gets called once the previous operation is done.
     //the entire stack of calls will return one promise that we must add to the list to return from our function
     promises.push(passengers = database.ref(`/TrainList/${trainId}/Passengers`).get().then( (snapshot => {
-        database.ref(`/TrainList/${trainId}/Mass`).set((carCount * 90169) + (snapshot.val() * 170))
+        database.ref(`/TrainList/${trainId}/Mass`).set((carCount * 81800) + (snapshot.val() * 170))
     })));
 
     return Promise.all(promises);
@@ -44,7 +44,7 @@ exports.changePassengers = functions.database.ref('/TrainList/{trainId}/Passenge
     const database = admin.database();
 
     return database.ref(`/TrainList/${trainId}/CarCount`).get().then( (snapshot) => {
-        database.ref(`/TrainList/${trainId}/Mass`).set((snapshot.val() * 90169) + (passengers * 170))
+        database.ref(`/TrainList/${trainId}/Mass`).set((snapshot.val() * 81800) + (passengers * 170))
     });
 })
 

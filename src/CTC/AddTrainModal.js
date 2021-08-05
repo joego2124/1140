@@ -234,7 +234,7 @@ const trainTemplate = {
 	LightState : false,
     Line : "GreenLine",
 	ManualMode: false,
-	Mass: 277817,
+	Mass: 90169,
 	NextStation: 0,
 	Passengers: 0,
 	Position : 0,

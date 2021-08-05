@@ -86,10 +86,12 @@ function makeTrainSim(newTrainId) {
   Firebase.database()
     .ref(`/TrainList/${newTrainId}/CurrentBlock`)
     .on('value', (snapshot) => {
+      console.log('CURRENT BLOCK: ' + snapshot.val());
       const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
       if (safeblock!== snapshot.val())
         console.warn('BLOCK ID OUT OF RANGE: ', newTrainId, snapshot.val());
       train.blocknumber = safeblock;
+      console.log('SAFEBLOCK ' + safeblock);
 
       Firebase.database()
             .ref(`/${train.line}/${safeblock}/BlockGrade`)
@@ -106,8 +108,10 @@ function makeTrainSim(newTrainId) {
                 .set(snapshot.val());
             });
           Firebase.database()
-            .ref(`/${train.line}/${safeblock}/Authority`)
+            .ref(`/${train.line}/${train.blocknumber}/Authority`)
             .on('value', (snapshot) => {
+              console.log(`/${train.line}/${train.blocknumber}/Authority` + "\n" + snapshot.val());
+              console.log();
               Firebase.database()
                 .ref(`/TrainList/${train.trainId}/BlockAuthority`)
                 .set(snapshot.val());
@@ -184,7 +188,7 @@ function makeTrainSim(newTrainId) {
           (this.power * 740) /
             (this.mass * (this.velocity != 0 ? this.velocity : 0.1)) -
           32.2 * Math.sin((this.grade * Math.PI) / 180);
-        // console.log( 'power:',this.power, 'mass:',this.mass,'velocity:',this.velocity,'grade:',this.grade,'acceleration:', acc );
+        console.log( 'power:',this.power, 'mass:',this.mass,'velocity:',this.velocity,'grade:',this.grade,'acceleration:', acc );
         Firebase.database()
           .ref(`/TrainList/${this.trainId}/Acceleration`)
           .set(acc);
@@ -271,6 +275,7 @@ function makeTrainSim(newTrainId) {
         if (newblock < 0) newblock = 0;
       } while (newblock !== Math.floor(newblock));
       {
+        console.log("FDSAFDSAFDSAFDSAFDSAFDSAFDSAFDSAFDSA");
         Firebase.database()
           .ref(`/TrainList/${this.trainId}/CurrentBlock`)
           .set(newblock);
