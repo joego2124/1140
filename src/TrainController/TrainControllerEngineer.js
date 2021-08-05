@@ -16,6 +16,14 @@ function TrainContollerEngineer() {
 		DatabaseGet(setTrainsList, "TrainList");
 	}, []);
 
+	useEffect(() => {
+		Firebase.database().ref('/TrainList').on('value', snapshot => {
+			let list = snapshot.val();
+			list.databasePath = "/TrainList";
+			setTrainsList(list);
+		});
+	}, []);
+
 	function getParentNameData() {
     let link = 'TrainList/' + selectedTrain.TrainId + '/TrainId';
     let ref = Firebase.database().ref(link);

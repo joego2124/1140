@@ -1,15 +1,21 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import "../../components/componentStyles.css";
+import { DatabaseGet2, DatabaseSet2} from '../../Database';
 import Firebase from 'firebase';
 
 function KiInput({ varName, parentName, selectedTrain }) {
 
   const [ki, setKi] = useState();
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    DatabaseSet2(parseInt(ki), varName, parentName);
+  };
+
   return (
     <div>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group
             onChange={e => setKi(e.target.value)}
             className="mb-3"
@@ -17,15 +23,13 @@ function KiInput({ varName, parentName, selectedTrain }) {
             <Form.Control
               type="number" 
               name = "ki"
-              min = "68"
-              max = "72"
-              placeholder={ki}>
+              min = "0">
             </Form.Control>
           </Form.Group>
+          <Button variant='primary' type='submit'>
+            Update
+          </Button>
         </Form>
-        <Button onClick={() => {
-            Firebase.database().ref(`/TrainList/${parentName}/Ki`).set(Number(ki));
-        }}>Update</Button>
     </div>
   );
 }

@@ -10,6 +10,8 @@ import FailureStatus from './FailureStatus';
 import TrainsPanel from '../CTC/TrainsPanel.js';
 import { DatabaseGet, DatabaseSet }  from "../Database.js";
 import Firebase from 'firebase';
+import HardwareOptions from './HardwareOptions';
+import StationOptions from './StationOptions';
 
 function TrainContollerDriver() {
 
@@ -37,6 +39,11 @@ function TrainContollerDriver() {
 		<div>
 			<div style={{ textAlign: `right` }} ><mark><strong>{selectedTrain.TrainId}</strong></mark></div>
 			<header>
+			<TrainsPanel 
+					setSelectedTrain={setSelectedTrain}
+					setAddTrainModal={setAddTrainModal}
+					trainsList={trainsList}
+				/>
 				<div style={{ paddingTop: `100px`, paddingLeft: `300px`, paddingRight: `150px` }}>
 				<Container>
 					<Col><DoorOptions selectedTrain={selectedTrain} parentName={parentName}/><BrakingOptions selectedTrain={selectedTrain} parentName={parentName}/></Col>
@@ -44,13 +51,10 @@ function TrainContollerDriver() {
 					<Col><TemperatureOptions selectedTrain={selectedTrain} parentName={parentName}/></Col>
 					<Col><FailureStatus selectedTrain={selectedTrain} parentName={parentName}/></Col>
 					<Col><TrainStatus selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><HardwareOptions selectedTrain={selectedTrain} parentName={parentName}></HardwareOptions>
+					<StationOptions selectedTrain={selectedTrain} parentName={parentName}></StationOptions></Col>
 				</Container>
 				</div>
-				<TrainsPanel 
-					setSelectedTrain={setSelectedTrain}
-					setAddTrainModal={setAddTrainModal}
-					trainsList={trainsList}
-				/>
 			</header>
 		</div>
 	)
