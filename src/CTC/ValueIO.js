@@ -18,8 +18,14 @@ const ValueIO = ({
 				valueType === "input" ? (
 					<Dropdown
 						onSelect={e => {
-							Firebase.database().ref(valueDatabasePath).set((e == 0 || e == 1) ? Number(e) : e);
-							console.log(`[CTC/ManiPanel/ValueIO]cevent key: ${e}, valueDatabasePath: ${valueDatabasePath}`);
+							let newVal = e;
+							if (e == 0 || e == 1) {
+								newVal = Number(e);
+							} else if (typeof e == "boolean") {
+								newVal = Boolean(e);
+							}
+							Firebase.database().ref(valueDatabasePath).set(newVal);
+							console.log(`[CTC/ManiPanel/ValueIO] event key: ${e}, valueDatabasePath: ${valueDatabasePath}`);
 						}}
 					>
 						<Dropdown.Toggle 

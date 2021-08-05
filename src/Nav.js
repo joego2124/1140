@@ -6,6 +6,8 @@ import { IoTrainOutline } from 'react-icons/io5';
 import { BiSitemap } from 'react-icons/bi';
 import { GiRailway } from 'react-icons/gi';
 import { GiRadarDish } from 'react-icons/gi';
+import { BsGearWide } from 'react-icons/bs';
+import { FaRegIdBadge } from 'react-icons/fa';
 
 function NavComponent() {
   const history = useHistory();
@@ -48,13 +50,13 @@ function NavComponent() {
         </NavItem>
         <NavItem eventKey='TrainControllerDriver'>
           <NavIcon>
-            <AiOutlineControl size='1.75em' />
+            <FaRegIdBadge size='1.75em' />
           </NavIcon>
           <NavText>Train Controller (Driver)</NavText>
         </NavItem>
         <NavItem eventKey='TrainControllerEngineer'>
           <NavIcon>
-            <AiOutlineControl size='1.75em' />
+            <BsGearWide size='1.75em' />
           </NavIcon>
           <NavText>Train Controller (Engineer)</NavText>
         </NavItem>

@@ -5,15 +5,19 @@
   margin-bottom: 25px;
 }
 
+.button {
+  flex-grow: 1;
+  margin: 10px;
+  margin-left: 25px;
+  margin-right: 25px;
+  border-radius: 25px;
+}
+
 .showWaysideControllersButton {
   position: absolute;
   top: 100px;
   left: 100px;
   z-index: 1;
-  /* display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center; */
 }
 
 .showBottomPanelButton {
@@ -21,10 +25,6 @@
   bottom: 25px;
   left: 50%;
   z-index: 1;
-  /* display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center; */
 }
 
 .buttonDiv {
@@ -137,21 +137,6 @@
   height: 100%;
 }
 
-.switch1Style {
-  position: absolute;
-  bottom: 12.4em;
-  left: 54.2%;
-  z-index: 1;
-}
-
-.switch2Style {
-  transform: rotate(90deg);
-  position: absolute;
-  bottom: 17.5em;
-  left: 54%;
-  z-index: 1;
-}
-
 .blockSelect {
   text-align: center;
   font-weight: bold;
@@ -180,4 +165,12 @@
 .dataValue {
   padding-left: 1em;
   font-weight: 500;
+}
+
+svg {
+  pointer-events: none;
+}
+
+path {
+  pointer-events: auto;
 }

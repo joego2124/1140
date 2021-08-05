@@ -1,9 +1,12 @@
-	import React, { useState } from 'react';
+	import React, { useState, useCallback } from 'react';
 import SlidingPane from "react-sliding-pane";
 import { Button, Dropdown } from 'react-bootstrap';
 import ValueIO from "./ValueIO";
 
 import "./styles.css"
+
+var trackLayout = require("./TrackLayout.json");
+
 
 const MainPanel = ({
 	setModalShow,
@@ -13,6 +16,30 @@ const MainPanel = ({
 
 	const [open, setOpen] = useState(true);
 	const [manualMode, setManualMode] = useState(false);
+
+	const formatSwitchState = useCallback(switchState => {
+		console.log("formatted switch state");
+		let layoutBlock = trackLayout[selectedBlock.Line?.toLowerCase() + "Line"]
+			?.find(block => Math.trunc(block.blockId) == selectedBlock.BlockNumber);
+
+		if (layoutBlock != undefined) {
+			if (layoutBlock.connectors.length < 2) return "N/A"
+			let str = "";
+			let flag = false;
+			layoutBlock.connectors[switchState].forEach(id => {
+				str += id != null ? id : "";
+				if (!flag && id != null) {
+					flag = true;
+					str += " : ";	
+				};
+			});
+			return str;
+		}
+		
+		return "N/A";
+	}, [selectedBlock])
+
+	console.log("[CTC/MainPanel] selected block changed: ", selectedBlock);
 
 	return (
 		<div>
@@ -107,26 +134,26 @@ const MainPanel = ({
 								}}
 							/>
 							<ValueIO 
-								valueType="input"
+								valueType={selectedBlock.isSwitchBlock == 1 ? "input" : "output"}
 								valueLabel="Switch State"
 								valueDatabasePath={`${selectedBlock.databasePath}/SwitchState`}
 								valueData={{
-									value: selectedBlock.SwitchState === 1 ? "TRUE" : "FALSE",
+									value: !formatSwitchState(selectedBlock.SwitchState) ? "N/A" : formatSwitchState(selectedBlock.SwitchState),
 									dropdownList: [
-										<Dropdown.Item eventKey={0}>FALSE</Dropdown.Item>,
-										<Dropdown.Item eventKey={1}>TRUE</Dropdown.Item>,
+										<Dropdown.Item eventKey={1}>{formatSwitchState(1)}</Dropdown.Item>,
+										<Dropdown.Item eventKey={0}>{formatSwitchState(0)}</Dropdown.Item>,
 									],
 								}}
 							/>
 							<ValueIO 
 								valueType="input"
 								valueLabel="Maintenance Status"
-								valueDatabasePath={`${selectedBlock.databasePath}/ManualMode`}
+								valueDatabasePath={`${selectedBlock.databasePath}/MaintenanceStatus`}
 								valueData={{
-									value: (new Boolean(selectedTrain.ManualMode)).toString().toUpperCase(),
+									value: selectedBlock.MaintenanceStatus == 1 ? "TRUE" : "FALSE",
 									dropdownList: [
-										<Dropdown.Item eventKey={true}>TRUE</Dropdown.Item>,
-										<Dropdown.Item eventKey={false}>FALSE</Dropdown.Item>,
+										<Dropdown.Item eventKey={1}>TRUE</Dropdown.Item>,
+										<Dropdown.Item eventKey={0}>FALSE</Dropdown.Item>,
 									],
 								}}
 							/>

@@ -259,8 +259,7 @@ exports.parseFile = (plc) => {
   // -------- WRITER HELPER -----------
   function jsWriter(tokens) {
     var header =
-      "var firebase = require('firebase-admin');\n\n" +
-      'var database = admin.database();\n\n';
+    "";
 
     // TODO:
     // -VARIABLE LINE
@@ -271,7 +270,7 @@ exports.parseFile = (plc) => {
       "\tvar ctcRef = firebase.database().ref('CTC/SuggestedAuthority/{1}/');\n" +
       '\tctcRef.get().then((snapshot) => {\n' +
       '\tconst suggestedAuthority = snapshot.val();\n' +
-      '\t\tupdateAuth(ctcRef);\n' +
+      '\t\tupdateAuth(suggestedAuthority);\n' +
       '\t\tupdateOccupancy(data);\n' +
       '\t\tupdateSwitchState(data);\n' +
       '\t\tlogic();\n' +
@@ -385,7 +384,7 @@ exports.parseFile = (plc) => {
           javascript += 'var occupancy = [];\n';
           javascript += 'var authority = [];\n\n';
 
-          javascript += String.format(listener, lineColor);
+          javascript += String.format(listener, lineColor, lineColor);
 
           for (let j = 0; j < tokens[i].data.length; j++) {
             blocks.push(tokens[i].data[j]);
@@ -672,7 +671,7 @@ exports.parseFile = (plc) => {
     //javascript += updateCall;
 
     update +=
-      'firebase.database().ref().update(updates).then(function(error){\nprocess.exit();\n});\n';
+      'firebase.database().ref().update(updates).then(function(error){\n\n});\n';
     update += '\n}';
 
     javascript += update;

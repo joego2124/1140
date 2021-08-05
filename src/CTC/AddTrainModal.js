@@ -211,6 +211,7 @@ const trainTemplate = {
 
 	Acceleration: 0,
 	AccelerationLimit: 5,
+	AnyFailures: false,
 	BlockAuthority : 0,
 	BlockLength : 50,
 	BrakeFailure: false,

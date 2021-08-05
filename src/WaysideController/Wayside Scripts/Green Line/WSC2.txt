@@ -2,6 +2,7 @@ WSC2: Green Line
 
 blocks: 23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,150,149,148,147,146,145,144,143,142,141,140,139,138,137,136,135,134,133,132,131,130
 listener: 29,18,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12
+switch: 29
 
 branch-1: 150,149,148
 branch-2: 147,146,145
@@ -28,5 +29,5 @@ IF: occupancy{blocks-31} SET authority{branch-6} TO 0
 IF: occupancy{branch-8} SET authority{branch-7} TO 0
 IF: occupancy{branch-7} SET authority{blocks-31} TO 0
 
-SET switch TO 1
+SET: switch TO (1)
 IF: occupancy{listener} SET switch TO 0
