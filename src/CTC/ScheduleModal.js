@@ -36,7 +36,7 @@ const ScheduleModal = (props) => {
 		var labelList = [];
 		console.log(props.trainsList);
 		for (const [trainName, trainObj] of Object.entries(props.trainsList)) {
-			if (trainName != "databasePath") {
+			if (trainName != "databasePath" && trainObj?.Route != undefined) {
 				labelList.push(
 					<tr>
 						<td>{trainName}</td>
