@@ -34,7 +34,8 @@ const updateSuggestedAuthority = (database, line) => {
     for (const [trainId, train] of Object.entries(trainListObj)) {
       for (let i = train.RouteIndex; i < train.RouteIndex + 3; i++) {
         if (i < train.Route.length) {
-          authorizedBlocks.push(train.Route[i]); //add authorized block's blockId to array
+          console.log(train.Route[i] < 0 ? 0 : train.Route[i]);
+          authorizedBlocks.push(train.Route[i] < 0 ? 0 : train.Route[i]); //add authorized block's blockId to array
         }
       }
     }
@@ -43,9 +44,10 @@ const updateSuggestedAuthority = (database, line) => {
     let lineLayout = [];
     trackLayout[`${line.toLowerCase().includes("red") ? "red" : "green"}Line`].forEach(block => {
       if (block.blockId % 1 == 0) {
+        let blockNumber = block.blockId < 0 ? 0 : block.blockId;
         lineLayout.push({
-          blockId: block.blockId < 0 ? 0 : block.blockId,
-          authority: (authorizedBlocks.find(v => v == block.blockId) != undefined ? 1 : 0),
+          blockId: blockNumber,
+          authority: (authorizedBlocks.find(v => v == blockNumber) != undefined ? 1 : 0),
         });
       }
     });

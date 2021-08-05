@@ -90,6 +90,41 @@ function makeTrainSim(newTrainId) {
       if (safeblock!== snapshot.val())
         console.warn('BLOCK ID OUT OF RANGE: ', newTrainId, snapshot.val());
       train.blocknumber = safeblock;
+
+      Firebase.database()
+            .ref(`/${train.line}/${safeblock}/BlockGrade`)
+            .on('value', (snapshot) => {
+              Firebase.database()
+                .ref(`/TrainList/${train.trainId}/Grade`)
+                .set(snapshot.val());
+            });
+          Firebase.database()
+            .ref(`/${train.line}/${safeblock}/BlockLength`)
+            .on('value', (snapshot) => {
+              Firebase.database()
+                .ref(`/TrainList/${train.trainId}/BlockLength`)
+                .set(snapshot.val());
+            });
+          Firebase.database()
+            .ref(`/${train.line}/${safeblock}/Authority`)
+            .on('value', (snapshot) => {
+              Firebase.database()
+                .ref(`/TrainList/${train.trainId}/BlockAuthority`)
+                .set(snapshot.val());
+            });
+          Firebase.database()
+            .ref(`/${train.line}/${safeblock}/SpeedLimit`)
+            .on('value', (snapshot) => {
+              Firebase.database()
+                .ref(`/TrainList/${train.trainId}/SpeedLimit`)
+                .set(snapshot.val());
+            });
+  
+          Firebase.database()
+            .ref(`/${train.line}/${safeblock}/Station`)
+            .on('value', (snapshot) => {
+              train.Station = snapshot.val();
+            });
     });
   Firebase.database()
     .ref(`/TrainList/${newTrainId}/PreviousBlock`)
@@ -250,40 +285,40 @@ function makeTrainSim(newTrainId) {
         Firebase.database().ref(`/${this.line}/${oldblock}/MaxCapacity`).set(0);
 
         //set new block values
-        Firebase.database()
-          .ref(`/${this.line}/${newblock}/BlockGrade`)
-          .once('value', (snapshot) => {
-            Firebase.database()
-              .ref(`/TrainList/${this.trainId}/Grade`)
-              .set(snapshot.val());
-          });
-        Firebase.database()
-          .ref(`/${this.line}/${newblock}/BlockLength`)
-          .once('value', (snapshot) => {
-            Firebase.database()
-              .ref(`/TrainList/${this.trainId}/BlockLength`)
-              .set(snapshot.val());
-          });
-        Firebase.database()
-          .ref(`/${this.line}/${newblock}/Authority`)
-          .once('value', (snapshot) => {
-            Firebase.database()
-              .ref(`/TrainList/${this.trainId}/BlockAuthority`)
-              .set(snapshot.val());
-          });
-        Firebase.database()
-          .ref(`/${this.line}/${newblock}/SpeedLimit`)
-          .once('value', (snapshot) => {
-            Firebase.database()
-              .ref(`/TrainList/${this.trainId}/SpeedLimit`)
-              .set(snapshot.val());
-          });
-
-        Firebase.database()
-          .ref(`/${this.line}/${newblock}/Station`)
-          .once('value', (snapshot) => {
-            this.Station = snapshot.val();
-          });
+          // Firebase.database()
+          //   .ref(`/${this.line}/${newblock}/BlockGrade`)
+          //   .on('value', (snapshot) => {
+          //     Firebase.database()
+          //       .ref(`/TrainList/${this.trainId}/Grade`)
+          //       .set(snapshot.val());
+          //   });
+          // Firebase.database()
+          //   .ref(`/${this.line}/${newblock}/BlockLength`)
+          //   .on('value', (snapshot) => {
+          //     Firebase.database()
+          //       .ref(`/TrainList/${this.trainId}/BlockLength`)
+          //       .set(snapshot.val());
+          //   });
+          // Firebase.database()
+          //   .ref(`/${this.line}/${newblock}/Authority`)
+          //   .on('value', (snapshot) => {
+          //     Firebase.database()
+          //       .ref(`/TrainList/${this.trainId}/BlockAuthority`)
+          //       .set(snapshot.val());
+          //   });
+          // Firebase.database()
+          //   .ref(`/${this.line}/${newblock}/SpeedLimit`)
+          //   .on('value', (snapshot) => {
+          //     Firebase.database()
+          //       .ref(`/TrainList/${this.trainId}/SpeedLimit`)
+          //       .set(snapshot.val());
+          //   });
+  
+          // Firebase.database()
+          //   .ref(`/${this.line}/${newblock}/Station`)
+          //   .on('value', (snapshot) => {
+          //     this.Station = snapshot.val();
+          //   });
 
         //load becon info
         // var beacon;
@@ -293,7 +328,7 @@ function makeTrainSim(newTrainId) {
               newblock - oldblock > 0 ? 'Beacon+1' : 'Beacon-1'
             }`
           )
-          .once('value', (snapshot) => {
+          .on('value', (snapshot) => {
             var beacon = snapshot.val();
             if (beacon?.CurrentStation != 0) {
               if (
@@ -316,7 +351,7 @@ function makeTrainSim(newTrainId) {
               newblock - oldblock > 0 ? 'Beacon-1' : 'Beacon+1'
             }`
           )
-          .once('value', (snapshot) => {
+          .on('value', (snapshot) => {
             var beacon = snapshot.val();
             if (beacon.CurrentStation != 0) {
               if (this.CurrentStation == beacon.CurrentStation) {

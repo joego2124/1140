@@ -54,6 +54,12 @@ function makeTrainSim(newTrainId) {
         let powermax = 120;
         let anyfailure = !train.blockauthority || train.sbrakestatus || train.ebrakestatus || train.brakefailure || train.enginefailure || train.signalfailure;
         if(anyfailure){
+            console.log(train.blockauthority);
+            console.log(train.sbrakestatus);
+            console.log(train.ebrakestatus);
+            console.log(train.brakefailure);
+            console.log(train.enginefailure);
+            console.log(train.signalfailure);
             train.power = 0;
             console.log('Power set low (0)')
         }

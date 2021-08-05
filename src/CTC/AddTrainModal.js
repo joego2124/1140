@@ -201,7 +201,7 @@ const styles = {
 
 const trainTemplate = {
 	TrainId: "",
-	CurrentBlock: 1,
+	CurrentBlock: 0,
 	PreviousBlock : 0,
 	RouteIndex: 0,
 	Route: [],
