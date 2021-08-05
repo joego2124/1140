@@ -51,7 +51,7 @@ function StatesPanel({ selectedBlock, lineName }){
 						<Col xs={4}>
 							<h4>
 								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Occupancy`} />
-								{' '}AVAILABILITY
+								{' '}OCCUPANCY
 							</h4>
 							<div>
 								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Occupancy`} />
