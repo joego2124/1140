@@ -24,7 +24,7 @@ const TrainsPanel = ({
 				width="225px"
 				onRequestClose={() => setOpen(false)}
 			>
-				<div className="trainPanelHolder">
+				<div className="trainPanelHolder">	
 					{
 						Object.entries(trainsList).map(arr => {
 							let trainName = arr[0], trainObj = arr[1];

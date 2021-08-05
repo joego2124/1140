@@ -103,8 +103,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			let train = trainArr[1];
 			if (trainArr[0] != "databasePath") {
 				let layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"]
-				.find(block => Math.trunc(block.blockId) === Math.trunc(train.CurrentBlock));
-				if (layoutBlock == undefined) layoutBlock = trackLayout[train.Line === "GreenLine" ? "greenLine" : "redLine"][0];
+					.find(block => block.blockId === train.CurrentBlock);
+				if (layoutBlock == undefined) return;
 				return trackBlockCircle(
 					<BiTrain 
 						key={train.TrainId}
