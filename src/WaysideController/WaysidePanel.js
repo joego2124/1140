@@ -32,7 +32,10 @@ const WaysidePanel = ({
           className='waysideButton'
           key={waysideName}
           onClick={() => {
-            setSelectedWaysideAndName(waysideObj, parseInt(waysideName) + 1);
+            setSelectedWaysideAndName(
+              waysideObj,
+              parseInt(waysideName) + (localColor == 'GreenLine' ? 1 : 7)
+            );
           }}
         >
           <div className='buttonDiv'>
@@ -42,7 +45,9 @@ const WaysidePanel = ({
                 localColor == 'RedLine' ? '#C44242' : 'rgba(49,135,133, 1)'
               }
             />
-            <div className='buttonText'>WSC {parseInt(waysideName) + 1}</div>
+            <div className='buttonText'>
+              WSC {parseInt(waysideName) + (localColor == 'GreenLine' ? 1 : 7)}
+            </div>
           </div>
         </Button>
       );
@@ -83,7 +88,7 @@ const WaysidePanel = ({
     setSelectedWayside(
       selColor == 'GreenLine' ? greenWaysideList[0] : redWaysideList[0]
     );
-    setSelectedWaysideName('WSC' + 1);
+    setSelectedWaysideName('WSC' + (selColor == 'GreenLine' ? 1 : 7));
   }
 
   return (

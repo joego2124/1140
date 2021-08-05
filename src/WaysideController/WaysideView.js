@@ -12,6 +12,7 @@ import { IoGitCompareSharp } from 'react-icons/io5';
 import { BsFillSquareFill } from 'react-icons/bs';
 import { GiTrafficLightsGreen } from 'react-icons/gi';
 import { GiTrafficLightsRed } from 'react-icons/gi';
+import { GiLevelCrossing } from 'react-icons/gi';
 import { BsCircleFill } from 'react-icons/bs';
 import Blocks from '../CTC/assets/Blocks';
 import '../CTC/styles.css';
@@ -106,10 +107,7 @@ const TrackView = ({
         let selBlock = selectedWayside?.find(
           (v) => v.BlockNumber == Math.trunc(blockId)
         );
-        console.log(selBlock);
-        setSelectedBlock(
-          selectedWayside?.find((v) => v.BlockNumber == Math.trunc(blockId))
-        );
+        setSelectedBlock(selBlock);
       } else {
         setSelectedBlock(selectedWayside[0]);
       }
@@ -131,7 +129,9 @@ const TrackView = ({
         console.warn('Hello');
         if (trainArr[0] != 'databasePath' && train.Line == trackColor) {
           let layoutBlock = selectedWayside.find(
-            (block) => block.CurrentBlock == train.CurrentBlock
+            (block) =>
+              Math.trunc(block.CurrentBlock < 0 ? -1 : block.CurrentBlock) ==
+              Math.trunc(train.CurrentBlock < 0 ? -1 : train.CurrentBlock)
           );
           console.log(layoutBlock, train.CurrentBlock);
           if (layoutBlock != undefined) {
@@ -417,6 +417,51 @@ const TrackView = ({
       });
     }
 
+    let railwayCrossings = [];
+    if (currBlock.isLevelCrossingBlock == 'Yes') {
+      currBlock.connectors[0].forEach((id, i) => {
+        if (id != null || railwayCrossings.length != 0) return;
+        let dx = 0,
+          dy = 0;
+        let dist = 23;
+        switch (i) {
+          case 0:
+            dx = -34;
+            dy = -30;
+            break;
+          case 1:
+            dy = -dist;
+            break;
+          case 2:
+            dx = 16;
+            dy = 10;
+            break;
+          case 3:
+            dy = dist;
+            break;
+        }
+        // Green means railway crossing is active, red means it's not
+        if (actualBlock?.Authority == 1 ? (color = 'red') : (color = 'green'));
+        railwayCrossings.push(
+          <div>
+            <GiLevelCrossing
+              size='50px'
+              style={{
+                position: 'absolute',
+                left: currPos.x + dx + 50,
+                top: currPos.y + dy + 50,
+                height: '40px',
+                width: '40px',
+                color: color,
+                overflow: 'visible',
+                zIndex: 1,
+              }}
+            />
+          </div>
+        );
+      });
+    }
+
     let newBlockSVGs = (
       <div key={lineColor + currBlock.blockId}>
         <OverlayTrigger
@@ -461,6 +506,7 @@ const TrackView = ({
         {blockSVGs}
         {beacons}
         {lights}
+        {railwayCrossings}
       </div>
     );
 
