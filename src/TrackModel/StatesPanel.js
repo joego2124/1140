@@ -14,12 +14,9 @@ import { DatabaseGetMulti } from '../components/DatabaseMulti';
 import { DatabaseSetMulti } from '../components/DatabaseMulti';
 import SplitButton from 'react-bootstrap/SplitButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-<<<<<<< HEAD
-=======
 import SetBeaconInfoModal from './SetBeaconInfoModal';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
->>>>>>> update-track-model
 
 function StatesPanel({ selectedBlock, lineName }){
 
@@ -31,15 +28,6 @@ function StatesPanel({ selectedBlock, lineName }){
 
 	var actualTempLocal, desiredTempLocal;
 	var trackHeater;
-<<<<<<< HEAD
-	const [actualTemp, setActualTemp] = useState(0);
-	const [desiredTemp, setDesiredTemp] = useState(0);
-	const [trackOccup, setTrackOccup] = useState(0);
-	// const [trackHeater, setTrackHeater] = useState(0);
-	const [failBrokenRail, setFailBrokenRail] = useState();
-	// const [failTrackCirc, setFailTrackCirc] = useState(0);
-	// const [failBeacon, setFailBeacon] = useState(0);
-=======
 	var brokenRailFailure, trackCircuitFailure, beaconFailure;
 	const [variantRail, setVariantRail] = useState("outline-dark");
 	const [variantTrackCircuit, setVariantTrackCircuit] = useState("outline-dark");
@@ -70,7 +58,6 @@ function StatesPanel({ selectedBlock, lineName }){
 		if( trackCircuitFailure ? setVariantTrackCircuit("danger") : setVariantTrackCircuit("outline-dark"));
 		if( beaconFailure ? setVariantBeacon("danger") : setVariantBeacon("outline-dark"));
 	}, [selectedBlock]);
->>>>>>> update-track-model
 
 	///////////////////////////////////////////////////////////////
 	//                          OLD CODE                         //
