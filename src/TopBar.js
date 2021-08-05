@@ -15,14 +15,13 @@ function TopBar() {
 	const [time, setTime] = useState(0);
 	const [timer, setTimer] = useState();
 	const [formattedTime, setFormattedTime] = useState("12:00");
+	// const [tickets, setTickets] = useState(0);
 
 	if (!Firebase.apps.length) {
 		Firebase.initializeApp(config);
 	}else {
 		Firebase.app(); // if already initialized, use that one
 	}
-
-	
 
 	//running clock
 	function clockTick() {
@@ -31,9 +30,12 @@ function TopBar() {
 				physicsTick();
 				// updatePower();
 
-				// These functions run every hour
-				console.log(time % 10);
+				// Run every hour:
+				// console.log(time % 10);
 				if (time % 10 == 0) {
+					// Description:
+					// Generate ticket sales for stations along all trains' routes.
+					// Set the throughput (total tickets / time elapsed since last calculation )
 					generateTicketSales();
 				}
 				

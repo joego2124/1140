@@ -114,7 +114,7 @@ function makeTrainSim(newTrainId) {
   //     console.log('simulating', this.trainId);
   // } );
   train.simulateTrain = function () {
-    console.log('simulating', this.trainId, this.power);
+    // console.log('simulating', this.trainId, this.power);
 
     if (this.ebrake == true) {
       //e brakes
