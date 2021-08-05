@@ -48,12 +48,36 @@ exports.changePassengers = functions.database.ref('/TrainList/{trainId}/Passenge
     });
 })
 
+exports.openServiceDoors = functions.database.ref('/TrainList/{trainId}/DoorStatus').onUpdate( (change, context) => {
+    const doorStatus = change.after.val();
+    const trainId = context.params.trainId;
+
+    const database = admin.database();
+
+    if (doorStatus == false){
+        database.ref(`/TrainList/${trainId}/LeftDoorStatus`).set(false);
+        database.ref(`/TrainList/${trainId}/RightDoorStatus`).set(false);
+    }
+    else{
+
+        return database.ref(`/TrainList/${trainId}/StationSide`).get().then( (snapshot) => {
+            const stationside = snapshot.val();
+            if(stationside.includes('Left'))
+                database.ref(`/TrainList/${trainId}/LeftDoorStatus`).set(true);
+            if(stationside.includes('Right'))
+                database.ref(`/TrainList/${trainId}/RightDoorStatus`).set(true);
+        });
+
+    }
+
+})
+
 exports.trainAdded = functions.database.ref(`/TrainList/{trainId}`).onCreate( (snapshot, context) => {
     const trainId = context.params.trainId;
     console.log('Train Added', trainId);
 
     // return admin.database().ref(`/TrainIds`).push(trainId);
-    return admin.database().ref(`/TrainIds/${trainId}`).set(trainId);
+    return admin.database().ref(`/TrainIds/-${trainId}`).set(trainId);
 })
 
 exports.trainRemoved = functions.database.ref(`/TrainList/{trainId}`).onDelete( (snapshot, context) => {
@@ -61,5 +85,5 @@ exports.trainRemoved = functions.database.ref(`/TrainList/{trainId}`).onDelete( 
     console.log('Train Removed', trainId);
     
     // return admin.database().ref(`/TrainIds`).remove(trainId);
-    return admin.database().ref(`/TrainIds/${trainId}`).remove();
+    return admin.database().ref(`/TrainIds/-${trainId}`).remove();
 })

@@ -14,6 +14,7 @@ exports.changeTrainLength = trainModel.changeTrainLength;
 exports.changePassengers = trainModel.changePassengers;
 exports.trainAdded = trainModel.trainAdded;
 exports.trainRemoved = trainModel.trainRemoved;
+exports.openServiceDoors = trainModel.openServiceDoors;
 
 exports.waysideTick = wayside.runLogic;
 exports.onBrakeFailure = trainControllerDriver.onBrakeFailure;
