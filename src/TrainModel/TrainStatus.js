@@ -1,51 +1,44 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Button, Container, Col, Row  } from 'react-bootstrap';
+import { Container, Col, Row  } from 'react-bootstrap';
 import VarDisplay from '../components/VarDisplay';
 import VarIndicator from '../components/VarIndicator';
 import ButtonIndicator from '../components/ButtonIndicator';
-import { DatabaseSet, DatabaseGet } from '../Database';
+import "../components/componentStyles.css";
 
 function TrainStatus(parentName) {
-	// const [EDoorStatus, setEDoorStatus] = useState(false);
-	// const [EBrakeStatus, setEBrakeStatus] = useState(false);
-
-	// useEffect(() => {setTimeout(()=>{DatabaseGet(setEDoorStatus, 'EDoorStatus', parentName); }, 500);}, [parentName]);
-	// useEffect(() => {setTimeout(()=>{DatabaseGet(setEBrakeStatus, 'EBrakeStatus', parentName); }, 500);}, [parentName]);
-
-	// useEffect(() => {DatabaseSet(EDoorStatus, 'RightDoorStatus', parentName);DatabaseSet(EDoorStatus, 'LeftDoorStatus', parentName);}, [EDoorStatus])
-	// useEffect(() => {DatabaseSet(EBrakeStatus, 'SBrakeStatus', parentName);}, [EBrakeStatus])
 	
 	return (
-		<div style={{borderStyle: 'solid', height:"90%", width: '105%'}}>
-			<h1>Train Status</h1>
+		<div className='Border'>
+			<h2>Train Status</h2>
 			<Container>
 				<Col>
 					<VarDisplay parentName={parentName} varName='NextStation' message='Next Station'/>
 					<VarDisplay parentName={parentName} varName='CurrentStation' message='Current Station'/>
 					<VarDisplay parentName={parentName} varName='Power' message='Commanded Power [W]'/>
 					<VarDisplay parentName={parentName} varName='Passengers' message='Passengers'/>
-					<h3>Crew: 2</h3>
+					<p className='componentLabel'>Crew: 2</p>
 					<VarIndicator parentName={parentName} varName='ExternalLightState' message='External Lights'/>
 					<VarIndicator parentName={parentName} varName='InternalLightState' message='Internal Lights'/>
-					<Container style={{borderStyle: 'solid'}}>
+				</Col>
+				<Col>
+					<Container className='Border'>
 						<Col>
-							<h1>Temperature</h1>
+							<h4>Temperature</h4>
 							<VarDisplay parentName={parentName} varName='InternalTemperature' message='Internal'/>
 							<VarDisplay parentName={parentName} varName='ExternalTemperature' message='External'/>
 						</Col>
 					</Container>
-				</Col>
-				<Col>
-					<Container style={{borderStyle: 'solid'}}>
+					<Container className='Border'>
 						<Col>
-							<h1>Brakes</h1>
+							<h4>Brakes</h4>
 							<VarIndicator parentName={parentName} varName='SBrakeStatus' message='Brake'/>
 							<ButtonIndicator parentName={parentName} varName='EBrakeStatus' message='Emergency Brake'/>
 						</Col>
 					</Container>
-					<Container style={{borderStyle: 'solid'}}>
+				</Col>
+				<Col>
+					<Container className='Border'>
 						<Col>
-							<h1>Doors</h1>
+							<h4>Doors</h4>
 							<Row>
 								<VarIndicator parentName={parentName} varName='LeftDoorStatus' message='Left'/>
 								<VarIndicator parentName={parentName} varName='RightDoorStatus' message='Right'/>
@@ -53,9 +46,9 @@ function TrainStatus(parentName) {
 							<ButtonIndicator parentName={parentName} varName='EDoorStatus' message='Emergency Door'/>
 						</Col>
 					</Container>
-					<Container style={{borderStyle: 'solid'}}>
+					<Container className='Border'>
 						<Col>
-							<h1>Failure Modes</h1>
+							<h4>Failure Modes</h4>
 							<ButtonIndicator parentName={parentName} varName='EngineFailure' message='Engine'/>
 							<ButtonIndicator parentName={parentName} varName='SignalFailure' message='Signal'/>
 							<ButtonIndicator parentName={parentName} varName='BrakeFailure' message='Brake'/>

@@ -1,5 +1,4 @@
 import Firebase from 'firebase';
-import { useState } from 'react';
 var trackLayout = require('../CTC/TrackLayout.json');
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
@@ -26,6 +25,7 @@ function makeTrainSim(newTrainId) {
   train.Station = 0;
   train.HasStoppedAtSation = false;
   train.passengers = 0;
+  train.carCount = 1;
 
   Firebase.database()
     .ref(`/TrainList/${newTrainId}/Power`)
@@ -87,7 +87,7 @@ function makeTrainSim(newTrainId) {
     .ref(`/TrainList/${newTrainId}/CurrentBlock`)
     .on('value', (snapshot) => {
       const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
-      if (safeblock)
+      if (safeblock!== snapshot.val())
         console.warn('BLOCK ID OUT OF RANGE: ', newTrainId, snapshot.val());
       train.blocknumber = safeblock;
     });
@@ -95,7 +95,7 @@ function makeTrainSim(newTrainId) {
     .ref(`/TrainList/${newTrainId}/PreviousBlock`)
     .on('value', (snapshot) => {
       const safeblock = snapshot.val() < 0 ? 0 : Math.floor(snapshot.val());
-      if (safeblock)
+      if (safeblock!== snapshot.val())
         console.warn('BLOCK ID OUT OF RANGE: ', newTrainId, snapshot.val());
       train.previousblocknumber = safeblock;
     });
@@ -116,7 +116,7 @@ function makeTrainSim(newTrainId) {
   train.simulateTrain = function () {
     console.log('simulating', this.trainId, this.power);
 
-    if (this.ebrake == true) {
+    if (this.ebrake === true) {
       //e brakes
       if (Math.abs(this.velocity) < 10) {
         Firebase.database().ref(`/TrainList/${this.trainId}/Velocity`).set(0);
@@ -130,7 +130,7 @@ function makeTrainSim(newTrainId) {
           .set((this.velocity / Math.abs(this.velocity)) * -8.96);
       }
     } else {
-      if (this.sbrake == true) {
+      if (this.sbrake === true) {
         //s brakes
         if (Math.abs(this.velocity) < 4) {
           Firebase.database().ref(`/TrainList/${this.trainId}/Velocity`).set(0);
@@ -172,16 +172,18 @@ function makeTrainSim(newTrainId) {
       this.HasStoppedAtSation == false
     ) {
       this.HasStoppedAtSation = true;
+      
+      console.log(this.trainId, ' has stopped in the station at block ', this.blocknumber);
+
       const departingPassengers = Math.floor(
         Math.random() * this.passengers + 1
       );
-      Firebase.database()
-        .ref(`/${this.line}/${this.blocknumber}/Station/PassengersDeparting`)
-        .set(departingPassengers);
-      Firebase.database()
-        .ref(`/TrainList/${this.trainId}/Passengers`)
-        .set(this.passengers - departingPassengers);
-      this.HasStoppedAtSation = true;
+      
+      const boardingPassengers = Math.floor((Math.random() * this.Station.Tickets) + 1);
+
+      Firebase.database().ref(`/${this.line}/${this.blocknumber}/Station/PassengersBoarding`).set(boardingPassengers);
+      Firebase.database().ref(`/TrainList/${this.trainId}/Passengers`).set(clamp(
+        this.passengers - departingPassengers+boardingPassengers, 0, this.carCount * 222) );
     }
 
     //enter new block
@@ -243,6 +245,9 @@ function makeTrainSim(newTrainId) {
 
         Firebase.database().ref(`/${this.line}/${newblock}/Occupancy`).set(1);
         Firebase.database().ref(`/${this.line}/${oldblock}/Occupancy`).set(0);
+
+        Firebase.database().ref(`/${this.line}/${newblock}/MaxCapacity`).set( this.passengers >= (this.carCount * 222) ? true : false);
+        Firebase.database().ref(`/${this.line}/${oldblock}/MaxCapacity`).set(0);
 
         //set new block values
         Firebase.database()

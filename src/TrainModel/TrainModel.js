@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Button, Container, Col, Row  } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
 import TrainsPanel from './TrainsPanel';
 import TrackStatus from './TrackStatus';
 import TrainStatus from './TrainStatus';
 import PhysicsStatus from './PhysicsStatus';
 import "./trainModelStyles.css";
-import { DatabaseList } from '../Database';
 
 function TrainModel() {
 

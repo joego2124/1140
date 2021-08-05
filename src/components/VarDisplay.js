@@ -13,7 +13,7 @@ function VarDisplay({varName, message, parentName, units}) {
 	return (
 		<div className="componentDiv">
 			<p className="componentLabel">{message}: </p>
-			<div className="componentText">{vari}</div> {units}
+			<div className="componentText">{isNaN(vari) ? vari : Math.round(vari)}</div> {units}
 		</div>
 	)
 }
