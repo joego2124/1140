@@ -327,9 +327,6 @@ function makeTrainSim(newTrainId) {
           return;
         }
         if (newblock < 0) newblock = 0;
-        if(newblock != Math.trunc(newblock)){
-
-        }
         console.log('exiting to block :', newblock)
       } while (newblock != Math.floor(newblock));
       {
