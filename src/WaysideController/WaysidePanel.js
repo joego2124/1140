@@ -22,6 +22,7 @@ const WaysidePanel = ({
 
   useEffect(() => {
     var buttonList = [];
+    console.log(selectedWaysideList);
     for (const [waysideName, waysideObj] of Object.entries(
       selectedWaysideList
     )) {
@@ -108,29 +109,27 @@ const WaysidePanel = ({
         style={{ paddingTop: '10rem' }}
         onRequestClose={() => setOpen(false)}
       >
-        <Button variant='light' className='greenLineButton'>
+        <Button
+          variant='light'
+          className='greenLineButton'
+          onClick={() => {
+            setColorAndSelectedWayside('GreenLine');
+          }}
+        >
           <div className='buttonDiv'>
-            <div
-              className='buttonText'
-              onClick={() => {
-                setColorAndSelectedWayside('GreenLine');
-              }}
-            >
-              Green Line
-            </div>
+            <div className='buttonText'>Green Line</div>
           </div>
         </Button>
 
-        <Button variant='light' className='redLineButton'>
+        <Button
+          variant='light'
+          className='redLineButton'
+          onClick={() => {
+            setColorAndSelectedWayside('RedLine');
+          }}
+        >
           <div className='buttonDiv'>
-            <div
-              className='buttonText'
-              onClick={() => {
-                setColorAndSelectedWayside('RedLine');
-              }}
-            >
-              Red Line
-            </div>
+            <div className='buttonText'>Red Line</div>
           </div>
         </Button>
         <div style={{ overflow: 'scroll', height: '30em' }}>
