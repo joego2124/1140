@@ -96,7 +96,7 @@ function TrackModel() {
 				top: "70px",
 				left: "100px"
 			}}>
-				<h2> {`Currently Selected: ${selectedBlock.BlockNumber}`} </h2>
+				<h2> {`Currently Selected: ${selectedBlock.BlockNumber} (${selectedBlock.Line})`} </h2>
 			</div>
 			<div style={{
 				display: "flex",

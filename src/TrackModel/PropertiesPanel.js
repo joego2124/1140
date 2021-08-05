@@ -17,7 +17,6 @@ function PropertiesPanel({ selectedBlock, lineName }) {
 
 	const [tempModalShow, setTempModalShow] = useState(false);
 
-	console.log("DATABASE PATH", selectedBlock.databasePath);
 	return (
 		// Properties title
 		<div style={{
