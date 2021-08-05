@@ -89,7 +89,6 @@ function TopBar() {
 				TRANES
 				<div style={ styles.verticalDivider }></div>
 				<div style={ styles.currentPageHeader }>
-					CTC Dashboard
 				</div>
 			</Navbar.Brand>
 			<Navbar.Collapse id="basic-navbar-nav">

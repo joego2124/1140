@@ -1,0 +1,6 @@
+WSC9: Red Line
+
+blocks: 24,25,26,27,28,29,77,76,75
+switch: 27
+
+SET: switch TO (0)

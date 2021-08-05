@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Container, Col, Row  } from 'react-bootstrap';
-import VarDisplay from '../components/VarDisplay';
-import SPSInput from '../components/SPSInput';
+import VarDisplay from './components/VarDisplay';
+import SPSInput from './components/SPSInput';
 
 function TrainStatus({parentName, selectedTrain}) {
     return (

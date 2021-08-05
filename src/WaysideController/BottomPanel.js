@@ -10,10 +10,15 @@ import { DatabaseGet, DatabaseSet } from '../Database';
 import PLCFileUpload from './PLCFileUpload';
 import VarDisplay from '../components/VarDisplay';
 
-const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
+const BottomPanel = ({
+  selectedWayside,
+  selectedBlockFromTrack,
+  selectedWaysideName,
+}) => {
   console.log(selectedBlockFromTrack);
   const [open, setOpen] = useState(true);
-  const [plcUploaded, setPlcUploaded] = useState(0);
+  const [plcUploadDate, setPlcUploadDate] = useState();
+  const [plcWaysideNumber, setPlcWaysideNumber] = useState();
   const [selectedBlock, setSelectedBlock] = useState(selectedBlockFromTrack);
 
   useEffect(() => handleBlocks('trackSelectedBlock'), [selectedBlockFromTrack]);
@@ -30,73 +35,71 @@ const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
     }
   }
 
-  function getUploadStatusWS0Data() {
-    let link = 'WSC/WSC0/UploadStatus';
+  function getPlcUploadDateData() {
+    let link = 'WSC/' + selectedWaysideName + '/UploadStatus';
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       let newState = snapshot.val();
-      setPlcUploaded(newState);
+      setPlcUploadDate(newState);
     });
   }
 
-  useEffect(() => getUploadStatusWS0Data(), [selectedWayside]);
-
-  function getUploadStatusWS1Data() {
-    let link = 'WSC/WSC1/UploadStatus';
-    let ref = Firebase.database().ref(link);
-    ref.on('value', (snapshot) => {
-      let newState = snapshot.val();
-      setPlcUploaded(newState);
-    });
-  }
-
-  useEffect(() => getUploadStatusWS1Data(), [selectedWayside]);
+  useEffect(() => getPlcUploadDateData(), [selectedWayside]);
 
   function setUploadStatusData() {
-    let newState = plcUploaded;
-    let link = 'WSC/WSC1/UploadStatus';
-    Firebase.database().ref(link).set(newState);
+    if (plcUploadDate != undefined) {
+      let newState = plcUploadDate;
+      let link = 'WSC/' + selectedWaysideName + '/UploadStatus';
+      Firebase.database().ref(link).set(newState);
+    }
   }
 
-  useEffect(() => setUploadStatusData(), [plcUploaded]);
+  useEffect(() => setUploadStatusData(), [plcUploadDate]);
 
   function setSwitchStateData() {
     if (selectedBlock.isSwitchBlock == 1) {
+      console.log(selectedWayside[0]);
+      let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+      console.log(line);
       let newState = selectedBlock?.SwitchState == 0 ? 1 : 0;
-      let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+      let link = line + '/' + selectedBlock.BlockNumber + '/SwitchState';
+      console.log(link);
       Firebase.database().ref(link).set(newState);
     }
   }
 
   function getSwitchStateData() {
-    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/SwitchState';
+    let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+    let link = line + '/' + selectedBlock.BlockNumber + '/SwitchState';
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       selectedBlock.SwitchState = snapshot.val();
     });
   }
 
-  useEffect(() => getSwitchStateData(), [selectedBlock.SwitchState]);
+  useEffect(() => getSwitchStateData(), [selectedBlock]);
 
   function getOccupancyData() {
-    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/Occupancy';
+    let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+    let link = line + '/' + selectedBlock.BlockNumber + '/Occupancy';
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       selectedBlock.Occupancy = snapshot.val();
     });
   }
 
-  useEffect(() => getOccupancyData(), [selectedBlock.Occupancy]);
+  useEffect(() => getOccupancyData(), [selectedBlock]);
 
   function getAuthorityData() {
-    let link = '/GreenLine/' + selectedBlock.BlockNumber + '/Authority';
+    let line = selectedWayside[0].Line == 'Red' ? 'RedLine' : 'GreenLine';
+    let link = line + '/' + selectedBlock.BlockNumber + '/Authority';
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       selectedBlock.Authority = snapshot.val();
     });
   }
 
-  useEffect(() => getAuthorityData(), [selectedBlock.Authority]);
+  useEffect(() => getAuthorityData(), [selectedBlock]);
 
   useEffect(() => handleBlocks(), [selectedWayside]);
 
@@ -157,15 +160,11 @@ const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
             </div>
             <div className='dataName'>
               Speed Limit:
-              <div className='dataValue'>
-                {selectedBlock?.SpeedLimit * 0.621371} mph
-              </div>
+              <div className='dataValue'>{selectedBlock?.SpeedLimit} mph</div>
             </div>
             <div className='dataName'>
               Length:
-              <div className='dataValue'>
-                {selectedBlock?.BlockLength * 3.28084} feet
-              </div>
+              <div className='dataValue'>{selectedBlock?.BlockLength} feet</div>
             </div>
           </div>
         </div>
@@ -198,12 +197,13 @@ const BottomPanel = ({ selectedWayside, selectedBlockFromTrack }) => {
           <div className='uploadPLCSection'>
             Upload PLC
             <div className='dataName'>
-              Upload Status:
-              <div className='dataValue'>
-                {plcUploaded ? ' Uploaded' : ' Not Uploaded'}
-              </div>
+              Last Uploaded:
+              <div className='dataValue'>{plcUploadDate}</div>
             </div>
-            <PLCFileUpload setter={setPlcUploaded} />
+            <PLCFileUpload
+              setPlcUploadDate={setPlcUploadDate}
+              setPlcWaysideNumber={setPlcWaysideNumber}
+            />
           </div>
           <div className='moveSwitchSection'>
             Move Switch

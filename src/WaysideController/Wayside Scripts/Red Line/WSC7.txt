@@ -1,0 +1,17 @@
+WSC7: Red Line
+
+blocks: 0,10,9,8
+listener: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+
+switch: 9
+
+IF: occupancy{listener} SET authority{yard} TO 0
+IF: occupancy{blocks-8} SET authority{blocks-10} TO 0
+
+IF: authority{blocks-10} SET switch TO 1
+IF: occupancy{blocks-8} SET switch TO 0
+IF: authority{yard} SET switch TO 0
+
+
+
+IF: authority{yard} SET switch TO 

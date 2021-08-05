@@ -1,0 +1,6 @@
+WSC12: Red Line
+
+blocks: 41,42,43,44,45,46,47,48,49,50,67,68,69
+switch: 43
+
+SET: switch TO (0)

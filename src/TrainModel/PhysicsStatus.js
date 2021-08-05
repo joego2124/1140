@@ -50,6 +50,7 @@ function PhysicsStatus(parentName) {
 			{/* <Button onClick={physicsTick}>Advance 1 min</Button> */}
 			<div className="trainModelRow">
 				<div className="trainModelColumn">
+					<VarDisplay parentName={parentName} varName='Position' message='Position [ft]'/>
 					<VarDisplay parentName={parentName} varName='Velocity' message='Velocity [ft/s]'/>
 					<VarDisplay parentName={parentName} varName='Acceleration' message='Acceleration [ft/s^2]'/>
 					<VarDisplay parentName={parentName} varName='Mass' message='Mass [lb]'/>

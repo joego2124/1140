@@ -1,0 +1,17 @@
+WSC1: Green Line
+
+blocks: 22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1
+listener: 29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12
+
+switch: 12
+
+branch-1: 11,10
+branch-2: 3,4,5
+
+IF: occupancy{blocks-9} SET authority{branch-1} TO 0
+IF: occupancy{blocks-2} SET authority{branch-2} TO 0
+IF: occupancy{branch-1} SET authority{blocks-14,13,12} TO 0
+IF: occupancy{listener} SET authority{blocks-1} TO 0
+
+IF: occupancy{blocks-13} SET switch TO 0
+IF: authority{blocks-1} SET switch TO 1

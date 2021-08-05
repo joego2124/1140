@@ -44,7 +44,7 @@
 		{ "blockId": 27,   "section": "F", "connectors": [[null, 26, null, 28]], "color": "GreenLine"},
 		{ "blockId": 28,   "section": "F", "connectors": [[null, 27, null, 29]], "color": "GreenLine"},
 
-		{ "blockId": 29,   "section": "G", "connectors": [[null, 28, null, 30], [150, 29, null, null]], "color": "GreenLine"},
+		{ "blockId": 29,   "section": "G", "connectors": [[null, 28, null, 30], [150, 28, null, null]], "color": "GreenLine"},
 		{ "blockId": 30,   "section": "G", "connectors": [[null, 29, null, 31]], "color": "GreenLine"},
 		{ "blockId": 31,   "section": "G", "connectors": [[null, 30, null, 32]], "station": "SOUTH BANK", "color": "GreenLine"},
 		{ "blockId": 32,   "section": "G", "connectors": [[null, 31, null, 33]], "color": "GreenLine"},
