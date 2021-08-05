@@ -14,6 +14,12 @@ import { DatabaseGetMulti } from '../components/DatabaseMulti';
 import { DatabaseSetMulti } from '../components/DatabaseMulti';
 import SplitButton from 'react-bootstrap/SplitButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+<<<<<<< HEAD
+=======
+import SetBeaconInfoModal from './SetBeaconInfoModal';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+>>>>>>> update-track-model
 
 function StatesPanel({ selectedBlock, lineName }){
 
@@ -25,6 +31,7 @@ function StatesPanel({ selectedBlock, lineName }){
 
 	var actualTempLocal, desiredTempLocal;
 	var trackHeater;
+<<<<<<< HEAD
 	const [actualTemp, setActualTemp] = useState(0);
 	const [desiredTemp, setDesiredTemp] = useState(0);
 	const [trackOccup, setTrackOccup] = useState(0);
@@ -32,6 +39,38 @@ function StatesPanel({ selectedBlock, lineName }){
 	const [failBrokenRail, setFailBrokenRail] = useState();
 	// const [failTrackCirc, setFailTrackCirc] = useState(0);
 	// const [failBeacon, setFailBeacon] = useState(0);
+=======
+	var brokenRailFailure, trackCircuitFailure, beaconFailure;
+	const [variantRail, setVariantRail] = useState("outline-dark");
+	const [variantTrackCircuit, setVariantTrackCircuit] = useState("outline-dark");
+	const [variantBeacon, setVariantBeacon] = useState("outline-dark");
+	const [trackOccup, setTrackOccup] = useState(0);
+
+	const [tempModalShow, setTempModalShow] = useState(false);
+	const [beaconModalShow, setBeaconModalShow] = useState(false);
+
+	// Set database failure modes upon start-up
+	useEffect(() => {
+		Firebase.database().ref(`${selectedBlock.databasePath}/FailureBrokenRail`).set( false );
+		Firebase.database().ref(`${selectedBlock.databasePath}/FailureTrackCircuit`).set( false );
+		Firebase.database().ref(`${selectedBlock.databasePath}/BeaconFailure`).set( false );
+	}, []);
+	// Update color of faliure mode buttons when switching blocks
+	useEffect(() => {
+		Firebase.database().ref(`${selectedBlock.databasePath}/FailureBrokenRail`).once( 'value', snapshot => {
+			brokenRailFailure = snapshot.val();
+		});
+		Firebase.database().ref(`${selectedBlock.databasePath}/FailureTrackCircuit`).once( 'value', snapshot => {
+			trackCircuitFailure = snapshot.val();
+		});
+		Firebase.database().ref(`${selectedBlock.databasePath}/BeaconFailure`).once( 'value', snapshot => {
+			beaconFailure = snapshot.val();
+		});
+		if( brokenRailFailure ? setVariantRail("danger") : setVariantRail("outline-dark"));
+		if( trackCircuitFailure ? setVariantTrackCircuit("danger") : setVariantTrackCircuit("outline-dark"));
+		if( beaconFailure ? setVariantBeacon("danger") : setVariantBeacon("outline-dark"));
+	}, [selectedBlock]);
+>>>>>>> update-track-model
 
 	///////////////////////////////////////////////////////////////
 	//                          OLD CODE                         //
@@ -66,7 +105,7 @@ function StatesPanel({ selectedBlock, lineName }){
 						<Col xs={4}>
 							<h4>
 								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Occupancy`} />
-								{' '}AVAILABILITY
+								{' '}OCCUPANCY
 							</h4>
 							<div>
 								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Occupancy`} />
@@ -77,6 +116,22 @@ function StatesPanel({ selectedBlock, lineName }){
 								<br />
 								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/MaxCapacity`} />
 								{' '}Maximum capacity?
+							</div>
+							<div>
+								<br />
+								<br />
+								<br />
+								<Button 
+								 size="sm"
+								 onClick={() => setBeaconModalShow(true)}>
+									Edit Beacon Info
+								</Button>
+								<SetBeaconInfoModal 
+									show={beaconModalShow} 
+									lineName={`${selectedBlock.Line}Line`}
+									onHide={() => {setBeaconModalShow(false)}}
+									selectedBlock={selectedBlock}
+								/>
 							</div>
 						</Col>
 						<Col xs={4}>
@@ -110,24 +165,24 @@ function StatesPanel({ selectedBlock, lineName }){
 								</div>							
 							</p>
 							<div>
-								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/CrossingLights`} />
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Occupancy`} />
 								{' '}Signal State
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/LevelCrossingState`} />
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Authority`} />
 								{' '}Railway Crossing
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/TrackHeater`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`/${selectedBlock.Line}Line/TrackHeater`} />
 								{' '}Track Heater
 								<br />
-								<VarDisplayMulti message='Current Temperature [°F]' path={`/${lineName}/CurrentTemperature`} />
+								<VarDisplayMulti message='Current Temperature [°F]' path={`/${selectedBlock.Line}Line/CurrentTemperature`} />
 								<br />
 								<Button size="sm" 
 									onClick={()=>
 										{
-											Firebase.database().ref(`/${lineName}/TrackHeater`).once( 'value', snapshot => {
+											Firebase.database().ref(`/${selectedBlock.Line}Line/TrackHeater`).once( 'value', snapshot => {
 												trackHeater = snapshot.val();
 											});
-											Firebase.database().ref(`/${lineName}/TrackHeater`).set( !trackHeater );;
+											Firebase.database().ref(`/${selectedBlock.Line}Line/TrackHeater`).set( !trackHeater );;
 										}}>
 									Toggle Heater
 								</Button>
@@ -143,20 +198,49 @@ function StatesPanel({ selectedBlock, lineName }){
 								<VarDisplayMulti message='Ticket sales' path={`${selectedBlock.databasePath}/Station/Tickets`} />
 							</p>
 							<h4>FAILURE MODES</h4>
-								<ButtonGroup size="sm">
-									<Button variant="outline-dark"
-										size="sm"
+								<ButtonGroup 
+									size="sm">
+									<Button
+										variant={variantRail}
 										onClick={()=>{
-											// DatabaseGetMulti(setFailBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
-											// DatabaseSetMulti(!failBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
+											Firebase.database().ref(`${selectedBlock.databasePath}/FailureBrokenRail`).once( 'value', snapshot => {
+												brokenRailFailure = snapshot.val();
+											});
+											Firebase.database().ref(`${selectedBlock.databasePath}/FailureBrokenRail`).set( !brokenRailFailure );
+											// Set occupancy
+											Firebase.database().ref(`${selectedBlock.databasePath}/Occupancy`).set( !brokenRailFailure );
+											// Set color of button
+											if( brokenRailFailure ? setVariantRail("outline-dark") : setVariantRail("danger"));
 										}}>
-									Broken Rail
+										Broken Rail
 									</Button>
-									<Button variant="outline-dark" size="sm">
+									<Button
+										variant={variantTrackCircuit}
+										onClick={()=>{
+											Firebase.database().ref(`${selectedBlock.databasePath}/FailureTrackCircuit`).once( 'value', snapshot => {
+												trackCircuitFailure = snapshot.val();
+											});
+											Firebase.database().ref(`${selectedBlock.databasePath}/FailureTrackCircuit`).set( !trackCircuitFailure );
+											// Set occupancy
+											Firebase.database().ref(`${selectedBlock.databasePath}/Occupancy`).set( !trackCircuitFailure );
+											// Set color of button
+											if( trackCircuitFailure ? setVariantTrackCircuit("outline-dark") : setVariantTrackCircuit("danger"));
+										}}>
 										Track Circuit
 									</Button>
-									<Button variant="outline-dark" size="sm">
-										Beacon Failure
+									<Button
+										variant={variantBeacon}
+										onClick={()=>{
+											Firebase.database().ref(`${selectedBlock.databasePath}/BeaconFailure`).once( 'value', snapshot => {
+												beaconFailure = snapshot.val();
+											});
+											Firebase.database().ref(`${selectedBlock.databasePath}/BeaconFailure`).set( !beaconFailure );
+											// Set occupancy
+											Firebase.database().ref(`${selectedBlock.databasePath}/Occupancy`).set( !beaconFailure );
+											// Set color of button
+											if( beaconFailure ? setVariantBeacon("outline-dark") : setVariantBeacon("danger"));
+										}}>
+										Power Failure
 									</Button>
 								</ButtonGroup>
 								

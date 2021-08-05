@@ -39,7 +39,9 @@ function PropertiesPanel({ selectedBlock, lineName }) {
 				<br />
 				<VarDisplayMulti message='Elevation [ft]' path={`${selectedBlock.databasePath}/Elevation`} />
 				<br />
-				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`${selectedBlock.databasePath}/DesiredTrackTemperature`} />
+				<VarDisplayMulti message='Desired Track Temperature [°F]' path={`${selectedBlock.Line}Line/DesiredTrackTemperature`} />
+				<br />
+				<VarDisplayMulti message='Grade [%]' path={`${selectedBlock.databasePath}/BlockGrade`} />
 				<br />
 				<VarDisplayMulti message='Railway Crossing' path={`${selectedBlock.databasePath}/isLevelCrossingBlock`} />
 				<br />
