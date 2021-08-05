@@ -8,13 +8,14 @@ import LightOptions from './LightOptions';
 import TemperatureOptions from './TemperatureOptions';
 import FailureStatus from './FailureStatus';
 import TrainsPanel from '../CTC/TrainsPanel.js';
-import { DatabaseGet, DatabaseSet }  from "../Database";
+import { DatabaseGet, DatabaseSet }  from "../Database.js";
 import Firebase from 'firebase';
-
+import HardwareOptions from './HardwareOptions';
+import StationOptions from './StationOptions';
 
 function TrainContollerDriver() {
 
-	const [parentName, setParentName] = useState('TRN1');
+	const [parentName, setParentName] = useState();
 	const [addTrainModal, setAddTrainModal] = useState(false);
 	const [selectedTrain, setSelectedTrain] = useState({});
 	const [trainsList, setTrainsList] = useState({});
@@ -24,42 +25,36 @@ function TrainContollerDriver() {
 	}, []);
 
 	function getParentNameData() {
-		console.log(selectedTrain);
-		console.log(selectedTrain.TrainId);
     let link = 'TrainList/' + selectedTrain.TrainId + '/TrainId';
-		console.log(link);
     let ref = Firebase.database().ref(link);
     ref.on('value', (snapshot) => {
       let newState = snapshot.val();
-			console.log(newState);
       setParentName(newState);
     });
   }
 
   useEffect(() => getParentNameData(), [selectedTrain]);
 
-
 	return (
 		<div>
-			<header className="App-header">
-				<Container>
-					<Col>
-					<DoorOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					<BrakingOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					</Col>
-					<Col>
-					<ModeOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					<LightOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					</Col>
-					<TemperatureOptions selectedTrain={selectedTrain} parentName={parentName}/>
-					<FailureStatus selectedTrain={selectedTrain} parentName={parentName}/>
-					<TrainStatus selectedTrain={selectedTrain} parentName={parentName}/>
-				</Container>
-				<TrainsPanel 
+			<div style={{ textAlign: `right` }} ><mark><strong>{selectedTrain.TrainId}</strong></mark></div>
+			<header>
+			<TrainsPanel 
 					setSelectedTrain={setSelectedTrain}
 					setAddTrainModal={setAddTrainModal}
 					trainsList={trainsList}
 				/>
+				<div style={{ paddingTop: `100px`, paddingLeft: `300px`, paddingRight: `150px` }}>
+				<Container>
+					<Col><DoorOptions selectedTrain={selectedTrain} parentName={parentName}/><BrakingOptions selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><ModeOptions selectedTrain={selectedTrain} parentName={parentName}/><LightOptions selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><TemperatureOptions selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><FailureStatus selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><TrainStatus selectedTrain={selectedTrain} parentName={parentName}/></Col>
+					<Col><HardwareOptions selectedTrain={selectedTrain} parentName={parentName}></HardwareOptions>
+					<StationOptions selectedTrain={selectedTrain} parentName={parentName}></StationOptions></Col>
+				</Container>
+				</div>
 			</header>
 		</div>
 	)
