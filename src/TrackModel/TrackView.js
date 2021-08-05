@@ -319,8 +319,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 							break;
 					case 3: dy = dist; break;
 				}
-				// Turn signal to OFF if authority is set to 1
-				if (actualBlock?.Authority == 1 ? color = "red" : color = "green");
+				// Green means railway crossing is active, red means it's not
+				if (actualBlock?.Authority == 1 ? color = "green" : color = "red");
 				railwayCrossings.push(
 					<div>
 					<GiLevelCrossing size="50px" style={{

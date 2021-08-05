@@ -112,10 +112,10 @@ function StatesPanel({ selectedBlock, lineName }){
 								</div>							
 							</p>
 							<div>
-								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/CrossingLights`} />
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Occupancy`} />
 								{' '}Signal State
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/LevelCrossingState`} />
+								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Authority`} />
 								{' '}Railway Crossing
 								<br />
 								<WSMIndicator selectedBlock={selectedBlock} path={`/${lineName}/TrackHeater`} />
