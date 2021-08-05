@@ -4,6 +4,9 @@ import { Button, OverlayTrigger, Tooltip, Dropdown, DropdownButton } from 'react
 import { BiTrain } from 'react-icons/bi';
 import { IoGitCompareSharp } from 'react-icons/io5';
 import { BsFillSquareFill } from "react-icons/bs";
+import { GiTrafficLightsGreen } from "react-icons/gi";
+import { GiTrafficLightsRed } from "react-icons/gi";
+import { BsCircleFill } from "react-icons/bs";
 import Blocks from './assets/Blocks';
 import './styles.css';
 
@@ -125,7 +128,8 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	const traceTrack = (currBlock, currPos, trackLayoutList, lineName) => {
 		
 		let blockSVGs = [];
-		let lineColor = lineName === "greenLine" ? "green" : "red";
+		let lineColor = lineName.toLowerCase().includes("red") ? "red" : "green";
+		let actualBlock = blockLists[lineColor][Math.trunc(currBlock.blockId)];
 		
 		currBlock.position = currPos;
 
@@ -133,7 +137,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 		visitedBlockIds.push(currBlock.blockId);
 
 		//iterate through all connections
-		currBlock.connectors.forEach(connnectorArr => {
+		currBlock.connectors.forEach((connnectorArr, index) => {
 
 			let blockTypeName = ""; //var for determining svg to render
 
@@ -172,7 +176,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			//conditional vars
 			let blockType = (blockTypeName === "0101" || blockTypeName === "1010") ? "straight" : "curved";
 			let size = blockType === "straight" ? 100 : 55;
-			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${blockSVGs.length > 0 ? .25 : 1})`;
+			let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, ${actualBlock?.SwitchState == index ? 1 : .25})`;
 			
 			color = currBlock.section === "YARD" ? "grey" : color; //yard blocks are grey
 
@@ -246,6 +250,52 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			});
 		}
 
+		let lights = [];
+		let color = `rgb(${lineName === "greenLine" ? "49,135,133" : "196,73,76"}, 1)`;
+		if (currBlock.connectors.length > 1) {
+			let lightHistory = [null, null, null, null];
+			let filledBlockIds = currBlock.connectors[actualBlock?.SwitchState];
+			
+			currBlock.connectors.forEach(connector => {
+				connector.forEach((id, i) => {
+					if (id === null || lightHistory[i] != null) return;
+					lightHistory[i] = true;
+					let dx = 0, dy = 0;
+					let dist = 41;
+					switch(i) {
+						case 0: dx = -dist; break;
+						case 1: dy = -dist; break;
+						case 2: dx = dist; break;
+						case 3: dy = dist; break;
+					}
+					lights.push(
+						<div>
+							<BsCircleFill size="50px" style={{
+								position: "absolute", 
+								left: currPos.x + dx + 47.5,
+								top: currPos.y + dy + 47.5, 
+								height: "25px",
+								width: "25px",
+								color: color,
+								overflow: "visible",
+								zIndex: 1009,
+							}}/>
+							<BsCircleFill size="50px" style={{
+								position: "absolute", 
+								left: currPos.x + dx + 52.5,
+								top: currPos.y + dy + 52.5, 
+								height: "15px",
+								width: "15px",
+								color: filledBlockIds?.find(v => v == id) == undefined ? "white" : color,
+								overflow: "visible",
+								zIndex: 1010,
+							}}/>
+						</div>
+					);
+				});
+			});
+		}
+
 		let newBlockSVGs = <div key={lineColor + currBlock.blockId}>
 			<OverlayTrigger
 				placement="top"
@@ -279,6 +329,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 			>{`${currBlock.section}${currBlock.blockId}`}</div>
 			{blockSVGs}
 			{beacons}
+			{lights}
 		</div>
 
 		if (lineName === "greenLine") {
