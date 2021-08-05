@@ -26,7 +26,14 @@ const WaysidePanel = ({
       selectedWaysideList
     )) {
       buttonList.push(
-        <Button variant='light' className='waysideButton' key={waysideName}>
+        <Button
+          variant='light'
+          className='waysideButton'
+          key={waysideName}
+          onClick={() => {
+            setSelectedWaysideAndName(waysideObj, parseInt(waysideName) + 1);
+          }}
+        >
           <div className='buttonDiv'>
             <BsCircleFill
               size='1.5em'
@@ -34,17 +41,7 @@ const WaysidePanel = ({
                 localColor == 'RedLine' ? '#C44242' : 'rgba(49,135,133, 1)'
               }
             />
-            <div
-              className='buttonText'
-              onClick={() => {
-                setSelectedWaysideAndName(
-                  waysideObj,
-                  parseInt(waysideName) + 1
-                );
-              }}
-            >
-              WSC {parseInt(waysideName) + 1}
-            </div>
+            <div className='buttonText'>WSC {parseInt(waysideName) + 1}</div>
           </div>
         </Button>
       );
