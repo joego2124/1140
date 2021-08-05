@@ -145,11 +145,13 @@ function CTC() {
 	useEffect(() => {
 		console.log("[CTC] red or green database line blocks changed");
 		let newBlockList = {"red": redBlocks, "green": greenBlocks};
-		let color = selectedBlock.Line.toLowerCase().includes("red") ? "red" : "green";
-		let blockIndex = selectedBlock.BlockNumber < 0 ? 0 : selectedBlock.BlockNumber;
-		let updatedSelectedBlock = newBlockList[color][blockIndex];
-		updatedSelectedBlock.databasePath = `${newBlockList[color].databasePath}/${blockIndex}`;
-		setSelectedBlock(updatedSelectedBlock);
+		if (selectedBlock.Line != undefined) {
+			let color = selectedBlock.Line.toLowerCase().includes("red") ? "red" : "green";
+			let blockIndex = selectedBlock.BlockNumber < 0 ? 0 : selectedBlock.BlockNumber;
+			let updatedSelectedBlock = newBlockList[color][blockIndex];
+			updatedSelectedBlock.databasePath = `${newBlockList[color].databasePath}/${blockIndex}`;
+			setSelectedBlock(updatedSelectedBlock);
+		}
 		setBlockLists(newBlockList);
 	}, [redBlocks, greenBlocks]);
 
