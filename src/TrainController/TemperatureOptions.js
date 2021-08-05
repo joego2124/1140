@@ -1,10 +1,7 @@
 import React from 'react';
 import { Button, Container, Col, Row  } from 'react-bootstrap';
-import VarDisplay from '../components/VarDisplay';
-import VarInput from '../components/VarInput';
-import TempInput from '../components/TempInput';
-import VarIndicator from '../components/VarIndicator';
-import ButtonIndicator from '../components/ButtonIndicator';
+import VarDisplay from './components/VarDisplay';
+import TempInput from './components/TempInput';
 
 function TemperatureOptions({parentName, selectedTrain}) {
     return (
@@ -12,9 +9,9 @@ function TemperatureOptions({parentName, selectedTrain}) {
             <h3>TEMPERATURE</h3>
             <Container>
                 <Col>
-                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='ExternalTemperature' message='Ext. Temp' units='°F'/>
-                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='InternalTemperature' message='Int. Temp' units='°F'/>
-                    <TempInput selectedTrain={selectedTrain} parentName={parentName} varName='InternalTemperature' message='Int. Temp'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='ExternalTemperature' message='External Temperature' units='°F'/>
+                    <VarDisplay selectedTrain={selectedTrain} parentName={parentName} varName='InternalTemperature' message='Internal Temperature' units='°F'/>
+                    <TempInput selectedTrain={selectedTrain} parentName={parentName} varName='InternalTemperature'/>
                 </Col>
             </Container>
         </div>
