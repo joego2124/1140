@@ -25,13 +25,21 @@ function StatesPanel({ selectedBlock, lineName }){
 	}
 
 	var trackHeater;
+	var brokenRailFailure, trackCircuitFailure, beaconFailure;
 	const [trackOccup, setTrackOccup] = useState(0);
-	const [failBrokenRail, setFailBrokenRail] = useState();
+	const [failBrokenRail, setFailBrokenRail] = useState(0);
+	const [failTrackCirc, setFailTrackCirc] = useState(0);
+	const [failBeacon, setFailBeacon] = useState(0);
 
 	const [tempModalShow, setTempModalShow] = useState(false);
 	const [beaconModalShow, setBeaconModalShow] = useState(false);
-	// const [failTrackCirc, setFailTrackCirc] = useState(0);
-	// const [failBeacon, setFailBeacon] = useState(0);
+
+	// Set database failure modes upon start-up
+	useEffect(() => {
+		Firebase.database().ref(`${selectedBlock.databasePath}/FailureBrokenRail`).set( false );
+		Firebase.database().ref(`${selectedBlock.databasePath}/FailureTrackCircuit`).set( false );
+		Firebase.database().ref(`${selectedBlock.databasePath}/BeaconFailure`).set( false );
+	}, []);
 
 	return (
 		<div style={{
@@ -115,7 +123,7 @@ function StatesPanel({ selectedBlock, lineName }){
 								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Occupancy`} />
 								{' '}Signal State
 								<br />
-								<WSMIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Authority`} />
+								<WSMInverseIndicator selectedBlock={selectedBlock} path={`${selectedBlock.databasePath}/Authority`} />
 								{' '}Railway Crossing
 								<br />
 								<WSMIndicator selectedBlock={selectedBlock} path={`/${selectedBlock.Line}Line/TrackHeater`} />
@@ -149,15 +157,31 @@ function StatesPanel({ selectedBlock, lineName }){
 									<Button variant="outline-dark"
 										size="sm"
 										onClick={()=>{
-											// DatabaseGetMulti(setFailBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
-											// DatabaseSetMulti(!failBrokenRail, `/${lineName}/${selectedBlock}/FailureBrokenRail`);
+											Firebase.database().ref(`${selectedBlock.databasePath}/FailureBrokenRail`).once( 'value', snapshot => {
+												brokenRailFailure = snapshot.val();
+											});
+											Firebase.database().ref(`${selectedBlock.databasePath}/FailureBrokenRail`).set( !brokenRailFailure );
 										}}>
 									Broken Rail
 									</Button>
-									<Button variant="outline-dark" size="sm">
+									<Button variant="outline-dark"
+										size="sm"
+										onClick={()=>{
+											Firebase.database().ref(`${selectedBlock.databasePath}/FailureTrackCircuit`).once( 'value', snapshot => {
+												trackCircuitFailure = snapshot.val();
+											});
+											Firebase.database().ref(`${selectedBlock.databasePath}/FailureTrackCircuit`).set( !trackCircuitFailure );
+										}}>
 										Track Circuit
 									</Button>
-									<Button variant="outline-dark" size="sm">
+									<Button variant="outline-dark"
+										size="sm"
+										onClick={()=>{
+											Firebase.database().ref(`${selectedBlock.databasePath}/BeaconFailure`).once( 'value', snapshot => {
+												beaconFailure = snapshot.val();
+											});
+											Firebase.database().ref(`${selectedBlock.databasePath}/BeaconFailure`).set( !beaconFailure );
+										}}>
 										Beacon Failure
 									</Button>
 								</ButtonGroup>

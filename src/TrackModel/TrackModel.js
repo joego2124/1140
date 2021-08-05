@@ -28,15 +28,6 @@ function TrackModel() {
 
 	//update trains and blocks list
 	useEffect(() => {
-		// Firebase.database().ref('/TrainList').on('value', snapshot => {
-		// 	let list = snapshot.val();
-		// 	if(list != undefined && list != null){
-		// 		list.databasePath = "/TrainList";
-		// 	}
-		// 	else
-		// 		list = [];
-		// 	setTrainsList(list);
-		// });
 		Firebase.database().ref('/GreenLine').on('value', snapshot => {
 			let blocks = [];
 			for (const [index, block] of Object.entries(snapshot.val())) {

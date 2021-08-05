@@ -324,7 +324,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 					case 3: dy = dist; break;
 				}
 				// Green means railway crossing is active, red means it's not
-				if (actualBlock?.Authority == 1 ? color = "green" : color = "red");
+				if (actualBlock?.Authority == 1 ? color = "red" : color = "green");
 				railwayCrossings.push(
 					<div>
 					<GiLevelCrossing size="50px" style={{
