@@ -29,6 +29,14 @@ exports.runLogic = functions.database.ref('/SimulationClock/Time').onUpdate((cha
             .then(res => eval(waysides['WSC4'].Script))
             .then(res => eval(waysides['WSC5'].Script))
             .then(res => eval(waysides['WSC6'].Script))
+            .then(res => eval(waysides['WSC7'].Script))
+            .then(res => eval(waysides['WSC8'].Script))
+            .then(res => eval(waysides['WSC9'].Script))
+            .then(res => eval(waysides['WSC10'].Script))
+            .then(res => eval(waysides['WSC11'].Script))
+            .then(res => eval(waysides['WSC12'].Script))
+            .then(res => eval(waysides['WSC13'].Script))
+
         // eval(waysides['WSC2'].Script);
     })))
    

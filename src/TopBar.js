@@ -15,6 +15,7 @@ function TopBar() {
 	const [time, setTime] = useState(0);
 	const [timer, setTimer] = useState();
 	const [formattedTime, setFormattedTime] = useState("12:00");
+
 	// const [tickets, setTickets] = useState(0);
 
 	if (!Firebase.apps.length) {
@@ -41,7 +42,7 @@ function TopBar() {
 				
 				return time + 1;
 			});
-
+			
 			if(!paused) {
 				setTimer(setTimeout(() => clockTick(), 1000 * (1/speed)));
 			}
@@ -79,10 +80,12 @@ function TopBar() {
 	
 	//calculate formatted time when tick time changes
 	useEffect(() => {
-		let totalMinutes = time % 1440;
-		let hours = Math.floor(totalMinutes / 60);
-		let minutes = totalMinutes % 60;
-		setFormattedTime(`${hours > 9 ? hours : "0" + hours}:${minutes > 9 ? minutes : "0" + minutes}`);
+		let totalSeconds = time % 86400;
+		let hours = Math.floor(totalSeconds / 3600);
+		let totalMinutes = time % 3600;
+		let minutes = Math.floor(totalMinutes / 60);
+		let seconds = totalSeconds % 60;
+		setFormattedTime(`${hours > 9 ? hours : "0" + hours}:${minutes > 9 ? minutes : "0" + minutes}:${seconds > 9 ? seconds : "0" + seconds}`);
 	}, [time]);
 
 	return (

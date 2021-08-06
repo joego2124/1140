@@ -34,7 +34,9 @@ function generateTicketSales( totalTickets ) {
                 ticketSum += tempTickets;
 
                 // Set ticket value for stations
-                Firebase.database().ref(`/${lineName}/${stationId}/Station/Tickets`).set( Number(tempTickets) );
+                if (stationId > 0) {
+                    Firebase.database().ref(`/${lineName}/${stationId}/Station/Tickets`).set( Number(tempTickets) );
+                }
             });
         });
         // Set throughput value

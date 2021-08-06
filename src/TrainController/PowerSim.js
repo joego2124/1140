@@ -52,33 +52,33 @@ function makeTrainSim(newTrainId) {
     Firebase.database().ref(`/TrainList/${newTrainId}/ManualMode`).on('value', snapshot => { train.manualmode = snapshot.val(); });
     Firebase.database().ref(`/TrainList/${newTrainId}/Power`).on('value', snapshot => { train.power = snapshot.val(); });
 
-    console.log('Preconversion velocity: ', train.velocity, train.trainId);
+    // console.log('Preconversion velocity: ', train.velocity, train.trainId);
     train.velocity = train.velocity / 2.237;
-    console.log('Postconversion velocity: ', train.velocity, train.trainId);
+    // console.log('Postconversion velocity: ', train.velocity, train.trainId);
     train.setpointspeed = train.setpointspeed = 2.237;
 
     train.calculatePower = function () {
 
-        console.log(`--- CALCULATING POWER: ${train.trainId} ---`)
+        // console.log(`--- CALCULATING POWER: ${train.trainId} ---`)
         let powermax = 120;
         let anyfailure = !train.blockauthority /*|| train.sbrakestatus*/ || train.ebrakestatus || train.brakefailure || train.enginefailure || train.signalfailure;
         if(anyfailure){
-            console.log(train.blockauthority);
-            console.log(train.sbrakestatus);
-            console.log(train.ebrakestatus);
-            console.log(train.brakefailure);
-            console.log(train.enginefailure);
-            console.log(train.signalfailure);
+            // console.log(train.blockauthority);
+            // console.log(train.sbrakestatus);
+            // console.log(train.ebrakestatus);
+            // console.log(train.brakefailure);
+            // console.log(train.enginefailure);
+            // console.log(train.signalfailure);
             train.power = 0;
             train.sbrakestatus = 1;
-            console.log('Power set low (0)')
+            // console.log('Power set low (0)')
         }
         else{
-            console.log('- ek: ', train.ek);
-            console.log('- ekm1: ', train.ekm1);
-            console.log('- uk: ', train.uk);
-            console.log('- ukm1: ', train.ukm1);
-            console.log('- velocity:', train.velocity);
+            // console.log('- ek: ', train.ek);
+            // console.log('- ekm1: ', train.ekm1);
+            // console.log('- uk: ', train.uk);
+            // console.log('- ukm1: ', train.ukm1);
+            // console.log('- velocity:', train.velocity);
             train.sbrakestatus = 0;
             if(train.manualmode){
                 train.ek = train.setpointspeed - train.velocity
@@ -102,12 +102,12 @@ function makeTrainSim(newTrainId) {
             else if(train.power < 0){
                 train.power = 0;
             }
-            console.log('+ ek: ', train.ek);
-            console.log('+ ekm1: ', train.ekm1);
-            console.log('+ uk: ', train.uk);
-            console.log('+ ukm1: ', train.ukm1);
-            console.log('+ velocity:', train.velocity);
-            console.log('Power Calculation: ', train.power)
+            // console.log('+ ek: ', train.ek);
+            // console.log('+ ekm1: ', train.ekm1);
+            // console.log('+ uk: ', train.uk);
+            // console.log('+ ukm1: ', train.ukm1);
+            // console.log('+ velocity:', train.velocity);
+            // console.log('Power Calculation: ', train.power)
             Firebase.database().ref(`/TrainList/${train.trainId}/ek`).set(train.ek);
             Firebase.database().ref(`/TrainList/${train.trainId}/ekm1`).set(train.ekm1);
             Firebase.database().ref(`/TrainList/${train.trainId}/uk`).set(train.uk);

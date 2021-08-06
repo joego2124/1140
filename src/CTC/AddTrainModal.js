@@ -136,7 +136,7 @@ const AddTrainModal = (props) => {
 					
 					<Form.Group onChange={e => setDepartureTime(e.target.value)} className="mb-3" controlId="exampleForm.ControlInput1">
 						<Form.Label>Set Departure Time</Form.Label>
-						<Form.Control type="time" value="12:00"/>
+						<Form.Control type="time" value={departureTime}/>
 					</Form.Group>
 					
 				</Form>

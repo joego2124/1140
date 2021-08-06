@@ -98,7 +98,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	//TODO: refactor so doesnt rerender on EVERY train change
 	//render train icons on track
 	useEffect(() => {
-		console.log("trains rerendered");
+		// console.log("trains rerendered");
 		setTrainSVGs(Object.entries(trainsList).map(trainArr => {
 			let train = trainArr[1];
 			if (trainArr[0] != "databasePath") {
@@ -345,7 +345,7 @@ const TrackView = ({selectedTrain, trainsList, setSelectedBlock, blockLists}) =>
 	//TODO: refactor so doesnt rerender on EVERY block change
 	useEffect(() => {
 		if (Object.keys(blockLists).length == 0) return;
-		console.log("[CTC/TrackView] Rendering track view");
+		// console.log("[CTC/TrackView] Rendering track view");
 		greenBlockSVGs = [];
 		redBlockSVGs = [];
 		for (const [key, value] of Object.entries(trackLayout)) {

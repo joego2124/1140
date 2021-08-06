@@ -11,5 +11,3 @@ IF: authority{blocks-53} SET switch TO 0
 
 IF: occupancy{listener} SET authority{branch-1} TO 0
 IF: authority{blocks-66} SET switch TO 1
-
-//TODO: spacing
